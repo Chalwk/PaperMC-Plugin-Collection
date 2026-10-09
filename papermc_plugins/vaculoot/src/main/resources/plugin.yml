@@ -4,7 +4,7 @@ main: com.chalwk.VacuLoot
 api-version: '1.21'
 description: Toggleable item magnet with multiple tiers and features
 author: Chalwk
-website: https://github.com/Chalwk
+website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 
 softdepend: [ Vault ]
 

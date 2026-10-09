@@ -4,7 +4,7 @@ main: com.chalwk.BigBrother
 api-version: '1.21'
 description: Monitor player activities with various spy features
 author: Chalwk
-website: https://github.com/Chalwk
+website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 
 commands:
   bigbrother:

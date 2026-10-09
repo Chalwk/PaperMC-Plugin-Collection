@@ -4,7 +4,7 @@ main: com.chalwk.GameModeManager
 api-version: '1.21'
 description: Manage separate inventories per gamemode with world-based auto-switching
 author: Chalwk
-website: https://github.com/Chalwk
+website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 
 commands:
   gmmanage:

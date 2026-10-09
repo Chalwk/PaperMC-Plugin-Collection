@@ -6,7 +6,7 @@ category: Gameplay
 plugin_id: noctiview
 latest_version: "1.0.0"
 author: Chalwk
-website: https://github.com/Chalwk
+website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
 main: com.chalwk.NoctiView
 source_path: papermc_plugins/noctiview

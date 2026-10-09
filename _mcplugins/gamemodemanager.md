@@ -6,7 +6,7 @@ category: Gameplay
 plugin_id: gamemodemanager
 latest_version: "1.0.1"
 author: Chalwk
-website: https://github.com/Chalwk
+website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
 main: com.chalwk.GameModeManager
 source_path: papermc_plugins/gamemodemanager
