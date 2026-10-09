@@ -4,7 +4,7 @@ title: AutoMessages
 description: Scheduled broadcasts to all players and console, with legacy colors, JSON click/hover components, and configurable interval.
 category: Administration
 plugin_id: automessages
-latest_version: "1.0.2"
+latest_version: "1.0.1"
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
@@ -47,6 +47,8 @@ permissions:
 # AutoMessages
 
 AutoMessages periodically broadcasts configured messages to all online players and the console.
+
+Also available on SpigotMC: <https://www.spigotmc.org/resources/automessages.139507/>
 
 ## Features
 
