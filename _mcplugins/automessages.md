@@ -5,7 +5,6 @@ description: Scheduled broadcasts to all players and console, with legacy colors
 category: Administration
 plugin_id: automessages
 latest_version: "1.0.0"
-version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21

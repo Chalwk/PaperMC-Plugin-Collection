@@ -8,8 +8,9 @@ to report a vulnerability, and what to expect when you do.
 
 ## Supported Versions
 
-Each plugin carries its own version number in its `plugin.yml` and its
-`build.gradle`. Fixes are applied to the latest version on `main` and, where
+Each plugin's version is set at build time from the release tag (`-Pversion=`)
+and baked into its `plugin.yml` by Gradle's `processResources`. The tag is the
+source of truth. Fixes are applied to the latest version on `main` and, where
 practical, backported to the most recent release tag.
 
 | Version          | Supported          |

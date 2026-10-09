@@ -45,11 +45,60 @@ jobs:
       - name: Build ${{ steps.parse.outputs.plugin }}
         run: ./gradlew :${{ steps.parse.outputs.plugin }}:build -Pversion=${{ steps.parse.outputs.version }} --no-daemon
 
+      - name: Verify release artifact
+        id: verify
+        run: |
+          set -euo pipefail
+          PLUGIN="${{ steps.parse.outputs.plugin }}"
+          VERSION="${{ steps.parse.outputs.version }}"
+          LIB_DIR="papermc_plugins/$PLUGIN/build/libs"
+
+          shopt -s nullglob
+          jars=("$LIB_DIR"/*.jar)
+          if [ ${#jars[@]} -eq 0 ]; then
+            echo "::error::No JAR produced in $LIB_DIR"
+            exit 1
+          fi
+          if [ ${#jars[@]} -gt 1 ]; then
+            echo "::error::Expected exactly one JAR in $LIB_DIR, found ${#jars[@]}: ${jars[*]}"
+            exit 1
+          fi
+
+          JAR="${jars[0]}"
+          echo "Verifying $JAR"
+
+          if ! unzip -l "$JAR" | grep -q ' plugin.yml$'; then
+            echo "::error::plugin.yml missing inside $JAR"
+            exit 1
+          fi
+
+          PLUGIN_YML="$(unzip -p "$JAR" plugin.yml)"
+
+          if printf '%s' "$PLUGIN_YML" | grep -Fq '${version}'; then
+            echo "::error::plugin.yml still contains the literal \${version} - processResources substitution did not run"
+            printf '%s\n' "$PLUGIN_YML"
+            exit 1
+          fi
+
+          ACTUAL_VERSION="$(printf '%s\n' "$PLUGIN_YML" \
+            | grep -E '^version:' \
+            | head -n1 \
+            | sed -E "s/^version:[[:space:]]*['\"]?([^'\"]+)['\"]?.*/\1/")"
+
+          if [ "$ACTUAL_VERSION" != "$VERSION" ]; then
+            echo "::error::plugin.yml version '$ACTUAL_VERSION' does not match tag version '$VERSION'"
+            printf '%s\n' "$PLUGIN_YML"
+            exit 1
+          fi
+
+          echo "OK: $JAR contains plugin.yml version $VERSION"
+          echo "jar=$JAR" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.parse.outputs.tag }}
           name: ${{ steps.parse.outputs.plugin }} ${{ steps.parse.outputs.version }}
           generate_release_notes: true
-          files: papermc_plugins/${{ steps.parse.outputs.plugin }}/build/libs/*.jar
+          files: ${{ steps.verify.outputs.jar }}
           fail_on_unmatched_files: true

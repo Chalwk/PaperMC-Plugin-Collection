@@ -5,7 +5,6 @@ description: Toggleable item magnet with tiered ranges, optional Vault economy c
 category: Gameplay
 plugin_id: vaculoot
 latest_version: "1.0.0"
-version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21

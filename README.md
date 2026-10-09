@@ -26,7 +26,7 @@ Full documentation for each plugin lives on the [website](https://chalwk.github.
 
 | Plugin                                          | Version                                                                                                                                      | Docs                                                                                      | Releases                                                                                      | What it does                                                                                      |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| [`BigBrother`](papermc_plugins/bigbrother/)     | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.0)   | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/)   | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)   | Command, sign, anvil, book, and portal spies with per-player toggles and filters                  |
+| [`BigBrother`](papermc_plugins/bigbrother/)     | [![v1.0.1](https://img.shields.io/badge/v-1.0.1-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.1)   | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/)   | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)   | Command, sign, anvil, book, and portal spies with per-player toggles and filters                  |
 | [`AdminChat`](papermc_plugins/adminchat/)       | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0)    | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/adminchat/)    | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)    | Multi-channel staff chat with per-channel permissions, formatting, sounds, and visibility toggles |
 | [`AutoMessages`](papermc_plugins/automessages/) | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/automessages/) | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v) | Scheduled broadcasts with legacy colors and JSON click/hover components                           |
 
@@ -43,7 +43,7 @@ To download the latest build of a specific plugin:
 - **VacuLoot** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/vaculoot-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=vaculoot-v)
 - **GameModeManager** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/gamemodemanager-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=gamemodemanager-v)
 - **NoctiView** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/noctiview-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=noctiview-v)
-- **BigBrother** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)
+- **BigBrother** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.1) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)
 - **AdminChat** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)
 - **AutoMessages** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v)
 
@@ -100,10 +100,11 @@ git tag vaculoot-v1.2.3
 git push origin vaculoot-v1.2.3
 ```
 
-The `Release` workflow builds only that plugin at the tagged version and
-publishes a GitHub Release with the corresponding JAR attached
-(e.g. `vaculoot-1.2.3.jar`). Tags that don't match `<plugin>-v<semver>` are
-rejected with an error.
+The `Release` workflow builds only that plugin at the tagged version, verifies
+the resulting JAR contains a `plugin.yml` with the version baked in correctly,
+and only then publishes a GitHub Release with the JAR attached
+(e.g. `VacuLoot-1.2.3.jar`). Tags that don't match `<plugin>-v<semver>` are
+rejected before the build starts.
 
 ---
 
@@ -117,54 +118,6 @@ rejected with an error.
 5. Run `/reload confirm` or restart to apply config changes.
 
 Every plugin generates its own config on first run with sensible defaults.
-
----
-
-## Conventions
-
-Plugins in this collection try to follow a few house rules:
-
-- **Java 21+**, Paper API preferred. If a plugin genuinely needs a
-  platform-specific API (Spigot, Bukkit), it says so in its docs.
-- **No cross-plugin dependencies.** Every plugin is standalone. If two plugins
-  need to talk, they do it via events or a soft-depend, never a hard compile
-  dependency.
-- **`/pluginname help` always works.** Every command has a help subcommand,
-  tab completion, and permission nodes.
-- **Permissions are granular.** No `pluginname.*` wildcards that silently grant
-  everything. Each action has its own node.
-- **Configs are versioned.** Config files include a `config-version` key so
-  migrations are possible without guessing.
-- **No hardcoded messages.** Every user-facing string is in `config.yml` or a
-  `messages.yml`.
-- **Destructive actions are opt-in**, not default. Nothing deletes blocks,
-  items, or player data without an explicit confirmation flag.
-- **MIT licensed.** Take what's useful.
-
----
-
-## Layout
-
-```
-papermc_plugins/
-├── adminchat/          AdminChat
-├── automessages/       AutoMessages
-├── bigbrother/         BigBrother
-├── gamemodemanager/    GameModeManager
-├── noctiview/          NoctiView
-└── vaculoot/           VacuLoot
-
-_mcplugins/             Jekyll collection: one doc page per plugin
-_includes/              Jekyll partials (head, header, footer)
-_layouts/               Jekyll layouts (default, page, plugin)
-assets/css/             Jekyll site stylesheet
-
-.github/                Issue templates, PR template, CI workflows
-build.gradle            Root build script
-settings.gradle         Project includes
-gradle/                 Wrapper + version catalog
-gradlew, gradlew.bat    Gradle wrapper scripts
-```
 
 ---
 

@@ -5,7 +5,6 @@ description: Separate inventories and player state per gamemode, with world-chan
 category: Gameplay
 plugin_id: gamemodemanager
 latest_version: "1.0.0"
-version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21

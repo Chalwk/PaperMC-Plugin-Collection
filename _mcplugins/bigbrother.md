@@ -5,7 +5,6 @@ description: Player activity monitoring through command, sign, anvil, book, and 
 category: Administration
 plugin_id: bigbrother
 latest_version: "1.0.1"
-version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
