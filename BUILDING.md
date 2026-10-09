@@ -68,8 +68,7 @@ Unix shells use `./` (forward slash).
 
 ## Common commands
 
-All commands below assume you're in the repository root
-(`C:\GitHub Repositories\PaperMC-Plugin-Collection` on Windows).
+All commands below assume you're in the repository root on Windows.
 
 ### Build every plugin
 
@@ -382,60 +381,3 @@ To disable the daemon for a single build (slower, used in CI):
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - PR checklist and code style
 - [`.github/workflows/build.yml`](.github/workflows/build.yml) - the CI build
 - [`.github/workflows/release.yml`](.github/workflows/release.yml) - the release workflow
-```
-
----
-
-## Where to put this
-
-Save it as `BUILDING.md` at the repo root:
-
-```
-C:\GitHub Repositories\PaperMC-Plugin-Collection\BUILDING.md
-```
-
-Then commit:
-
-```cmd
-git add BUILDING.md
-git commit -m "Add BUILDING.md"
-```
-
----
-
-## Small follow-ups worth doing while you're here
-
-1. **Update the README's build section** to link to this file instead of duplicating the commands. Keeps one source of truth. Change:
-
-   ```markdown
-   ## Building
-
-   See [BUILDING.md](BUILDING.md) for the full guide, or:
-   ```
-
-   …and drop the rest of that section.
-
-2. **Commit the wrapper files you just generated.** They aren't tracked yet, so CI still won't work until you do:
-
-   ```cmd
-   dir /b gradlew*
-   git status
-   ```
-
-   You should see `gradlew`, `gradlew.bat`, and `gradle/wrapper/` listed as untracked. Add them all:
-
-   ```cmd
-   git add gradlew gradlew.bat gradle/wrapper/
-   git commit -m "Add Gradle wrapper files"
-   git push
-   ```
-
-3. **Verify the version stamp worked.** Run:
-
-   ```cmd
-   jar xf papermc_plugins\adminchat\build\libs\AdminChat-1.0.0.jar plugin.yml
-   type plugin.yml
-   del plugin.yml
-   ```
-
-   The `version:` line should read `1.0.0`. If it shows `${version}`, tell me - that means the `plugin.yml` still has `version: 1.0.0` unquoted, or the `processResources` block isn't firing.
