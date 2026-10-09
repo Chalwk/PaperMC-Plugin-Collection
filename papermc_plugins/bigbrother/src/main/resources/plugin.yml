@@ -1,0 +1,109 @@
+name: BigBrother
+version: '${version}'
+main: com.chalwk.BigBrother
+api-version: '1.21'
+description: Monitor player activities with various spy features
+author: Chalwk
+website: https://github.com/Chalwk
+
+commands:
+  bigbrother:
+    description: Manage BigBrother spy features
+    usage: /<command> [help|status|commands|signs|anvils|books|portals|reload] [player]
+    permission: bigbrother.use
+    aliases: [ bb ]
+
+permissions:
+  bigbrother.*:
+    description: All BigBrother permissions
+    children:
+      bigbrother.use: true
+      bigbrother.reload: true
+      bigbrother.spy.*: true
+
+  bigbrother.use:
+    description: Allows using BigBrother commands
+    default: op
+
+  bigbrother.reload:
+    description: Allows reloading BigBrother configuration
+    default: op
+
+  bigbrother.spy.*:
+    description: All spy features
+    children:
+      bigbrother.commandspy.*: true
+      bigbrother.signspy.*: true
+      bigbrother.anvilspy.*: true
+      bigbrother.bookspy.*: true
+      bigbrother.portalspy.*: true
+
+  bigbrother.commandspy.*:
+    description: All command spy permissions
+    children:
+      bigbrother.commandspy.toggle: true
+      bigbrother.commandspy.toggle.others: true
+
+  bigbrother.commandspy.toggle:
+    description: Allows toggling command spy
+    default: op
+
+  bigbrother.commandspy.toggle.others:
+    description: Allows toggling command spy for others
+    default: op
+
+  bigbrother.signspy.*:
+    description: All sign spy permissions
+    children:
+      bigbrother.signspy.toggle: true
+      bigbrother.signspy.toggle.others: true
+
+  bigbrother.signspy.toggle:
+    description: Allows toggling sign spy
+    default: op
+
+  bigbrother.signspy.toggle.others:
+    description: Allows toggling sign spy for others
+    default: op
+
+  bigbrother.anvilspy.*:
+    description: All anvil spy permissions
+    children:
+      bigbrother.anvilspy.toggle: true
+      bigbrother.anvilspy.toggle.others: true
+
+  bigbrother.anvilspy.toggle:
+    description: Allows toggling anvil spy
+    default: op
+
+  bigbrother.anvilspy.toggle.others:
+    description: Allows toggling anvil spy for others
+    default: op
+
+  bigbrother.bookspy.*:
+    description: All book spy permissions
+    children:
+      bigbrother.bookspy.toggle: true
+      bigbrother.bookspy.toggle.others: true
+
+  bigbrother.bookspy.toggle:
+    description: Allows toggling book spy
+    default: op
+
+  bigbrother.bookspy.toggle.others:
+    description: Allows toggling book spy for others
+    default: op
+
+  bigbrother.portalspy.*:
+    description: All portal spy permissions
+    children:
+      bigbrother.portalspy.toggle: true
+      bigbrother.portalspy.toggle.others: true
+
+  bigbrother.portalspy.toggle:
+    description: Allows toggling portal spy
+    default: op
+
+  bigbrother.portalspy.toggle.others:
+    description: Allows toggling portal spy for others
+    default: op

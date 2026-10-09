@@ -1,0 +1,29 @@
+name: AutoMessages
+version: '${version}'
+main: com.chalwk.AutoMessages
+api-version: '1.21'
+description: Periodically broadcasts interactive messages
+author: Chalwk
+website: https://github.com/Chalwk
+
+commands:
+  automessages:
+    description: Manage AutoMessages plugin
+    usage: /<command> [help|status|reload]
+    permission: automessages.use
+    aliases: [ am ]
+
+permissions:
+  automessages.*:
+    description: All AutoMessages permissions
+    children:
+      automessages.use: true
+      automessages.reload: true
+
+  automessages.use:
+    description: Allows using /automessages
+    default: op
+
+  automessages.reload:
+    description: Allows reloading configuration
+    default: op

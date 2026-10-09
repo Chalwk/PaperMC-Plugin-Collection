@@ -1,0 +1,7 @@
+# GameModeManager Configuration
+config-version: 1
+
+# Messages
+messages:
+  no_permission: "&cYou don't have permission to use this feature!"
+  reloaded: "&aConfiguration reloaded!"

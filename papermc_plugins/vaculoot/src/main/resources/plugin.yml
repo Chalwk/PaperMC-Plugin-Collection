@@ -1,0 +1,49 @@
+name: VacuLoot
+version: '${version}'
+main: com.chalwk.VacuLoot
+api-version: '1.21'
+description: Toggleable item magnet with multiple tiers and features
+author: Chalwk
+website: https://github.com/Chalwk
+
+softdepend: [ Vault ]
+
+commands:
+  magnet:
+    description: Toggle item magnet
+    usage: /<command> [player|toggle|reload|check|tier|help]
+    permission: magnet.use
+    aliases: [ ml, mag ]
+
+permissions:
+  magnet.*:
+    description: All VacuLoot permissions
+    children:
+      magnet.use: true
+      magnet.use.others: true
+      magnet.admin: true
+      magnet.tier.basic: true
+      magnet.tier.advanced: true
+      magnet.tier.ultimate: true
+      magnet.tier.god: true
+  magnet.use:
+    description: Allows using the magnet command
+    default: op
+  magnet.use.others:
+    description: Allows toggling magnet for other players
+    default: op
+  magnet.admin:
+    description: Access to admin management commands
+    default: op
+  magnet.tier.basic:
+    description: Access to basic magnet tier
+    default: true
+  magnet.tier.advanced:
+    description: Access to advanced magnet tier
+    default: op
+  magnet.tier.ultimate:
+    description: Access to ultimate magnet tier
+    default: op
+  magnet.tier.god:
+    description: Access to god magnet tier
+    default: op

@@ -1,0 +1,43 @@
+name: AdminChat
+version: 1.0.0
+main: com.chalwk.AdminChat
+api-version: 1.21
+description: Secure admin-only chat system with multiple channels
+author: Chalwk
+website: https://github.com/Chalwk
+
+commands:
+  achat:
+    description: Send messages in admin chat channels
+    usage: /<command> [help|off|toggle|reload] or /<command> [channel] [message]
+    permission: adminchat.use
+    aliases: [ ac ]
+  adminchat:
+    description: Admin chat management commands
+    usage: /<command> [help|reload|toggle] [player]
+    permission: adminchat.admin
+
+permissions:
+  adminchat.*:
+    description: All AdminChat permissions
+    children:
+      adminchat.use: true
+      adminchat.admin: true
+      adminchat.channel.mod: true
+      adminchat.channel.admin: true
+      adminchat.channel.trial: true
+  adminchat.use:
+    description: Allows using admin chat
+    default: op
+  adminchat.admin:
+    description: Access to admin management commands
+    default: op
+  adminchat.channel.mod:
+    description: Access to mod channel
+    default: op
+  adminchat.channel.admin:
+    description: Access to admin channel
+    default: op
+  adminchat.channel.trial:
+    description: Access to trial channel
+    default: op

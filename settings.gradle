@@ -1,0 +1,15 @@
+rootProject.name = 'PaperMC-Plugin-Collection'
+
+def pluginsRoot = 'papermc_plugins'
+
+[
+    'adminchat',
+    'automessages',
+    'bigbrother',
+    'gamemodemanager',
+    'noctiview',
+    'vaculoot'
+].each { name ->
+    include(":${name}")
+    project(":${name}").projectDir = file("${pluginsRoot}/${name}")
+}

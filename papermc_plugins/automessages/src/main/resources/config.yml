@@ -1,0 +1,167 @@
+# AutoMessages Configuration
+config-version: 1
+
+# Time in seconds between each broadcast
+interval: 600
+
+# Periodic broadcasts - one entry per message, keyed by broadcast order.
+broadcasts:
+  1:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 CHEST SHOP'
+    - ''
+    - '&7Seek merchant wisdom? Learn to build thy trading post'
+    - ' '
+    - '{"text":"• Click to unveil Chest Shop Scroll","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://jericraft.net/guides/chest-shop/"},"hoverEvent":{"action":"show_text","value":"Learn merchant ways"}}'
+
+  2:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 TOME ARCHIVES'
+    - ''
+    - '&7Shelf Wisdom:'
+    - '&8• &7Hold &bwritten book&8 » &7Place'
+    - '&8• &7Left-Click &8» &7Examine'
+    - '&8• &7Right-Click &8» &7Read'
+    - '&8• &7Shift+Click &8» &7Remove'
+
+  3:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 PRESTIGIOUS GARBS'
+    - ''
+    - '&8&l&7Villager Rank Boons:'
+    - '&8• &7Access all Discord chambers'
+    - '&8• &7Wield &b/hat&7 & &b/ride'
+    - '&8• &7Claim &bVillager Kit'
+    - '&8• &7Pursue &b4 concurrent trades'
+    - '&8• &7Right-click upon a carpet, stair, or slab to take a seat or type &b/sit&7 to perch upon any surface.'
+
+  4:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 ARTISAN WISDOM'
+    - ''
+    - '&7Forge items with &b/recipe <material>&7'
+    - '&8» &7Reveals crafting secrets'
+
+  5:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 GUILD MASTERY'
+    - ''
+    - '&7Earn money through hunting, fishing, mining, woodcutitng and more!'
+    - ' '
+    - '{"text":"• Click to learn more!","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://jericraft.net/guides/jobs/"},"hoverEvent":{"action":"show_text","value":"Learn trade secrets"}}'
+
+  6:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 SKILLS LORE'
+    - ''
+    - '&7Master &3Gathering&7, &4Combat&7, &5Crafting'
+    - '&8» &7Gain double yields & rare treasures'
+    - ' '
+    - '{"text":"• Click to open Skill Tome","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://jericraft.net/guides/mcmmo/"},"hoverEvent":{"action":"show_text","value":"Study mastery paths"}}'
+
+  7:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 ROYAL COURT'
+    - ''
+    - '&7Join our &5Discord&7 fellowship'
+    - ' '
+    - '{"text":"• Click to pledge fealty","bold":true,"color":"dark_green","clickEvent":{"action":"run_command","value":"/discord"},"hoverEvent":{"action":"show_text","value":"Join noble company"}}'
+
+  9:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 SOUL RECALL'
+    - ''
+    - '&7Reclaim thy path with &b/back'
+    - '&8» &7Returns thee to last demise'
+
+  10:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 LAND EDICTS'
+    - ''
+    - '&8• &71 claimed chunk = &b1 faction power'
+    - '&8• &7Power &b≥ claims&7 keeps land protected'
+    - '&8• &7Deaths or members leaving reduce power'
+    - '&8• &7Power &b< claims&7 makes thy land raidable'
+    - ' '
+    - '{"text":"• Click to study Land Tome","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://jericraft.net/guides/factions/"},"hoverEvent":{"action":"show_text","value":"Learn realm governance"}}'
+
+  11:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 RELIC RECLAIM'
+    - ''
+    - '&7Plunder lost treasures with &b/scavenge'
+
+  12:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 ROYAL BAZAAR'
+    - ''
+    - '&7Acquire mystic artifacts from our coffers'
+    - '&8» &7Each purchase strengthens the realm'
+    - ' '
+    - '{"text":"• Click to visit Marketplace","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://jericraft.net/store/"},"hoverEvent":{"action":"show_text","value":"Peruse royal wares"}}'
+
+  13:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 ROYAL DECREE'
+    - ''
+    - '&7By order of the &4Crown&7:'
+    - '&8• &7Study the &fCode of Honor'
+    - '&8• &7Swear fealty to realm laws'
+    - ' '
+    - '{"text":"• Click to read Imperial Scrolls","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://jericraft.net/rules"},"hoverEvent":{"action":"show_text","value":"Learn realm laws"}}'
+
+  14:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 SEASONAL PORTENTS'
+    - ''
+    - '&7Realm changes with seasons:'
+    - '&8• &cWinter&8: &7Scarce crops & frost'
+    - '&8• &aSpring&8: &7Bountiful rains'
+    - '&8• &6Summer&8: &7Fertile lands'
+    - '&8• &5Autumn&8: &7Eerie mists'
+
+  15:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 ASCENDED FOES'
+    - ''
+    - '&7Beasts match thy power level!'
+    - '&8» &7Greater challenges = richer spoils'
+
+  16:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 PERSONAL SETTINGS'
+    - ''
+    - '&7Customize your gameplay with &b/options&7!'
+    - '&8• &7Edit signs instantly &8» &fShift+Right-Click'
+    - '&8• &7Toggle compass bar &8» &fBoss Bar Display'
+    - '&8• &7Enable tag sound &8» &fChat Mentions'
+    - '&8• &7Control PMs &8» &fAccept/Decline Messages'
+    - '&8• &7Manage TPAs &8» &fToggle Requests'
+    - '&8• &7Secure your money &8» &fAccept/Block Payments'
+    - '&8• &7Chat bubbles &8» &fSee speech above players'
+    - '&8• &7PM sounds &8» &fToggle notification sound'
+    - '&8• &7Let others ride you &8» &fEnable/Disable'
+    - '&8• &7Show PvE damage &8» &fToggle numbers'
+    - '&8• &7Show PvP damage &8» &fTrack combat hits'
+    - '&8• &7Durability warnings &8» &fGet tool alerts'
+
+  17:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 KNOW THYSELF'
+    - ''
+    - '&7Curious about your progress? Check your stats with &f/stats&7!'
+    - '&8• &7Track your &fKills &8» &7PvP & PvE records'
+    - '&8• &7Monitor your &fBlocks Mined &8» &7Resource grinding'
+    - '&8• &7View your &fPlaytime &8» &7See how long you’ve ruled the realm'
+    - '&8• &7Check your &fDeaths &8» &7Battle scars or bad luck?'
+    - '&8• &7And more... &8» &7Uncover your legacy!'
+
+  18:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 MERCHANT GUILD'
+    - ''
+    - '&7Seek the wisdom of the realm''s traders'
+    - '&8» &7Browse their wares and strike bargains'
+    - ' '
+    - '{"text":"• Click to open Merchant Dialog","bold":true,"color":"dark_green","clickEvent":{"action":"run_command","value":"/merchants"},"hoverEvent":{"action":"show_text","value":"Speak with the merchants"}}'
+
+  19:
+    - '&e&l꧁ ༺&6&lBulletin&e&l༻ ꧂ &e👉 EXCALIBUR PACK'
+    - ''
+    - '&7Enhance thy vision with the &bExcalibur&7 texture pack!'
+    - '&8» &7High-resolution textures & epic medieval feel'
+    - ' '
+    - '{"text":"• Click to claim the Excalibur Pack","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://www.curseforge.com/minecraft/texture-packs/excalibur"},"hoverEvent":{"action":"show_text","value":"Arm thyself with Excalibur"}}'
+
+# Messages
+messages:
+  no_permission: "&cYou don't have permission to use this feature!"
+  reloaded: "&aConfiguration reloaded and scheduler restarted!"
+  unknown_command: "&cUnknown command. Use /automessages help."
+  status_header: "&eAutoMessages Status:"
+  status_interval: "&7- Interval: &f{interval}s"
+  status_total: "&7- Total messages: &f{total}"
+  status_next: "&7- Next message index: &f{next}/{total}"

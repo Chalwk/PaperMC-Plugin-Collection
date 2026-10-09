@@ -1,0 +1,117 @@
+name: Bug Report
+description: Report a bug, crash, or unexpected behaviour in one of the plugins.
+title: "[BUG] <title>"
+labels: [ "bug", "needs triage" ]
+assignees: Chalwk
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Is this a security issue?**
+        > If this bug could expose credentials, leak player data, let a player
+        > bypass permissions, or do something they shouldn't, **do not open a
+        > public issue**.
+        > Use the [Report a vulnerability](https://github.com/Chalwk/PaperMC-Plugin-Collection/security/advisories/new)
+        > link on the new issue page instead.
+        >
+        > For all other bugs, continue below.
+  - type: markdown
+    attributes:
+      value: |
+        **Describe the bug**
+        > Provide a clear and concise description in the following sections.
+        > Use headers (`#`) or lists (`-`) to organize your thoughts.
+  - type: dropdown
+    id: plugin
+    attributes:
+      label: Which plugin?
+      description: Select the plugin that is misbehaving.
+      options:
+        - VacuLoot
+        - GameModeManager
+        - BigBrother
+        - AutoMessages
+        - AdminChat
+        - NoctiView
+        - Other (specify below)
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin Version
+      description: Run `/pluginname version` in-game, or check `plugin.yml`. Redact nothing here - versions are safe to share.
+      placeholder: "e.g., 1.2.0"
+    validations:
+      required: true
+  - type: input
+    id: server-software
+    attributes:
+      label: Server Software
+      description: Which server software and version are you running?
+      placeholder: "e.g., Paper 1.21.4, Purpur 1.21.1, Spigot 1.20.6"
+    validations:
+      required: true
+  - type: input
+    id: java-version
+    attributes:
+      label: Java Version
+      description: Output of `java -version`.
+      placeholder: "e.g., 21.0.3"
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or Action
+      description: What command did you run, or what action did you take, that triggered the bug?
+      placeholder: "e.g., /vaculoot radius 10"
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe what you expected to happen.
+      placeholder: "Explain the expected behavior"
+    validations:
+      required: true
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: Describe what actually happened, including any console errors or stack traces.
+      placeholder: "Paste the full stack trace or error output here"
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant Config
+      description: Paste the relevant section of the plugin's config.yml. Redact any credentials, API keys, or database details.
+      render: yaml
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Write any other context or information about the bug here. Other plugins installed, recent changes, etc.
+      placeholder: "Further context or information here"
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        **Screenshots and Logs**
+        > Include any relevant screenshots or log files to help illustrate the bug.
+        >
+        > Please make sure you have redacted any API keys, tokens, database
+        > credentials, or real IP addresses before posting.
+        >
+        >
+        > Thank you
+        >
+        > **I appreciate your effort in reporting bugs in these plugins. Your input is invaluable!**

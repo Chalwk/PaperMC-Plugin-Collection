@@ -1,0 +1,67 @@
+# AdminChat Configuration
+config-version: 1
+
+# Default channel (when no channel specified)
+default_channel: "admin"
+
+# Message cooldown in seconds
+cooldown: 2
+
+# Chat channels configuration
+channels:
+  mod:
+    permission: "adminchat.channel.mod"
+    format: "&8[&9Mod&8] &b{sender}&8: &f{message}"
+    prefix: "&8[&9Mod&8]"
+    sound:
+      enabled: true
+      type: BLOCK_NOTE_BLOCK_PLING
+      volume: 0.5
+      pitch: 1.5
+
+  admin:
+    permission: "adminchat.channel.admin"
+    format: "&8[&cAdmin&8] &c{sender}&8: &f{message}"
+    prefix: "&8[&cAdmin&8]"
+    sound:
+      enabled: true
+      type: BLOCK_NOTE_BLOCK_PLING
+      volume: 0.5
+      pitch: 1.8
+
+  trial:
+    permission: "adminchat.channel.trial"
+    format: "&8[&eTrial&8] &e{sender}&8: &f{message}"
+    prefix: "&8[&eTrial&8]"
+    sound:
+      enabled: false
+      type: BLOCK_NOTE_BLOCK_PLING
+      volume: 0.5
+      pitch: 1.2
+
+# Messages
+messages:
+  no_permission: "&cYou don't have permission to use this channel!"
+  no_channel: "&cChannel not found!"
+  toggled_on: "&aAdmin chat visibility enabled!"
+  toggled_off: "&cAdmin chat visibility disabled!"
+  toggled_for: "&aAdmin chat visibility {state} for {player}!"
+  cooldown: "&cPlease wait {seconds} seconds before sending another message!"
+  reloaded: "&aConfiguration reloaded!"
+  usage: "&eUsage: /achat [channel] [message] or /achat [channel] (to toggle) or /achat toggle"
+  usage_toggled: "&eYou are in {channel} chat mode. Just type your message, or use /achat off to exit."
+  channel_on: "&aYou are now in {channel} chat mode. Your messages will be sent to this channel. Type /achat off to exit."
+  channel_off: "&cYou have exited {channel} chat mode."
+  player_not_found: "&cPlayer not found!"
+  players_only: "&cOnly players can use this command!"
+  no_toggled_channel: "&cYou don't have any channel toggled!"
+  unknown_command: "&cUnknown command. Use /achat help."
+  visibility_enabled_by: "&eYour admin chat visibility was enabled by {sender}"
+  visibility_disabled_by: "&eYour admin chat visibility was disabled by {sender}"
+
+# Notification settings
+notifications:
+  join_notification: true
+  join_message: "&7[&a+&7] &f{player} &7has joined the server"
+  quit_notification: true
+  quit_message: "&7[&c-&7] &f{player} &7has left the server"

@@ -1,0 +1,67 @@
+title: PaperMC-Plugin-Collection
+tagline: "Collection of Minecraft plugins for PaperMC"
+description: "A collection of Minecraft plugins for PaperMC and compatible servers."
+
+url: "https://chalwk.github.io"
+baseurl: "/PaperMC-Plugin-Collection"
+
+author:
+  name: Jericho Crosby
+  handle: Chalwk
+  email: chalwk.dev@gmail.com
+
+repository: "Chalwk/PaperMC-Plugin-Collection"
+github_username: Chalwk
+discord_invite: "https://discord.gg/g6ENWebHsE"
+
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+collections:
+  mcplugins:
+    output: true
+    permalink: /plugins/:name/
+
+exclude:
+  - .github
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+  - vendor
+  - node_modules
+  - papermc_plugins
+  - "*.iml"
+  - build
+  - .idea
+  - .vscode
+  - build.gradle
+  - settings.gradle
+  - gradle.properties
+  - gradlew
+  - gradlew.bat
+  - gradle
+  - run.bat
+
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "mcplugins"
+    values:
+      layout: "plugin"

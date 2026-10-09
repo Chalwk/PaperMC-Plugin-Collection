@@ -1,0 +1,62 @@
+# BigBrother Configuration
+config-version: 1
+
+# Server-wide master switch. If false, no spy features fire regardless of per-player toggles.
+global_toggle: true
+
+# When true, newly-seen players start with all spy features enabled.
+enabled_by_default: true
+
+# Per-spy-type configuration.
+# Keys (command, sign, anvil, book, portal) map to SpyType in code.
+spy:
+  command:
+    enabled: true
+    message: "&7[&eCSPY&7] &f{player} &7executed command: &e{command}"
+
+  sign:
+    enabled: true
+    message: "&7[&aSignSpy&7] &f{player} &7wrote on sign:&r{sign_lines}"
+
+  anvil:
+    enabled: true
+    message: "&7[&6AnvilSpy&7] &f{player} &7used anvil: &e{old_name} &7→ &a{new_name}"
+
+  book:
+    enabled: true
+    message: "&7[&dBookSpy&7] &f{player} &7wrote in book '&e{title}&7': &f{preview}"
+
+  portal:
+    enabled: true
+    message: "&7[&5PortalSpy&7] &f{player} &7traveled through portal: &e{from_world} &7→ &a{to_world}"
+
+# Filters - events matching any of these are ignored entirely.
+filters:
+  excluded_commands:
+    - "msg"
+    - "w"
+    - "tell"
+    - "whisper"
+    - "me"
+    - "say"
+    - "help"
+    - "?"
+  excluded_players: [ ]
+  excluded_worlds:
+    - "world_nether"
+    - "world_the_end"
+
+# Messages
+messages:
+  no_permission: "&cYou don't have permission to use this feature!"
+  players_only: "&cOnly players can use this command!"
+  player_not_found: "&cPlayer not found!"
+  reloaded: "&aConfiguration reloaded!"
+  unknown_command: "&cUnknown command. Use /bigbrother help."
+  global_enabled: "&aBigBrother enabled! Use subcommands to configure specific spy features."
+  global_disabled: "&cBigBrother disabled! All spy features are now off."
+  status_header: "&aEnabled spy features:"
+  status_empty: "&7No spy features are currently enabled."
+  status_entry: "&7- &e{spy}"
+  spy_toggled_self: "&a{spy} spy has been {state}!"
+  spy_toggled_other: "&a{spy} spy has been {state} for {player}!"

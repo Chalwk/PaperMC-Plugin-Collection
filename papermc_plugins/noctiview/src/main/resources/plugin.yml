@@ -1,0 +1,29 @@
+name: NoctiView
+version: '${version}'
+main: com.chalwk.NoctiView
+api-version: '1.21'
+description: Simple night vision toggle plugin with per-world controls
+author: Chalwk
+website: https://github.com/Chalwk
+
+commands:
+  nightvision:
+    description: Toggle night vision or use admin commands
+    usage: /<command> [player|reload|worlds|enableworld|disableworld]
+    permission: nightvision.use
+    aliases: [ nv ]
+
+permissions:
+  noctiview.*:
+    description: All NoctiView permissions
+    children:
+      nightvision.use: true
+      noctiview.admin: true
+
+  nightvision.use:
+    description: Allows toggling your own night vision
+    default: true
+
+  noctiview.admin:
+    description: Access to admin commands and toggling for others
+    default: op

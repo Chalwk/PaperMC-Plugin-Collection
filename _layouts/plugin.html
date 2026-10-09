@@ -1,0 +1,70 @@
+---
+layout: default
+---
+
+<div class="container">
+  <article class="script-detail">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Plugins</a>
+      <span class="breadcrumb-sep">/</span>
+      <span>{{ page.title }}</span>
+    </nav>
+
+    <header class="script-detail-header">
+      <div class="script-detail-title">
+        <h1>{{ page.title }}</h1>
+        {% if page.category %}
+        <span class="category-badge">{{ page.category }}</span>
+        {% endif %}
+      </div>
+
+      {% if page.description %}
+      <p class="script-detail-lede">{{ page.description }}</p>
+      {% endif %}
+
+      <div class="script-detail-actions">
+        {% if page.source_path %}
+        <a class="btn btn-sm btn-secondary"
+          href="https://github.com/{{ site.repository }}/tree/main/{{ page.source_path }}" target="_blank"
+          rel="noopener">
+          View source on GitHub
+        </a>
+        {% endif %}
+        {% if page.release_url %}
+        <a class="btn btn-sm btn-primary" href="{{ page.release_url }}" target="_blank" rel="noopener">
+          Download JAR
+        </a>
+        {% endif %}
+      </div>
+
+      {% if page.tags %}
+      <div class="script-detail-tags">
+        {% for tag in page.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if page.minecraft_versions or page.server_software or page.java_version %}
+      <dl class="plugin-meta">
+        {% if page.minecraft_versions %}
+        <dt>Minecraft</dt>
+        <dd>{{ page.minecraft_versions }}</dd>
+        {% endif %}
+        {% if page.server_software %}
+        <dt>Server</dt>
+        <dd>{{ page.server_software }}</dd>
+        {% endif %}
+        {% if page.java_version %}
+        <dt>Java</dt>
+        <dd>{{ page.java_version }}</dd>
+        {% endif %}
+      </dl>
+      {% endif %}
+    </header>
+
+    <div class="prose">
+      {{ content }}
+    </div>
+  </article>
+</div>

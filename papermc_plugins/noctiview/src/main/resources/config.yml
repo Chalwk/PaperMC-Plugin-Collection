@@ -1,0 +1,52 @@
+# NoctiView Configuration
+config-version: 1
+
+# Particle settings
+particle:
+  enabled: true
+  type: GLOW  # Available: GLOW, HEART, FLAME, NOTE, etc.
+  count: 10
+  offset_x: 0.5
+  offset_y: 1.0
+  offset_z: 0.5
+  speed: 0.1
+
+# Sound settings
+sound:
+  enabled: true
+  type: ENTITY_EXPERIENCE_ORB_PICKUP
+  volume: 1.0
+  pitch: 1.0
+
+# Effect settings
+effect:
+  duration: 999999  # Duration in ticks (20 ticks = 1 second)
+  amplifier: 0      # Potion effect amplifier
+
+# World settings
+# Set to true to enable night vision, false to disable
+worlds:
+  world: true
+  world_nether: false
+  world_the_end: false
+
+# Messages
+messages:
+  no_permission: "&cYou don't have permission to use this feature!"
+  players_only: "&cOnly players can use this command!"
+  reloaded: "&aConfiguration reloaded!"
+  player_not_found: "&cPlayer not found!"
+  world_not_found: "&cWorld not found!"
+  world_enabled: "&aEnabled night vision in {world}!"
+  world_disabled: "&cDisabled night vision in {world}!"
+  world_header: "&6=== Night Vision World Settings ==="
+  world_not_enabled_self: "&cNight vision is not enabled in this world!"
+  world_not_enabled_other: "&cNight vision is not enabled in {world}!"
+  night_vision_enabled: "&aNight vision enabled!"
+  night_vision_disabled: "&cNight vision disabled!"
+  night_vision_enabled_for: "&aEnabled night vision for {player}!"
+  night_vision_disabled_for: "&cDisabled night vision for {player}!"
+  night_vision_enabled_by: "&eNight vision enabled by {sender}!"
+  night_vision_disabled_by: "&eNight vision disabled by {sender}!"
+  usage_enableworld: "&cUsage: /nightvision enableworld <world>"
+  usage_disableworld: "&cUsage: /nightvision disableworld <world>"

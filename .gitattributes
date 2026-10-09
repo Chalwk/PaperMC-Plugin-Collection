@@ -1,0 +1,13 @@
+* text=auto eol=lf
+
+# Windows batch files must keep CRLF
+*.bat text eol=crlf
+
+# Shell scripts must keep LF
+gradlew text eol=lf
+*.sh text eol=lf
+
+# Binary files
+*.jar binary
+*.png binary
+*.jpg binary

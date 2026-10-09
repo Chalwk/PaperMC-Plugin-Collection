@@ -1,0 +1,79 @@
+# VacuLoot Configuration
+config-version: 1
+
+# Default tier for players without specific tier permissions
+default_tier: "basic"
+
+# Magnet settings
+magnet:
+  # How often (in ticks) to check for nearby items (20 ticks = 1 second)
+  interval: 5
+
+# Toggle settings
+toggle:
+  # Cooldown between toggles in seconds
+  cooldown: 5
+
+# Attraction settings
+attraction:
+  # Whether to attract dropped items
+  items: true
+  # Whether to attract experience orbs
+  experience: true
+  # Base movement speed (higher = faster attraction)
+  speed: 0.3
+
+# Economy settings (requires Vault)
+economy:
+  enabled: true
+  # Cost to toggle magnet (per toggle)
+  toggle_cost: 10.0
+
+# World restrictions (empty list = all worlds allowed)
+worlds:
+  allowed:
+    - "world"
+    - "world_nether"
+    - "world_the_end"
+
+# Item blacklist (items that won't be attracted)
+blacklist:
+  materials:
+    - "BEDROCK"
+    - "BARRIER"
+    - "COMMAND_BLOCK"
+
+# Magnet tiers configuration
+tiers:
+  basic:
+    range: 5.0
+    speed_multiplier: 1.0
+    permission: "magnet.tier.basic"
+  advanced:
+    range: 10.0
+    speed_multiplier: 1.2
+    permission: "magnet.tier.advanced"
+  ultimate:
+    range: 15.0
+    speed_multiplier: 1.5
+    permission: "magnet.tier.ultimate"
+  god:
+    range: 25.0
+    speed_multiplier: 2.0
+    permission: "magnet.tier.god"
+
+# Messages
+messages:
+  enabled: "&aMagnet &e{tier} &aenabled! &7(Range: &e{range}&7 blocks)"
+  disabled: "&cMagnet disabled!"
+  cooldown: "&cPlease wait {seconds} seconds before toggling magnet again!"
+  insufficient_funds: "&cYou need ${amount} to toggle magnet!"
+  toggled_for: "&aMagnet {state} for {player}!"
+  toggled_by: "&aYour magnet was {state} by {sender}!"
+  status: "&7[&bVacuLoot&7] {player}'s magnet: {status} &7(Tier: {tier}, Range: {range} blocks)"
+  reloaded: "&aConfiguration reloaded!"
+  player_not_found: "&cPlayer not found!"
+  invalid_tier: "&cInvalid magnet tier! Available tiers: basic, advanced, ultimate, god"
+  tier_set: "&aSet {player}'s magnet tier to {tier}"
+  tier_changed: "&aYour magnet tier has been changed to {tier}"
+  no_permission: "&cYou don't have permission to use this command!"
