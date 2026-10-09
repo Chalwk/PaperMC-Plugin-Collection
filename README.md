@@ -5,49 +5,40 @@
 [![Security Policy](https://img.shields.io/badge/security-policy-blue)](SECURITY.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-A collection of plugins for **PaperMC** (and compatible forks such as Spigot and Bukkit). Every plugin is a complete, standalone
-JAR - no shared library, no dependency chain between plugins.
+A collection of plugins for **PaperMC** (and compatible forks). Every plugin is a complete, standalone JAR - no shared library,
+no dependency chain between plugins.
 
-Full documentation for each plugin lives on the [website](https://chalwk.github.io/PaperMC-Plugin-Collection/).
+Full documentation, downloads, and release notes for each plugin live on
+the [website](https://chalwk.github.io/PaperMC-Plugin-Collection/).
 
 ---
 
-## Index
+## Plugins
 
 ### Gameplay
 
-| Plugin                                                | Version                                                                                                                                         | Docs                                                                                         | Releases                                                                                         | What it does                                                                                                        |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| [`VacuLoot`](papermc_plugins/vaculoot/)               | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/vaculoot-v1.0.0)        | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/vaculoot/)        | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=vaculoot-v)        | Toggleable item and XP magnet with tiered ranges, optional Vault economy cost, world allow-list, and item blacklist |
-| [`GameModeManager`](papermc_plugins/gamemodemanager/) | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/gamemodemanager-v1.0.0) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/gamemodemanager/) | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=gamemodemanager-v) | Separate inventories and player state per gamemode, with world-change preservation                                  |
-| [`NoctiView`](papermc_plugins/noctiview/)             | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/noctiview-v1.0.0)       | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/noctiview/)       | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=noctiview-v)       | Per-world night vision toggle with configurable particles, sound feedback, and admin world controls                 |
+| Plugin                                                | Docs                                                                                         | What it does                                                                                                        |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| [`VacuLoot`](papermc_plugins/vaculoot/)               | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/vaculoot/)        | Toggleable item and XP magnet with tiered ranges, optional Vault economy cost, world allow-list, and item blacklist |
+| [`GameModeManager`](papermc_plugins/gamemodemanager/) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/gamemodemanager/) | Separate inventories and player state per gamemode, with world-change preservation                                  |
+| [`NoctiView`](papermc_plugins/noctiview/)             | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/noctiview/)       | Per-world night vision toggle with configurable particles, sound feedback, and admin world controls                 |
 
 ### Administration
 
-| Plugin                                          | Version                                                                                                                                      | Docs                                                                                      | Releases                                                                                      | What it does                                                                                      |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| [`BigBrother`](papermc_plugins/bigbrother/)     | [![v1.0.1](https://img.shields.io/badge/v-1.0.1-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.1)   | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/)   | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)   | Command, sign, anvil, book, and portal spies with per-player toggles and filters                  |
-| [`AdminChat`](papermc_plugins/adminchat/)       | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0)    | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/adminchat/)    | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)    | Multi-channel staff chat with per-channel permissions, formatting, sounds, and visibility toggles |
-| [`AutoMessages`](papermc_plugins/automessages/) | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/automessages/) | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v) | Scheduled broadcasts with legacy colors and JSON click/hover components                           |
+| Plugin                                          | Docs                                                                                      | What it does                                                                                      |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| [`BigBrother`](papermc_plugins/bigbrother/)     | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/)   | Command, sign, anvil, book, and portal spies with per-player toggles and filters                  |
+| [`AdminChat`](papermc_plugins/adminchat/)       | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/adminchat/)    | Multi-channel staff chat with per-channel permissions, formatting, sounds, and visibility toggles |
+| [`AutoMessages`](papermc_plugins/automessages/) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/automessages/) | Scheduled broadcasts with legacy colors and JSON click/hover components                           |
 
 ---
 
-## Releases
+## Downloads
 
-Each plugin is released independently, tagged as `<plugin>-v<version>`. The
-`Release` workflow builds only the tagged plugin and attaches its JAR to the
-GitHub Release.
-
-To download the latest build of a specific plugin:
-
-- **VacuLoot** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/vaculoot-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=vaculoot-v)
-- **GameModeManager** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/gamemodemanager-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=gamemodemanager-v)
-- **NoctiView** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/noctiview-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=noctiview-v)
-- **BigBrother** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.1) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)
-- **AdminChat** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)
-- **AutoMessages** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v)
-
-Or browse [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases).
+Each plugin is released independently. The [website](https://chalwk.github.io/PaperMC-Plugin-Collection/)
+links to the latest JAR for every plugin, or you can browse
+[all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases)
+on GitHub.
 
 ---
 
@@ -58,6 +49,12 @@ Or browse [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/rel
   - Minecraft **1.21+**; check individual plugin docs for exact version support
 - **Gradle 8.x** to build from source (or use the included `./gradlew` wrapper)
 - No external dependencies unless a plugin says otherwise in its docs
+
+> **Build JVM note:** the Gradle wrapper (8.10.2) does not yet run on Java 25
+> or newer. If your default JDK is newer than the wrapper supports, point
+> `org.gradle.java.home` at a compatible JDK via a local `gradle.properties`,
+> or set `JAVA_HOME` accordingly. The compiled output still targets Java 21
+> bytecode regardless of which JDK builds it.
 
 ---
 
@@ -91,20 +88,142 @@ To build a specific plugin at a specific version (matches the release workflow):
 
 ---
 
-## Releasing
+## Releasing (for maintainers)
 
-Releases are tag-driven. To cut a release for a single plugin:
+Releases are tag-driven. Each plugin is released independently, tagged as
+`<plugin>-v<semver>`. Pushing a tag matching that format triggers the
+`Release` workflow, which builds only the tagged plugin, verifies the
+resulting JAR, and publishes a GitHub Release with the JAR attached.
+
+### Prerequisites
+
+- Write access to the repository.
+- A local clone with the plugin's source ready to release.
+- Java 21 installed, or a working `./gradlew` wrapper.
+
+### Tag format
+
+Tags must match `<plugin>-v<semver>`, all lowercase:
+
+| Valid                    | Invalid                  | Why                          |
+| ------------------------ | ------------------------ | ---------------------------- |
+| `gamemodemanager-v1.0.1` | `GameModeManager-v1.0.1` | Uppercase                    |
+| `vaculoot-v2.1.3`        | `vaculoot-2.1.3`         | Missing `v`                  |
+| `adminchat-v1.0.0`       | `adminchat_v1.0.0`       | Underscore instead of hyphen |
+
+Tags that don't match are rejected by `release.yml` before the build starts.
+
+### Before tagging
+
+One file references the release version and must be updated before the
+release commit:
+
+**`_mcplugins/<plugin>.md`** - bump `latest_version` in the frontmatter. The
+plugin page's **Download** button is built from this field. If it's skipped,
+the site will keep pointing at the previous release after the new one ships.
+
+### Checklist
+
+Run from the repository root.
+
+1. Edit the plugin's Java source as needed.
+
+2. Bump `latest_version` in `_mcplugins/<plugin>.md`.
+
+3. **(Optional)** Build locally to catch CI failures early:
+
+   ```bash
+   ./gradlew :<plugin>:clean :<plugin>:build -Pversion=<version>
+   ```
+
+   Change `<version>` in this command too - omitting `-Pversion` builds with
+   the default `0.0.0-dev`. The resulting JAR appears at
+   `papermc_plugins/<plugin>/build/libs/`.
+
+4. Stage and commit:
+
+   ```bash
+   git add .
+   git commit -m "fix(<plugin>): <summary>, release <version>"
+   ```
+
+5. Push to `main`:
+
+   ```bash
+   git push origin main
+   ```
+
+   This triggers `build.yml` (compiles every plugin) and `jekyll.yml`
+   (rebuilds the docs site). Wait for `build.yml` to pass before tagging -
+   if it fails, fix the problem, commit, and push again.
+
+6. Create the tag:
+
+   ```bash
+   git tag -a <plugin>-v<version> -m "Release <Plugin> <version>"
+   ```
+
+7. Push the tag:
+
+   ```bash
+   git push origin <plugin>-v<version>
+   ```
+
+   This triggers `release.yml`, which:
+
+   - Parses the tag into a plugin name and version.
+   - Verifies `papermc_plugins/<plugin>/` exists.
+   - Builds with `-Pversion=<version>`.
+   - Verifies the JAR's `plugin.yml` contains the correct version, with no
+     leftover `${version}` placeholder.
+   - Publishes a GitHub Release with the JAR attached.
+
+8. Watch the **Actions** tab for `release.yml` to complete. When it's green,
+   the release is live and the JAR is downloadable.
+
+### Worked example
+
+Releasing `GameModeManager` `1.0.0` → `1.0.1`:
 
 ```bash
-git tag vaculoot-v1.2.3
-git push origin vaculoot-v1.2.3
+./gradlew :gamemodemanager:clean :gamemodemanager:build -Pversion=1.0.1
+
+git add .
+git commit -m "fix(gamemodemanager): harden state handling, release 1.0.1"
+git push origin main
+
+git tag -a gamemodemanager-v1.0.1 -m "Release GameModeManager 1.0.1"
+git push origin gamemodemanager-v1.0.1
 ```
 
-The `Release` workflow builds only that plugin at the tagged version, verifies
-the resulting JAR contains a `plugin.yml` with the version baked in correctly,
-and only then publishes a GitHub Release with the JAR attached
-(e.g. `VacuLoot-1.2.3.jar`). Tags that don't match `<plugin>-v<semver>` are
-rejected before the build starts.
+On Windows CMD, drop the `./` prefix (`gradlew`, not `./gradlew`). In
+PowerShell, use `.\gradlew`.
+
+### If `release.yml` fails
+
+A tag is an immutable pointer to a commit. You cannot simply re-run the
+workflow against a corrected commit - the tag itself has to move.
+
+Delete the tag locally and remotely:
+
+```bash
+git tag -d <plugin>-v<version>
+git push origin :refs/tags/<plugin>-v<version>
+```
+
+Fix the underlying issue, commit, and push to `main`. Then repeat steps 6-7
+with the same tag name. The tag now points at the corrected commit and
+`release.yml` will re-run.
+
+### Releasing multiple plugins
+
+Each plugin is tagged and pushed independently, and each tag fires its own
+`release.yml` run. To release several at once:
+
+1. Update the docs for every plugin being released (step 2).
+2. Commit once.
+3. Push to `main` once.
+4. Tag and push each plugin separately.
 
 ---
 

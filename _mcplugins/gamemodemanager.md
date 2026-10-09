@@ -4,7 +4,7 @@ title: GameModeManager
 description: Separate inventories and player state per gamemode, with world-change handling to preserve gamemode.
 category: Gameplay
 plugin_id: gamemodemanager
-latest_version: "1.0.0"
+latest_version: "1.0.1"
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
@@ -80,6 +80,10 @@ config-version: 1
 messages:
   no_permission: "&cYou don't have permission to use this feature!"
   reloaded: "&aConfiguration reloaded!"
+  unknown_subcommand: "&cUnknown subcommand. Use &6/gmmanage help"
+  help:
+    - "&6/gmmanage reload &7- Reload the configuration"
+    - "&6/gmmanage help &7- Show this help"
 ```
 
 ## Notes

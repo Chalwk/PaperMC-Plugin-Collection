@@ -9,9 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+/**
+ * Bukkit resets the player's gamemode on world change (notably for creative
+ * players entering a survival world). We record the gamemode before the
+ * change and restore it once the new world is loaded.
+ */
 public class WorldSwitchListener implements Listener {
     private final GameModeManager plugin;
 
@@ -19,17 +23,10 @@ public class WorldSwitchListener implements Listener {
         this.plugin = plugin;
     }
 
+    // MONITOR: we don't influence the outcome, just record what we saw.
+    // PlayerPortalEvent extends PlayerTeleportEvent, so portals hit this too.
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        capturePendingGameMode(event);
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerPortal(PlayerPortalEvent event) {
-        capturePendingGameMode(event);
-    }
-
-    private void capturePendingGameMode(PlayerTeleportEvent event) {
         if (event.getTo() == null) return;
         if (event.getFrom().getWorld() == event.getTo().getWorld()) return;
 
@@ -42,6 +39,7 @@ public class WorldSwitchListener implements Listener {
         Player player = event.getPlayer();
         GameMode pending = plugin.consumePendingGameMode(player);
 
+        // Only touch it if Bukkit actually changed it on us.
         if (pending != null && player.getGameMode() != pending) {
             player.setGameMode(pending);
         }

@@ -11,7 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * Handles /gmmanage and its subcommands.
+ */
 public class GameModeCommand implements TabExecutor {
     private final GameModeManager plugin;
 
@@ -21,9 +25,9 @@ public class GameModeCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender,
-                             @NotNull Command command,
-                             @NotNull String label,
-                             @NotNull String[] args) {
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String[] args) {
 
         if (!sender.hasPermission("gmmanage.use")) {
             MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
@@ -31,7 +35,9 @@ public class GameModeCommand implements TabExecutor {
         }
 
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
-            MessageHelper.sendMessage(sender, "&6/gmmanage reload &7- Reload the configuration");
+            for (String line : plugin.getConfigManager().getConfig().getHelpLines()) {
+                MessageHelper.sendMessage(sender, line);
+            }
             return true;
         }
 
@@ -45,23 +51,26 @@ public class GameModeCommand implements TabExecutor {
             return true;
         }
 
-        MessageHelper.sendMessage(sender, "&cUnknown subcommand. Use &6/gmmanage help");
+        MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getUnknownSubcommandMsg());
         return true;
     }
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender,
-                                      @NotNull Command command,
-                                      @NotNull String label,
-                                      @NotNull String[] args) {
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            String partial = args[0].toLowerCase();
+            String partial = args[0].toLowerCase(Locale.ROOT);
+
+            // Only suggest subcommands the sender can actually run.
             List<String> options = new ArrayList<>();
             if (sender.hasPermission("gmmanage.reload")) {
                 options.add("reload");
             }
             options.add("help");
+
             for (String opt : options) {
                 if (opt.startsWith(partial)) {
                     completions.add(opt);

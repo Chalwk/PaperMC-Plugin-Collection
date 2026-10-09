@@ -26,6 +26,8 @@ public class PlayerDataListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         plugin.getInventoryManager().savePlayer(player);
+
+        // Drop in-memory state so the map doesn't grow forever.
         plugin.getInventoryManager().removePlayerData(player.getUniqueId());
         plugin.clearPendingGameMode(player.getUniqueId());
     }

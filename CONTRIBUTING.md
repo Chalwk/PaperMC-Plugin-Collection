@@ -38,7 +38,9 @@ expect.
 
 Before opening a PR, make sure:
 
-- The plugin compiles cleanly on Java 21 with `./gradlew build`
+- The plugin compiles cleanly with `./gradlew build` and produces Java 21
+  bytecode (the compile toolchain and release target are set in the root
+  `build.gradle`)
 - The plugin targets PaperMC **1.21 or newer** and does not use APIs newer
   than `io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT` (the compile-time
   floor in the root `build.gradle`)

@@ -1,7 +1,9 @@
 # GameModeManager Configuration
 config-version: 1
-
-# Messages
 messages:
   no_permission: "&cYou don't have permission to use this feature!"
   reloaded: "&aConfiguration reloaded!"
+  unknown_subcommand: "&cUnknown subcommand. Use &6/gmmanage help"
+  help:
+    - "&6/gmmanage reload &7- Reload the configuration"
+    - "&6/gmmanage help &7- Show this help"

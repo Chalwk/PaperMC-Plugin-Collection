@@ -12,6 +12,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Loads config.yml from the plugin data folder, seeding it from the
+ * bundled resource on first run.
+ */
 public class ConfigManager {
     private final GameModeManager plugin;
     private final PluginConfig pluginConfig;
@@ -39,6 +43,8 @@ public class ConfigManager {
     public void reloadConfig() {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
+        // Merge in any new keys from the bundled config so users don't have to
+        // delete their file after an update.
         InputStream resourceStream = plugin.getResource("config.yml");
         if (resourceStream != null) {
             try (InputStreamReader defaultConfigStream = new InputStreamReader(resourceStream, StandardCharsets.UTF_8)) {
@@ -52,6 +58,7 @@ public class ConfigManager {
             plugin.getLogger().warning("Default config.yml not found inside plugin jar!");
         }
 
+        // Write back so any newly-defaulted keys show up in the user's file.
         try {
             config.save(configFile);
         } catch (IOException e) {

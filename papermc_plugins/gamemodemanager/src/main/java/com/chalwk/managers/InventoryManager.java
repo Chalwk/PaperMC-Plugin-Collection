@@ -4,6 +4,10 @@ package com.chalwk.managers;
 
 import com.chalwk.GameModeManager;
 import org.bukkit.GameMode;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -16,6 +20,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Holds per-player, per-gamemode state and persists it under playerdata/.
+ * Only CREATIVE and SURVIVAL are tracked - anything else falls through
+ * untouched.
+ */
 public class InventoryManager {
     private final GameModeManager plugin;
     private final Map<UUID, Map<GameMode, PlayerState>> playerData = new HashMap<>();
@@ -41,16 +50,17 @@ public class InventoryManager {
         if (file.exists()) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
             for (GameMode gm : GameMode.values()) {
-                if (!isTracked(gm)) continue;
-                String path = gm.name().toLowerCase();
+                if (!isTracked(gm))
+                    continue;
+                String path = gm.name().toLowerCase(Locale.ROOT);
                 ConfigurationSection section = config.getConfigurationSection(path);
                 if (section != null) {
-                    PlayerState state = PlayerState.deserialize(section);
-                    modeMap.put(gm, state);
+                    modeMap.put(gm, PlayerState.deserialize(section));
                 }
             }
         }
 
+        // Any missing gamemode gets an empty slate so getState() never returns null.
         for (GameMode gm : GameMode.values()) {
             if (isTracked(gm)) {
                 modeMap.putIfAbsent(gm, PlayerState.createDefault());
@@ -63,16 +73,19 @@ public class InventoryManager {
     public void savePlayer(Player player) {
         UUID uuid = player.getUniqueId();
         Map<GameMode, PlayerState> modeMap = playerData.get(uuid);
-        if (modeMap == null) return;
+        if (modeMap == null)
+            return;
 
+        // Snapshot whatever they're holding right now before writing.
         captureCurrentState(player);
 
         File file = getPlayerFile(uuid);
         YamlConfiguration config = new YamlConfiguration();
         for (Map.Entry<GameMode, PlayerState> entry : modeMap.entrySet()) {
             GameMode gm = entry.getKey();
-            if (!isTracked(gm)) continue;
-            String path = gm.name().toLowerCase();
+            if (!isTracked(gm))
+                continue;
+            String path = gm.name().toLowerCase(Locale.ROOT);
             ConfigurationSection section = config.createSection(path);
             entry.getValue().serialize(section);
         }
@@ -96,9 +109,9 @@ public class InventoryManager {
 
     public void captureCurrentState(Player player) {
         GameMode gm = player.getGameMode();
-        if (!isTracked(gm)) return;
-        PlayerState state = PlayerState.fromPlayer(player);
-        setState(player, gm, state);
+        if (!isTracked(gm))
+            return;
+        setState(player, gm, PlayerState.fromPlayer(player));
     }
 
     public void setState(Player player, GameMode gm, PlayerState state) {
@@ -110,13 +123,13 @@ public class InventoryManager {
     public PlayerState getState(Player player, GameMode gm) {
         UUID uuid = player.getUniqueId();
         Map<GameMode, PlayerState> modeMap = playerData.get(uuid);
-        if (modeMap == null) return PlayerState.createDefault();
+        if (modeMap == null)
+            return PlayerState.createDefault();
         return modeMap.getOrDefault(gm, PlayerState.createDefault());
     }
 
     public void applyState(Player player, GameMode gm) {
-        PlayerState state = getState(player, gm);
-        state.applyToPlayer(player);
+        getState(player, gm).applyToPlayer(player);
     }
 
     public void switchGamemode(Player player, GameMode newGm) {
@@ -127,11 +140,15 @@ public class InventoryManager {
     }
 
     private File getPlayerFile(UUID uuid) {
-        return new File(dataFolder, uuid.toString() + ".yml");
+        return new File(dataFolder, uuid + ".yml");
     }
 
+    /**
+     * Snapshot of a player's inventory and vitals for one gamemode. All
+     * fields are final so instances are effectively immutable.
+     */
     public static class PlayerState {
-        private final ItemStack[] inventory;      // size 41
+        private final ItemStack[] inventory; // 41 slots on 1.21
         private final double health;
         private final int food;
         private final float saturation;
@@ -141,7 +158,7 @@ public class InventoryManager {
         private final List<PotionEffect> effects;
 
         private PlayerState(ItemStack[] inventory, double health, int food, float saturation,
-                            int totalExperience, int level, float exp, List<PotionEffect> effects) {
+                int totalExperience, int level, float exp, List<PotionEffect> effects) {
             this.inventory = inventory.clone();
             this.health = health;
             this.food = food;
@@ -154,33 +171,27 @@ public class InventoryManager {
 
         public static PlayerState fromPlayer(Player player) {
             PlayerInventory inv = player.getInventory();
-            ItemStack[] contents = inv.getContents();
             return new PlayerState(
-                    contents,
+                    inv.getContents(),
                     player.getHealth(),
                     player.getFoodLevel(),
                     player.getSaturation(),
                     player.getTotalExperience(),
                     player.getLevel(),
                     player.getExp(),
-                    new ArrayList<>(player.getActivePotionEffects())
-            );
+                    new ArrayList<>(player.getActivePotionEffects()));
         }
 
         public static PlayerState createDefault() {
-            ItemStack[] empty = new ItemStack[41];
             return new PlayerState(
-                    empty,
-                    20.0,
-                    20,
-                    5.0f,
-                    0,
-                    0,
-                    0.0f,
-                    Collections.emptyList()
-            );
+                    new ItemStack[41],
+                    20.0, 20, 5.0f, 0, 0, 0.0f,
+                    Collections.emptyList());
         }
 
+        // Map serialization is deprecated in favor of byte arrays, but the
+        // YAML stays readable this way. Fine for per-player files.
+        @SuppressWarnings("deprecation")
         public static PlayerState deserialize(ConfigurationSection section) {
             List<?> rawInv = section.getList("inventory");
             ItemStack[] inv = new ItemStack[41];
@@ -188,9 +199,9 @@ public class InventoryManager {
                 int size = Math.min(rawInv.size(), 41);
                 for (int i = 0; i < size; i++) {
                     Object obj = rawInv.get(i);
-                    if (obj instanceof Map) {
+                    if (obj instanceof Map<?, ?> rawMap) {
                         @SuppressWarnings("unchecked")
-                        Map<String, Object> map = (Map<String, Object>) obj;
+                        Map<String, Object> map = (Map<String, Object>) rawMap;
                         inv[i] = ItemStack.deserialize(map);
                     } else {
                         inv[i] = null;
@@ -198,42 +209,78 @@ public class InventoryManager {
                 }
             }
 
+            // Clamp everything - a hand-edited or corrupted file shouldn't
+            // let us call setHealth(0) and blow up at runtime.
             double health = section.getDouble("health", 20.0);
-            int food = section.getInt("food", 20);
-            float saturation = (float) section.getDouble("saturation", 5.0);
-            int totalExp = section.getInt("totalExperience", 0);
-            int level = section.getInt("level", 0);
-            float exp = (float) section.getDouble("exp", 0.0);
+            if (!Double.isFinite(health) || health <= 0)
+                health = 20.0;
+
+            int food = clampInt(section.getInt("food", 20), 0, 20);
+            float saturation = clampFloat((float) section.getDouble("saturation", 5.0), 0f, 20f);
+            int totalExp = Math.max(0, section.getInt("totalExperience", 0));
+            int level = Math.max(0, section.getInt("level", 0));
+            float exp = clampFloat((float) section.getDouble("exp", 0.0), 0f, 1f);
 
             List<PotionEffect> effects = new ArrayList<>();
             List<?> rawEffects = section.getList("potionEffects");
             if (rawEffects != null) {
                 for (Object obj : rawEffects) {
-                    if (obj instanceof Map) {
-                        @SuppressWarnings("unchecked")
-                        Map<String, Object> map = (Map<String, Object>) obj;
+                    if (!(obj instanceof Map<?, ?> rawMap))
+                        continue;
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> map = (Map<String, Object>) rawMap;
 
-                        PotionEffectType type = PotionEffectType.getByName((String) map.get("effect"));
-                        if (type == null) continue;
-
-                        int duration = (int) map.getOrDefault("duration", 0);
-                        int amplifier = (int) map.getOrDefault("amplifier", 0);
-                        boolean ambient = (boolean) map.getOrDefault("ambient", false);
-                        boolean hasParticles = (boolean) map.getOrDefault("has-particles", true);
-                        boolean hasIcon = (boolean) map.getOrDefault("has-icon", true);
-
-                        PotionEffect effect = new PotionEffect(type, duration, amplifier, ambient, hasParticles, hasIcon);
-                        effects.add(effect);
+                    // New format stores the namespaced key under "type".
+                    // Legacy format stored the display name under "effect" -
+                    // still supported so existing player files load cleanly.
+                    String keyString = map.get("type") instanceof String s ? s : null;
+                    PotionEffectType type;
+                    if (keyString != null) {
+                        NamespacedKey key = NamespacedKey.fromString(keyString);
+                        type = key == null ? null : Registry.EFFECT.get(key);
+                    } else {
+                        String legacy = (String) map.get("effect");
+                        type = legacy == null
+                                ? null
+                                : Registry.EFFECT.get(NamespacedKey.minecraft(legacy.toLowerCase(Locale.ROOT)));
                     }
+                    if (type == null) {
+                        continue;
+                    }
+
+                    int duration = toInt(map.get("duration"), 0);
+                    int amplifier = toInt(map.get("amplifier"), 0);
+                    boolean ambient = Boolean.TRUE.equals(map.get("ambient"));
+
+                    // Accept both new keys ("particles"/"icon") and the old
+                    // hyphenated ones for forward/backward compatibility.
+                    boolean hasParticles = !Boolean.FALSE.equals(map.get("particles"))
+                            && !Boolean.FALSE.equals(map.get("has-particles"));
+                    boolean hasIcon = !Boolean.FALSE.equals(map.get("icon"))
+                            && !Boolean.FALSE.equals(map.get("has-icon"));
+
+                    effects.add(new PotionEffect(type, duration, amplifier, ambient, hasParticles, hasIcon));
                 }
             }
 
             return new PlayerState(inv, health, food, saturation, totalExp, level, exp, effects);
         }
 
+        // Registry lookup so we don't rely on a specific Attribute constant
+        // name across Paper versions.
+        private static double resolveMaxHealth(Player player) {
+            AttributeInstance attr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            return attr != null ? attr.getValue() : 20.0;
+        }
+
         public void applyToPlayer(Player player) {
-            player.getInventory().setContents(inventory);
-            player.setHealth(Math.min(health, player.getMaxHealth()));
+            ItemStack[] copy = Arrays.copyOf(inventory, player.getInventory().getSize());
+            player.getInventory().setContents(copy);
+
+            double maxHealth = resolveMaxHealth(player);
+            double safeHealth = Math.max(1.0, Math.min(health, maxHealth));
+            player.setHealth(safeHealth);
+
             player.setFoodLevel(food);
             player.setSaturation(saturation);
             player.setTotalExperience(totalExperience);
@@ -245,17 +292,15 @@ public class InventoryManager {
             }
         }
 
+        // Deprecated for the same reason as deserialize() above.
+        @SuppressWarnings("deprecation")
         public void serialize(ConfigurationSection section) {
-            List<Map<String, Object>> invList = new ArrayList<>();
+            List<Map<String, Object>> invList = new ArrayList<>(inventory.length);
             for (ItemStack item : inventory) {
-                if (item != null) {
-                    invList.add(item.serialize());
-                } else {
-                    invList.add(null);
-                }
+                invList.add(item == null ? null : item.serialize());
             }
-            section.set("inventory", invList);
 
+            section.set("inventory", invList);
             section.set("health", health);
             section.set("food", food);
             section.set("saturation", saturation);
@@ -263,11 +308,31 @@ public class InventoryManager {
             section.set("level", level);
             section.set("exp", exp);
 
-            List<Map<String, Object>> effectList = new ArrayList<>();
+            List<Map<String, Object>> effectList = new ArrayList<>(effects.size());
             for (PotionEffect effect : effects) {
-                effectList.add(effect.serialize());
+                Map<String, Object> map = new LinkedHashMap<>();
+                map.put("type", effect.getType().getKey().toString());
+                map.put("duration", effect.getDuration());
+                map.put("amplifier", effect.getAmplifier());
+                map.put("ambient", effect.isAmbient());
+                map.put("particles", effect.hasParticles());
+                map.put("icon", effect.hasIcon());
+                effectList.add(map);
             }
             section.set("potionEffects", effectList);
+        }
+
+        // YAML numbers can round-trip as Long, Double, etc.
+        private static int toInt(Object value, int fallback) {
+            return value instanceof Number n ? n.intValue() : fallback;
+        }
+
+        private static int clampInt(int v, int min, int max) {
+            return Math.max(min, Math.min(max, v));
+        }
+
+        private static float clampFloat(float v, float min, float max) {
+            return Math.max(min, Math.min(max, v));
         }
     }
 }

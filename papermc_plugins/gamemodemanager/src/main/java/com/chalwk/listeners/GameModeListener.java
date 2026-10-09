@@ -17,11 +17,14 @@ public class GameModeListener implements Listener {
         this.plugin = plugin;
     }
 
+    // HIGHEST so we run after other plugins have had a chance to cancel; if
+    // they did, skip the swap so we don't desync their inventory.
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onGameModeChange(PlayerGameModeChangeEvent event) {
+        if (event.isCancelled()) return;
+
         Player player = event.getPlayer();
         GameMode newGm = event.getNewGameMode();
-
         plugin.getInventoryManager().switchGamemode(player, newGm);
     }
 }

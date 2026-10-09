@@ -9,6 +9,7 @@ import com.chalwk.listeners.PlayerDataListener;
 import com.chalwk.listeners.WorldSwitchListener;
 import com.chalwk.managers.InventoryManager;
 import org.bukkit.GameMode;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,13 +30,19 @@ public class GameModeManager extends JavaPlugin {
 
         configManager.loadConfig();
 
-        getCommand("gmmanage").setExecutor(new GameModeCommand(this));
+        PluginCommand command = getCommand("gmmanage");
+        if (command == null) {
+            getLogger().severe("Command 'gmmanage' is missing from plugin.yml - disabling GameModeManager.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        command.setExecutor(new GameModeCommand(this));
 
         getServer().getPluginManager().registerEvents(new GameModeListener(this), this);
         getServer().getPluginManager().registerEvents(new WorldSwitchListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDataListener(this), this);
 
-        getLogger().info("GameModeManager enabled! Inventories and player states are now gamemode-specific.");
+        getLogger().info("GameModeManager enabled.");
     }
 
     @Override
@@ -43,12 +50,12 @@ public class GameModeManager extends JavaPlugin {
         if (inventoryManager != null) {
             inventoryManager.saveAllPlayers();
         }
-        getLogger().info("GameModeManager disabled!");
+        getLogger().info("GameModeManager disabled.");
     }
 
     public void reload() {
         configManager.reloadConfig();
-        getLogger().info("Configuration reloaded!");
+        getLogger().info("Configuration reloaded.");
     }
 
     public ConfigManager getConfigManager() {
