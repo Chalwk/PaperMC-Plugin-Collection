@@ -4,7 +4,7 @@ title: BigBrother
 description: Player activity monitoring through command, sign, anvil, book, and portal spies with per-player toggles and filters.
 category: Administration
 plugin_id: bigbrother
-latest_version: "1.0.0"
+latest_version: "1.0.1"
 version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
@@ -21,7 +21,7 @@ tags:
 features:
   - "Five spy types: command, sign, anvil, book, portal"
   - "Per-player and per-spy toggles with `.toggle.others` support"
-  - "Excluded commands, players, and worlds"
+  - "Excluded commands, players, and worlds (matched case-insensitively for commands and players)"
   - "Configurable per-spy message formats with placeholders"
   - "Console mirroring for every notification"
 commands:
@@ -141,11 +141,15 @@ All `/bigbrother` subcommands also require `bigbrother.use` because the command'
 
 ## Spy Details
 
-- **Command**: logs commands before execution. Respects `filters.excluded_commands`. Placeholders: `{player}`, `{command}`.
-- **Sign**: logs sign edits and right-click sign interactions. Placeholders: `{player}`, `{sign_lines}`.
-- **Anvil**: logs taking the result from an anvil. Placeholders: `{player}`, `{old_name}`, `{new_name}`. Note: the current implementation sets `{old_name}` to `Unnamed`.
+- **Command**: logs commands before execution. Respects `filters.excluded_commands` (matched case-insensitively against the command name, without the leading `/`). Placeholders: `{player}`, `{command}`.
+- **Sign**: logs sign edits (`SignChangeEvent`) and right-click sign interactions (`PlayerInteractEvent`). Placeholders: `{player}`, `{sign_lines}`. Only the front side of the sign is currently reported.
+- **Anvil**: logs taking the result from an anvil (slot 2). Placeholders: `{player}`, `{old_name}`, `{new_name}`. `{old_name}` is the input item's display name, or its material key if it has no custom name.
 - **Book**: logs book edits. Placeholders: `{player}`, `{title}`, `{preview}`. `{preview}` is the first page, truncated to 50 characters.
-- **Portal**: logs portal travel. Placeholders: `{player}`, `{from_world}`, `{to_world}`.
+- **Portal**: logs portal travel (`PlayerPortalEvent`). Placeholders: `{player}`, `{from_world}`, `{to_world}`. End-portal teleports are not covered (they fire `PlayerTeleportEvent`).
+
+## Persistence
+
+Per-player spy state is held in memory only and is **not** persisted across server restarts. State is also dropped when a player quits, so reconnecting players start from `enabled_by_default`.
 
 ## Configuration
 
@@ -154,9 +158,9 @@ All `/bigbrother` subcommands also require `bigbrother.use` because the command'
 - `enabled_by_default`: whether new players start with all spies enabled.
 - `spy.<type>.enabled`: enable/disable spy type.
 - `spy.<type>.message`: message format.
-- `filters.excluded_commands`: commands ignored by command spy.
-- `filters.excluded_players`: players ignored by all spies.
-- `filters.excluded_worlds`: worlds ignored by all spies.
-- `messages`: plugin command/status messages.
+- `filters.excluded_commands`: commands ignored by command spy (case-insensitive).
+- `filters.excluded_players`: players ignored by all spies (case-insensitive).
+- `filters.excluded_worlds`: worlds ignored by all spies (case-sensitive).
+- `messages`: plugin command/status/help messages. Includes `state_enabled` / `state_disabled` (used as `{state}`), and the `help_*` keys that drive `/bigbrother help`.
 
 Default spy keys: `command`, `sign`, `anvil`, `book`, `portal`.
