@@ -5,6 +5,8 @@ description: "A collection of Minecraft plugins for PaperMC and compatible serve
 url: "https://chalwk.github.io"
 baseurl: "/PaperMC-Plugin-Collection"
 
+image: https://chalwk.github.io/PaperMC-Plugin-Collection/assets/images/social-preview.png
+
 author:
   name: Jericho Crosby
   handle: Chalwk
