@@ -7,6 +7,7 @@ import com.chalwk.config.PluginConfig;
 import com.chalwk.util.SpyType;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,22 +43,41 @@ public class SpyManager {
         return newState;
     }
 
-    public void toggleSpyForPlayer(Player target, SpyType type) {
+    /**
+     * Toggles the given spy type for the target player.
+     *
+     * @return the new state: {@code true} if the spy is now enabled,
+     *         {@code false} if it is now disabled.
+     */
+    public boolean toggleSpyForPlayer(Player target, SpyType type) {
         Set<SpyType> set = getOrCreateSpySet(target);
         if (set.contains(type)) {
             set.remove(type);
-        } else {
-            set.add(type);
+            return false;
         }
-        // Keep the (possibly empty) set so "disabled everything" is preserved.
+        set.add(type);
+        return true;
     }
 
-    public void toggleSpy(Player player, SpyType type) {
-        toggleSpyForPlayer(player, type);
+    public boolean toggleSpy(Player player, SpyType type) {
+        return toggleSpyForPlayer(player, type);
     }
 
+    /**
+     * Returns an unmodifiable view of the player's currently enabled spies.
+     * Mutate via {@link #toggleSpy(Player, SpyType)}.
+     */
     public Set<SpyType> getEnabledSpies(Player player) {
-        return getOrCreateSpySet(player);
+        return Collections.unmodifiableSet(getOrCreateSpySet(player));
+    }
+
+    /**
+     * Drops all per-player state for the given UUID. Called on quit so
+     * the maps don't grow without bound on long-running servers.
+     */
+    public void forget(UUID id) {
+        playerSpies.remove(id);
+        globalToggles.remove(id);
     }
 
     public String getStatusMessage(Player player) {
@@ -82,6 +102,6 @@ public class SpyManager {
         if (!globalToggles.getOrDefault(player.getUniqueId(), true)) {
             return false;
         }
-        return getEnabledSpies(player).contains(type);
+        return getOrCreateSpySet(player).contains(type);
     }
 }

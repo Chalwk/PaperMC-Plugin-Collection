@@ -31,6 +31,7 @@ spy:
     message: "&7[&5PortalSpy&7] &f{player} &7traveled through portal: &e{from_world} &7→ &a{to_world}"
 
 # Filters - events matching any of these are ignored entirely.
+# Command and player filter entries are matched case-insensitively.
 filters:
   excluded_commands:
     - "msg"
@@ -60,3 +61,13 @@ messages:
   status_entry: "&7- &e{spy}"
   spy_toggled_self: "&a{spy} spy has been {state}!"
   spy_toggled_other: "&a{spy} spy has been {state} for {player}!"
+
+  state_enabled: "enabled"
+  state_disabled: "disabled"
+
+  help_header: "&6&lBigBrother Help"
+  help_toggle_all: "&e/bigbrother &7- Toggle all spy features"
+  help_status: "&e/bigbrother status &7- Check your spy status"
+  help_spy_entry: "&e/bigbrother {command} [player] &7- Toggle {spy} spy"
+  help_reload: "&e/bigbrother reload &7- Reload configuration"
+  help_help: "&e/bigbrother help &7- Show this help"

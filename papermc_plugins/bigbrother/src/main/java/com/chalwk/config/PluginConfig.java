@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class PluginConfig {
@@ -35,6 +36,14 @@ public class PluginConfig {
     private String statusEntryMsg = "&7- &e{spy}";
     private String spyToggledSelfMsg = "&a{spy} spy has been {state}!";
     private String spyToggledOtherMsg = "&a{spy} spy has been {state} for {player}!";
+    private String stateEnabled = "enabled";
+    private String stateDisabled = "disabled";
+    private String helpHeaderMsg = "&6&lBigBrother Help";
+    private String helpToggleAllMsg = "&e/bigbrother &7- Toggle all spy features";
+    private String helpStatusMsg = "&e/bigbrother status &7- Check your spy status";
+    private String helpSpyEntryMsg = "&e/bigbrother {command} [player] &7- Toggle {spy} spy";
+    private String helpReloadMsg = "&e/bigbrother reload &7- Reload configuration";
+    private String helpHelpMsg = "&e/bigbrother help &7- Show this help";
 
     public PluginConfig(BigBrother plugin) {
         for (SpyType type : SpyType.values()) {
@@ -60,8 +69,8 @@ public class PluginConfig {
 
         ConfigurationSection filters = config.getConfigurationSection("filters");
         if (filters != null) {
-            excludedCommands = new ArrayList<>(filters.getStringList("excluded_commands"));
-            excludedPlayers = new ArrayList<>(filters.getStringList("excluded_players"));
+            excludedCommands = lowercase(filters.getStringList("excluded_commands"));
+            excludedPlayers = lowercase(filters.getStringList("excluded_players"));
             excludedWorlds = new ArrayList<>(filters.getStringList("excluded_worlds"));
         }
 
@@ -79,7 +88,23 @@ public class PluginConfig {
             statusEntryMsg = messages.getString("status_entry", statusEntryMsg);
             spyToggledSelfMsg = messages.getString("spy_toggled_self", spyToggledSelfMsg);
             spyToggledOtherMsg = messages.getString("spy_toggled_other", spyToggledOtherMsg);
+            stateEnabled = messages.getString("state_enabled", stateEnabled);
+            stateDisabled = messages.getString("state_disabled", stateDisabled);
+            helpHeaderMsg = messages.getString("help_header", helpHeaderMsg);
+            helpToggleAllMsg = messages.getString("help_toggle_all", helpToggleAllMsg);
+            helpStatusMsg = messages.getString("help_status", helpStatusMsg);
+            helpSpyEntryMsg = messages.getString("help_spy_entry", helpSpyEntryMsg);
+            helpReloadMsg = messages.getString("help_reload", helpReloadMsg);
+            helpHelpMsg = messages.getString("help_help", helpHelpMsg);
         }
+    }
+
+    private static List<String> lowercase(List<String> input) {
+        List<String> out = new ArrayList<>(input.size());
+        for (String s : input) {
+            out.add(s.toLowerCase(Locale.ROOT));
+        }
+        return out;
     }
 
     public boolean isGlobalEnabled() {
@@ -99,8 +124,9 @@ public class PluginConfig {
     }
 
     public boolean isCommandExcluded(String command) {
+        String lowered = command.toLowerCase(Locale.ROOT);
         for (String excluded : excludedCommands) {
-            if (command.toLowerCase().startsWith(excluded.toLowerCase())) {
+            if (lowered.startsWith(excluded)) {
                 return true;
             }
         }
@@ -108,7 +134,7 @@ public class PluginConfig {
     }
 
     public boolean isPlayerExcluded(String playerName) {
-        return excludedPlayers.contains(playerName.toLowerCase());
+        return excludedPlayers.contains(playerName.toLowerCase(Locale.ROOT));
     }
 
     public boolean isWorldExcluded(String worldName) {
@@ -161,5 +187,37 @@ public class PluginConfig {
 
     public String getSpyToggledOtherMsg() {
         return spyToggledOtherMsg;
+    }
+
+    public String getStateEnabled() {
+        return stateEnabled;
+    }
+
+    public String getStateDisabled() {
+        return stateDisabled;
+    }
+
+    public String getHelpHeaderMsg() {
+        return helpHeaderMsg;
+    }
+
+    public String getHelpToggleAllMsg() {
+        return helpToggleAllMsg;
+    }
+
+    public String getHelpStatusMsg() {
+        return helpStatusMsg;
+    }
+
+    public String getHelpSpyEntryMsg() {
+        return helpSpyEntryMsg;
+    }
+
+    public String getHelpReloadMsg() {
+        return helpReloadMsg;
+    }
+
+    public String getHelpHelpMsg() {
+        return helpHelpMsg;
     }
 }

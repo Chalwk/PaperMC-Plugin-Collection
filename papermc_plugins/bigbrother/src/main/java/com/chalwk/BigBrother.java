@@ -6,6 +6,7 @@ import com.chalwk.commands.BigBrotherCommand;
 import com.chalwk.config.ConfigManager;
 import com.chalwk.listeners.SpyListener;
 import com.chalwk.managers.SpyManager;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BigBrother extends JavaPlugin {
@@ -20,7 +21,13 @@ public class BigBrother extends JavaPlugin {
 
         configManager.loadConfig();
 
-        getCommand("bigbrother").setExecutor(new BigBrotherCommand(this));
+        PluginCommand command = getCommand("bigbrother");
+        if (command == null) {
+            getLogger().severe("Command 'bigbrother' is not registered in plugin.yml! Disabling.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        command.setExecutor(new BigBrotherCommand(this));
 
         getServer().getPluginManager().registerEvents(new SpyListener(this), this);
 

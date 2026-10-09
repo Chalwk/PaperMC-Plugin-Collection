@@ -30,19 +30,20 @@ public class BigBrotherCommand implements TabExecutor {
             @NotNull String label,
             @NotNull String[] args) {
 
+        PluginConfig config = plugin.getConfigManager().getConfig();
+
         if (!sender.hasPermission("bigbrother.use")) {
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+            MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
             return true;
         }
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayersOnlyMsg());
+                MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
                 return true;
             }
 
             boolean newState = plugin.getSpyManager().toggleGlobal(player);
-            PluginConfig config = plugin.getConfigManager().getConfig();
             String message = newState ? config.getGlobalEnabledMsg() : config.getGlobalDisabledMsg();
             MessageHelper.sendMessage(sender, message);
             return true;
@@ -57,16 +58,16 @@ public class BigBrotherCommand implements TabExecutor {
 
             case "reload":
                 if (!sender.hasPermission("bigbrother.reload")) {
-                    MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+                    MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
                     return true;
                 }
                 plugin.reload();
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getReloadedMsg());
+                MessageHelper.sendMessage(sender, config.getReloadedMsg());
                 return true;
 
             case "status":
                 if (!(sender instanceof Player player)) {
-                    MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayersOnlyMsg());
+                    MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
                     return true;
                 }
                 MessageHelper.sendMessage(sender, plugin.getSpyManager().getStatusMessage(player));
@@ -79,7 +80,7 @@ public class BigBrotherCommand implements TabExecutor {
                     return true;
                 }
 
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getUnknownCommandMsg());
+                MessageHelper.sendMessage(sender, config.getUnknownCommandMsg());
                 return true;
         }
     }
@@ -109,18 +110,16 @@ public class BigBrotherCommand implements TabExecutor {
                 return;
             }
 
-            plugin.getSpyManager().toggleSpyForPlayer(target, spyType);
-            boolean enabled = plugin.getSpyManager().getEnabledSpies(target).contains(spyType);
-            String state = enabled ? "enabled" : "disabled";
+            boolean enabled = plugin.getSpyManager().toggleSpyForPlayer(target, spyType);
+            String state = enabled ? config.getStateEnabled() : config.getStateDisabled();
             MessageHelper.sendMessage(sender,
                     config.getSpyToggledOtherMsg()
                             .replace("{spy}", spyType.getConfigKey())
                             .replace("{state}", state)
                             .replace("{player}", target.getName()));
         } else {
-            plugin.getSpyManager().toggleSpy(player, spyType);
-            boolean enabled = plugin.getSpyManager().getEnabledSpies(player).contains(spyType);
-            String state = enabled ? "enabled" : "disabled";
+            boolean enabled = plugin.getSpyManager().toggleSpy(player, spyType);
+            String state = enabled ? config.getStateEnabled() : config.getStateDisabled();
             MessageHelper.sendMessage(sender,
                     config.getSpyToggledSelfMsg()
                             .replace("{spy}", spyType.getConfigKey())
@@ -129,17 +128,20 @@ public class BigBrotherCommand implements TabExecutor {
     }
 
     private void sendHelp(CommandSender sender) {
-        MessageHelper.sendMessage(sender, "&6&lBigBrother Help");
-        MessageHelper.sendMessage(sender, "&e/bigbrother &7- Toggle all spy features");
-        MessageHelper.sendMessage(sender, "&e/bigbrother status &7- Check your spy status");
+        PluginConfig config = plugin.getConfigManager().getConfig();
+        MessageHelper.sendMessage(sender, config.getHelpHeaderMsg());
+        MessageHelper.sendMessage(sender, config.getHelpToggleAllMsg());
+        MessageHelper.sendMessage(sender, config.getHelpStatusMsg());
 
         for (SpyType type : SpyType.values()) {
             MessageHelper.sendMessage(sender,
-                    "&e/bigbrother " + type.getCommand() + " [player] &7- Toggle " + type.getConfigKey() + " spy");
+                    config.getHelpSpyEntryMsg()
+                            .replace("{command}", type.getCommand())
+                            .replace("{spy}", type.getConfigKey()));
         }
 
-        MessageHelper.sendMessage(sender, "&e/bigbrother reload &7- Reload configuration");
-        MessageHelper.sendMessage(sender, "&e/bigbrother help &7- Show this help");
+        MessageHelper.sendMessage(sender, config.getHelpReloadMsg());
+        MessageHelper.sendMessage(sender, config.getHelpHelpMsg());
     }
 
     @Override
