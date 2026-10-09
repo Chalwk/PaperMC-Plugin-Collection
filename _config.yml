@@ -40,7 +40,6 @@ exclude:
   - LICENSE
   - README.md
   - SECURITY.md
-  - structure.md
   - vendor
   - node_modules
   - papermc_plugins
