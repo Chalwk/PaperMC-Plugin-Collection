@@ -90,14 +90,95 @@ Tab completion covers `help`, `status`, and (if you have permission) `reload`.
 
 `broadcasts` is a numbered map of message entries. Each entry is a list of lines. Keys are sorted numerically before being broadcast, so gaps (e.g. skipping `8`) are fine.
 
-Example:
+Each line is one of two things:
+
+1. **A plain line** - parsed with `LegacyComponentSerializer.legacyAmpersand()`, so `&` codes work.
+2. **A JSON line** - parsed with Adventure's GSON serializer. The plugin treats a line as JSON when the trimmed line starts with `{` and ends with `}`.
+
+Plain example:
 
 ```yaml
 broadcasts:
   1:
-    - '&eHello!'
-    - '{"text":"Click here","clickEvent":{"action":"open_url","value":"https://example.com"}}'
+    - '&e&lBulletin'
+    - ''
+    - '&7Use &b/help&7 for a list of commands.'
 ```
+
+JSON example (interactive click):
+
+```yaml
+broadcasts:
+  2:
+    - '&e&lBulletin'
+    - '{"text":"• Click to open the guide","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://example.com/guide/"},"hoverEvent":{"action":"show_text","value":"Opens the guide in your browser"}}'
+```
+
+### Interactive Components
+
+Any line that is treated as JSON can attach **click** and **hover** behaviour to its text. These are the two fields you'll actually use.
+
+#### Click events
+
+The `clickEvent.action` field decides what happens when a player clicks the text. `clickEvent.value` is the payload.
+
+| Action              | What it does                                                       | `value` format                                        |
+| ------------------- | ------------------------------------------------------------------ | ----------------------------------------------------- |
+| `open_url`          | Opens a URL in the player's browser.                               | Full URL, e.g. `https://example.com/guide/`           |
+| `run_command`       | Runs a command **as the player**, with the permissions they have.  | Command text. A leading `/` is accepted and optional. |
+| `suggest_command`   | Fills the player's chat bar with the command but does not send it. | Command text.                                         |
+| `copy_to_clipboard` | Copies the value to the player's clipboard.                        | The text to copy.                                     |
+| `change_page`       | Flips the page of the written book the player is holding.          | A page number as a string, e.g. `"2"`.                |
+
+Of these, `open_url` and `run_command` are the two you'll use most. The other three are useful for guides, book mechanics, and utility broadcasts.
+
+#### Hover events
+
+The `hoverEvent.action` field decides what tooltip is shown when a player hovers over the text. `hoverEvent.value` is the payload.
+
+| Action        | What it shows      | `value` format                                                              |
+| ------------- | ------------------ | --------------------------------------------------------------------------- |
+| `show_text`   | A text tooltip.    | A string, or a nested text component object.                                |
+| `show_item`   | An item tooltip.   | An item object: `{"id":"minecraft:diamond","count":1}`.                     |
+| `show_entity` | An entity tooltip. | An entity object: `{"type":"minecraft:zombie","id":"<uuid>","name":"..."}`. |
+
+`show_text` covers almost every practical use. The other two are included for completeness.
+
+#### Examples
+
+Open a URL on click:
+
+```yaml
+- '{"text":"• Click to open the store","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://example.com/store/"},"hoverEvent":{"action":"show_text","value":"Visit the store"}}'
+```
+
+Run a command on click:
+
+```yaml
+- '{"text":"• Click to join Discord","bold":true,"color":"dark_green","clickEvent":{"action":"run_command","value":"/discord"},"hoverEvent":{"action":"show_text","value":"Opens the Discord invite"}}'
+```
+
+Suggest a command on click (fills the chat bar without sending):
+
+```yaml
+- '{"text":"• Click to suggest /help","color":"yellow","clickEvent":{"action":"suggest_command","value":"/help"},"hoverEvent":{"action":"show_text","value":"Fills the chat bar with /help"}}'
+```
+
+#### Mixing legacy formatting and interactive components
+
+Each list entry is broadcast on its own line, so you cannot have a coloured legacy prefix and a clickable JSON suffix on the *same visual line* by listing them as separate entries. They'll stack vertically.
+
+To combine them, encode the entire line as a single JSON component with `extra` children:
+
+```yaml
+- '{"text":"","extra":[{"text":"&e&lNotice: &7","color":"yellow"},{"text":"• Open guide","bold":true,"color":"aqua","clickEvent":{"action":"open_url","value":"https://example.com/guide/"},"hoverEvent":{"action":"show_text","value":"Opens the guide"}}]}'
+```
+
+> **Important:** `&` codes inside a JSON string are **not** translated. The legacy serializer only runs on lines that are *not* JSON. Once a line is parsed as JSON, styling must use the JSON fields (`color`, `bold`, `italic`, `underlined`, `strikethrough`, `obfuscated`). The `&e&lNotice:` segment in the example above is a JSON `text` value and will render literally unless you either drop the `&` codes or split the line so the `&`-coded part is a separate, non-JSON entry.
+
+#### Malformed JSON
+
+If a JSON line fails to deserialize, `MessageParser` falls back to legacy parsing for that line only. The rest of the broadcast still goes out. Check your server log if a line renders with raw `{"text":...}` visible.
 
 ### Messages
 
