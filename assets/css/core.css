@@ -401,6 +401,13 @@ blockquote p:last-child {
     text-decoration: none;
 }
 
+.script-card-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
 .category-badge {
     flex-shrink: 0;
     padding: 3px 10px;
@@ -411,6 +418,19 @@ blockquote p:last-child {
     font-weight: 600;
     letter-spacing: 0.03em;
     text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.version-badge {
+    flex-shrink: 0;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
     white-space: nowrap;
 }
 

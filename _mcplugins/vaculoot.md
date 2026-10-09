@@ -3,13 +3,14 @@ layout: plugin
 title: VacuLoot
 description: Toggleable item magnet with tiered ranges, optional Vault economy cost, world restrictions, and item blacklist.
 category: Gameplay
+plugin_id: vaculoot
+latest_version: "1.0.0"
 version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
 main: com.chalwk.VacuLoot
 source_path: papermc_plugins/vaculoot
-release_url: https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/latest
 minecraft_versions: "1.21+"
 server_software: "Paper, Purpur, Spigot"
 java_version: "21+"

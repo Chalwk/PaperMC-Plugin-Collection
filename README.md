@@ -16,19 +16,38 @@ Full documentation for each plugin lives on the [website](https://chalwk.github.
 
 ### Gameplay
 
-| Plugin                                                | Docs                                                                                         | What it does                                                                                                        |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [`VacuLoot`](papermc_plugins/vaculoot/)               | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/vaculoot/)        | Toggleable item and XP magnet with tiered ranges, optional Vault economy cost, world allow-list, and item blacklist |
-| [`GameModeManager`](papermc_plugins/gamemodemanager/) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/gamemodemanager/) | Separate inventories and player state per gamemode, with world-change preservation                                  |
-| [`NoctiView`](papermc_plugins/noctiview/)             | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/noctiview/)       | Per-world night vision toggle with configurable particles, sound feedback, and admin world controls                 |
+| Plugin                                                | Version                                                                                                                                         | Docs                                                                                         | Releases                                                                                         | What it does                                                                                                        |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| [`VacuLoot`](papermc_plugins/vaculoot/)               | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/vaculoot-v1.0.0)        | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/vaculoot/)        | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=vaculoot-v)        | Toggleable item and XP magnet with tiered ranges, optional Vault economy cost, world allow-list, and item blacklist |
+| [`GameModeManager`](papermc_plugins/gamemodemanager/) | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/gamemodemanager-v1.0.0) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/gamemodemanager/) | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=gamemodemanager-v) | Separate inventories and player state per gamemode, with world-change preservation                                  |
+| [`NoctiView`](papermc_plugins/noctiview/)             | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/noctiview-v1.0.0)       | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/noctiview/)       | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=noctiview-v)       | Per-world night vision toggle with configurable particles, sound feedback, and admin world controls                 |
 
 ### Administration
 
-| Plugin                                          | Docs                                                                                      | What it does                                                                                      |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| [`BigBrother`](papermc_plugins/bigbrother/)     | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/)   | Command, sign, anvil, book, and portal spies with per-player toggles and filters                  |
-| [`AdminChat`](papermc_plugins/adminchat/)       | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/adminchat/)    | Multi-channel staff chat with per-channel permissions, formatting, sounds, and visibility toggles |
-| [`AutoMessages`](papermc_plugins/automessages/) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/automessages/) | Scheduled broadcasts with legacy colors and JSON click/hover components                           |
+| Plugin                                          | Version                                                                                                                                      | Docs                                                                                      | Releases                                                                                      | What it does                                                                                      |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| [`BigBrother`](papermc_plugins/bigbrother/)     | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.0)   | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/)   | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)   | Command, sign, anvil, book, and portal spies with per-player toggles and filters                  |
+| [`AdminChat`](papermc_plugins/adminchat/)       | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0)    | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/adminchat/)    | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)    | Multi-channel staff chat with per-channel permissions, formatting, sounds, and visibility toggles |
+| [`AutoMessages`](papermc_plugins/automessages/) | [![v1.0.0](https://img.shields.io/badge/v-1.0.0-blue)](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/automessages/) | [All releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v) | Scheduled broadcasts with legacy colors and JSON click/hover components                           |
+
+---
+
+## Releases
+
+Each plugin is released independently, tagged as `<plugin>-v<version>`. The
+`Release` workflow builds only the tagged plugin and attaches its JAR to the
+GitHub Release.
+
+To download the latest build of a specific plugin:
+
+- **VacuLoot** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/vaculoot-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=vaculoot-v)
+- **GameModeManager** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/gamemodemanager-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=gamemodemanager-v)
+- **NoctiView** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/noctiview-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=noctiview-v)
+- **BigBrother** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)
+- **AdminChat** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)
+- **AutoMessages** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v)
+
+Or browse [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases).
 
 ---
 

@@ -3,13 +3,14 @@ layout: plugin
 title: AdminChat
 description: Multi-channel staff chat with per-channel permissions, formatting, sounds, cooldowns, and visibility toggles.
 category: Administration
+plugin_id: adminchat
+latest_version: "1.0.0"
 version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
 main: com.chalwk.AdminChat
 source_path: papermc_plugins/adminchat
-release_url: https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/latest
 minecraft_versions: "1.21+"
 server_software: "Paper, Purpur, Spigot"
 java_version: "21+"

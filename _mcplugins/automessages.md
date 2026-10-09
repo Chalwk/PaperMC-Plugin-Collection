@@ -3,13 +3,14 @@ layout: plugin
 title: AutoMessages
 description: Scheduled broadcasts to all players and console, with legacy colors, JSON click/hover components, and configurable interval.
 category: Administration
+plugin_id: automessages
+latest_version: "1.0.0"
 version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
 main: com.chalwk.AutoMessages
 source_path: papermc_plugins/automessages
-release_url: https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/latest
 minecraft_versions: "1.21+"
 server_software: "Paper, Purpur, Spigot"
 java_version: "21+"

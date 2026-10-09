@@ -3,13 +3,14 @@ layout: plugin
 title: GameModeManager
 description: Separate inventories and player state per gamemode, with world-change handling to preserve gamemode.
 category: Gameplay
+plugin_id: gamemodemanager
+latest_version: "1.0.0"
 version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
 main: com.chalwk.GameModeManager
 source_path: papermc_plugins/gamemodemanager
-release_url: https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/latest
 minecraft_versions: "1.21+"
 server_software: "Paper, Purpur, Spigot"
 java_version: "21+"

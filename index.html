@@ -41,7 +41,12 @@ description: "Collection of Minecraft plugins for PaperMC and compatible servers
                             {{ plugin.title }}
                         </a>
                     </h3>
-                    <span class="category-badge">{{ plugin.category }}</span>
+                    <div class="script-card-badges">
+                        {% if plugin.latest_version %}
+                        <span class="version-badge">v{{ plugin.latest_version }}</span>
+                        {% endif %}
+                        <span class="category-badge">{{ plugin.category }}</span>
+                    </div>
                 </header>
 
                 <p class="script-card-desc">{{ plugin.description }}</p>

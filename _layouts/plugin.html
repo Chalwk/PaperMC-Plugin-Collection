@@ -16,6 +16,9 @@ layout: default
         {% if page.category %}
         <span class="category-badge">{{ page.category }}</span>
         {% endif %}
+        {% if page.latest_version %}
+        <span class="version-badge">v{{ page.latest_version }}</span>
+        {% endif %}
       </div>
 
       {% if page.description %}
@@ -23,16 +26,25 @@ layout: default
       {% endif %}
 
       <div class="script-detail-actions">
+        {% if page.plugin_id and page.latest_version %}
+        <a class="btn btn-sm btn-primary"
+          href="https://github.com/{{ site.repository }}/releases/tag/{{ page.plugin_id }}-v{{ page.latest_version }}"
+          target="_blank" rel="noopener">
+          Download v{{ page.latest_version }}
+        </a>
+        {% endif %}
+        {% if page.plugin_id %}
+        <a class="btn btn-sm btn-secondary"
+          href="https://github.com/{{ site.repository }}/releases?q={{ page.plugin_id }}-v" target="_blank"
+          rel="noopener">
+          All releases
+        </a>
+        {% endif %}
         {% if page.source_path %}
         <a class="btn btn-sm btn-secondary"
           href="https://github.com/{{ site.repository }}/tree/main/{{ page.source_path }}" target="_blank"
           rel="noopener">
-          View source on GitHub
-        </a>
-        {% endif %}
-        {% if page.release_url %}
-        <a class="btn btn-sm btn-primary" href="{{ page.release_url }}" target="_blank" rel="noopener">
-          Download JAR
+          View source
         </a>
         {% endif %}
       </div>

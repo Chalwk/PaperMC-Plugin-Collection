@@ -3,13 +3,14 @@ layout: plugin
 title: BigBrother
 description: Player activity monitoring through command, sign, anvil, book, and portal spies with per-player toggles and filters.
 category: Administration
+plugin_id: bigbrother
+latest_version: "1.0.0"
 version: 1.0.0
 author: Chalwk
 website: https://github.com/Chalwk
 api-version: 1.21
 main: com.chalwk.BigBrother
 source_path: papermc_plugins/bigbrother
-release_url: https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/latest
 minecraft_versions: "1.21+"
 server_software: "Paper, Purpur, Spigot"
 java_version: "21+"
