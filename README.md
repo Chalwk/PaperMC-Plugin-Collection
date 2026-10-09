@@ -40,12 +40,12 @@ GitHub Release.
 
 To download the latest build of a specific plugin:
 
-- **VacuLoot** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/vaculoot-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=vaculoot-v)
-- **GameModeManager** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/gamemodemanager-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=gamemodemanager-v)
-- **NoctiView** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/noctiview-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=noctiview-v)
-- **BigBrother** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)
-- **AdminChat** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)
-- **AutoMessages** — [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v)
+- **VacuLoot** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/vaculoot-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=vaculoot-v)
+- **GameModeManager** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/gamemodemanager-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=gamemodemanager-v)
+- **NoctiView** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/noctiview-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=noctiview-v)
+- **BigBrother** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/bigbrother-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=bigbrother-v)
+- **AdminChat** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/adminchat-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=adminchat-v)
+- **AutoMessages** - [latest](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases/tag/automessages-v1.0.0) · [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases?q=automessages-v)
 
 Or browse [all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases).
 
