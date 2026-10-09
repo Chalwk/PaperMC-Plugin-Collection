@@ -168,7 +168,7 @@ Default spy keys: `command`, `sign`, `anvil`, `book`, `portal`.
 
 ### 1.0.2
 
-- Initial public release.
+- Book spy now uses the non-deprecated `BookMeta#page(int)` API. No behavioural change, but the plugin no longer emits a deprecation warning at build time and is compatible with future Paper releases that remove `getPages()`.
 
 ### 1.0.0
 
