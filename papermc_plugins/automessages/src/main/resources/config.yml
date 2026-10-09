@@ -165,3 +165,8 @@ messages:
   status_interval: "&7- Interval: &f{interval}s"
   status_total: "&7- Total messages: &f{total}"
   status_next: "&7- Next message index: &f{next}/{total}"
+  help:
+    - "&6&lAutoMessages Help"
+    - "&e/automessages status &7- Show current status"
+    - "&e/automessages reload &7- Reload configuration and restart scheduler"
+    - "&e/automessages help &7- Show this help"

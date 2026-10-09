@@ -9,10 +9,13 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageParser {
+public final class MessageParser {
 
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
     private static final GsonComponentSerializer GSON_SERIALIZER = GsonComponentSerializer.gson();
+
+    private MessageParser() {
+    }
 
     public static List<Component> parseLines(List<String> lines) {
         List<Component> components = new ArrayList<>();

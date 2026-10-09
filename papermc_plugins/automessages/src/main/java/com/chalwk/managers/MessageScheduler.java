@@ -48,7 +48,7 @@ public class MessageScheduler {
     }
 
     private void broadcastNext() {
-        List<List<String>> messages = plugin.getConfigManager().getConfig().getMessages();
+        List<List<String>> messages = plugin.getConfigManager().getConfig().getBroadcasts();
         if (messages.isEmpty()) {
             return;
         }

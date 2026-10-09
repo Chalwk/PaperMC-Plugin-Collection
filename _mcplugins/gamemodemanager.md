@@ -91,3 +91,30 @@ messages:
 - Only `CREATIVE` and `SURVIVAL` are tracked. Other gamemodes are ignored by the inventory/state manager.
 - Pending world-switch gamemodes are stored in memory and cleared on quit.
 - Player data is stored per UUID under `playerdata/`.
+
+## Changelog
+
+### 1.0.1
+
+**Fixed**
+
+- `PlayerQuitEvent` now clears pending gamemode state via `clearPendingGameMode(UUID)`, preventing a stale entry from leaking between sessions if a player disconnects mid-world-switch.
+- `GameModeListener#onGameModeChange` now checks `event.isCancelled()` before swapping inventories. Previously a cancelled gamemode change (e.g. by a protection plugin) would still trigger an inventory swap and desync state.
+- `WorldSwitchListener` no longer registers a separate `PlayerPortalEvent` handler. `PlayerPortalEvent` extends `PlayerTeleportEvent`, so the portal path was already covered by the teleport handler - the duplicate listener was dead code that could double-fire on portal traversal.
+
+**Changed**
+
+- Help and unknown-subcommand output moved out of Java source and into `config.yml`. `/gmmanage help` now reads from a new `messages.help` list, and the unknown-subcommand message is `messages.unknown_subcommand`. Both are exposed through `PluginConfig` and can be edited without rebuilding the plugin.
+- Tab completion for `/gmmanage reload` now respects the `gmmanage.reload` permission, matching the command's own permission check. Previously the subcommand was suggested to every player with `gmmanage.use`.
+- Case-insensitive comparison in tab completion uses `Locale.ROOT`.
+- Startup, shutdown, and reload log lines no longer use exclamation marks and no longer advertise the plugin's purpose on every enable (the description lives in `plugin.yml`).
+
+**Internal**
+
+- `getCommand("gmmanage")` is null-checked in `onEnable`. If the command is missing from `plugin.yml`, the plugin logs a clear error and disables itself instead of throwing an NPE at startup.
+- `PluginConfig#getHelpLines()` returns an unmodifiable list, so callers cannot mutate the config-backed help output.
+- `ConfigManager` and `PluginConfig` now carry class-level Javadoc.
+
+### 1.0.0
+
+- Initial release.

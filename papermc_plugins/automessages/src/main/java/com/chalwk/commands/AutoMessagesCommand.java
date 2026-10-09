@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AutoMessagesCommand implements TabExecutor {
 
@@ -27,8 +28,10 @@ public class AutoMessagesCommand implements TabExecutor {
             @NotNull String label,
             @NotNull String[] args) {
 
+        PluginConfig config = plugin.getConfigManager().getConfig();
+
         if (!sender.hasPermission("automessages.use")) {
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+            MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
             return true;
         }
 
@@ -39,7 +42,7 @@ public class AutoMessagesCommand implements TabExecutor {
 
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("automessages.reload")) {
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+                MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
                 return true;
             }
             plugin.reload();
@@ -52,14 +55,14 @@ public class AutoMessagesCommand implements TabExecutor {
             return true;
         }
 
-        MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getUnknownCommandMsg());
+        MessageHelper.sendMessage(sender, config.getUnknownCommandMsg());
         return true;
     }
 
     private void showStatus(CommandSender sender) {
         PluginConfig config = plugin.getConfigManager().getConfig();
         int interval = config.getInterval();
-        int size = config.getMessages().size();
+        int size = config.getBroadcasts().size();
         int index = plugin.getMessageScheduler().getCurrentIndex();
 
         MessageHelper.sendMessage(sender, config.getStatusHeaderMsg());
@@ -75,10 +78,9 @@ public class AutoMessagesCommand implements TabExecutor {
     }
 
     private void sendHelp(CommandSender sender) {
-        MessageHelper.sendMessage(sender, "&6&lAutoMessages Help");
-        MessageHelper.sendMessage(sender, "&e/automessages status &7- Show current status");
-        MessageHelper.sendMessage(sender, "&e/automessages reload &7- Reload configuration and restart scheduler");
-        MessageHelper.sendMessage(sender, "&e/automessages help &7- Show this help");
+        for (String line : plugin.getConfigManager().getConfig().getHelpMsg()) {
+            MessageHelper.sendMessage(sender, line);
+        }
     }
 
     @Override
@@ -89,7 +91,7 @@ public class AutoMessagesCommand implements TabExecutor {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            String partial = args[0].toLowerCase();
+            String partial = args[0].toLowerCase(Locale.ROOT);
 
             List<String> options = new ArrayList<>();
             options.add("help");

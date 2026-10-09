@@ -5,6 +5,7 @@ package com.chalwk;
 import com.chalwk.commands.AutoMessagesCommand;
 import com.chalwk.config.ConfigManager;
 import com.chalwk.managers.MessageScheduler;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AutoMessages extends JavaPlugin {
@@ -19,7 +20,13 @@ public class AutoMessages extends JavaPlugin {
 
         configManager.loadConfig();
 
-        getCommand("automessages").setExecutor(new AutoMessagesCommand(this));
+        PluginCommand command = getCommand("automessages");
+        if (command == null) {
+            getLogger().severe("Command 'automessages' is not registered in plugin.yml! Disabling plugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        command.setExecutor(new AutoMessagesCommand(this));
 
         messageScheduler.start();
 

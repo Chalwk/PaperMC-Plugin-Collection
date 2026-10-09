@@ -6,7 +6,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 
-public class MessageHelper {
+public final class MessageHelper {
+
+    private MessageHelper() {
+    }
 
     public static void sendMessage(CommandSender sender, String message) {
         Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
