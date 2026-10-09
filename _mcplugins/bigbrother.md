@@ -4,7 +4,7 @@ title: BigBrother
 description: Player activity monitoring through command, sign, anvil, book, and portal spies with per-player toggles and filters.
 category: Administration
 plugin_id: bigbrother
-latest_version: "1.0.1"
+latest_version: "1.0.2"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -163,3 +163,13 @@ Per-player spy state is held in memory only and is **not** persisted across serv
 - `messages`: plugin command/status/help messages. Includes `state_enabled` / `state_disabled` (used as `{state}`), and the `help_*` keys that drive `/bigbrother help`.
 
 Default spy keys: `command`, `sign`, `anvil`, `book`, `portal`.
+
+## Changelog
+
+### 1.0.2
+
+- Initial public release.
+
+### 1.0.0
+
+- Internal development builds.

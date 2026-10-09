@@ -157,14 +157,15 @@ public class SpyListener implements Listener {
 
         StringBuilder preview = new StringBuilder();
         if (bookMeta.hasPages()) {
-            for (String page : bookMeta.getPages()) {
-                String cleanPage = page.replace("\n", " ");
-                if (cleanPage.length() > 50) {
-                    preview.append(cleanPage, 0, 50).append("...");
-                } else {
-                    preview.append(cleanPage);
-                }
-                break;
+            Component firstPage = bookMeta.page(1);
+            String cleanPage = PlainTextComponentSerializer.plainText()
+                    .serialize(firstPage)
+                    .replace("\n", " ");
+
+            if (cleanPage.length() > 50) {
+                preview.append(cleanPage, 0, 50).append("...");
+            } else {
+                preview.append(cleanPage);
             }
         }
 
