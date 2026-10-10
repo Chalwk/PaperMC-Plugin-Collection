@@ -9,6 +9,21 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Turns the raw broadcast strings from config into Components.
+ *
+ * <p>
+ * Two formats are supported per line. A line that starts with {@code {}
+ * and ends with {@code }} is treated as JSON and parsed with Adventure's GSON
+ * serializer. Anything else is treated as legacy ampersand-formatted text.
+ * </p>
+ *
+ * <p>
+ * If a JSON line fails to parse, we fall back to legacy parsing for that
+ * line and keep going. That way a single typo doesn't silently kill an entire
+ * broadcast, and staff can see the raw text in chat and spot what went wrong.
+ * </p>
+ */
 public final class MessageParser {
 
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
@@ -28,6 +43,7 @@ public final class MessageParser {
                 try {
                     comp = GSON_SERIALIZER.deserialize(trimmed);
                 } catch (Exception e) {
+                    // Fall back rather than dropping the line entirely.
                     comp = LEGACY_SERIALIZER.deserialize(line);
                 }
             } else {

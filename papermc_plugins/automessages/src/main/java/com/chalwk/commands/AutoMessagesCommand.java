@@ -14,12 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Handles {@code /automessages} and its subcommands.
+ *
+ * <p>
+ * Subcommand dispatch is a small set of if-checks rather than a switch,
+ * because there are only three of them and adding more would be trivial.
+ * </p>
+ */
 public class AutoMessagesCommand implements TabExecutor {
 
     private final AutoMessages plugin;
+    private final MessageHelper messageHelper;
 
-    public AutoMessagesCommand(AutoMessages plugin) {
+    public AutoMessagesCommand(AutoMessages plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -31,10 +41,11 @@ public class AutoMessagesCommand implements TabExecutor {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!sender.hasPermission("automessages.use")) {
-            MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+            messageHelper.sendMessage(sender, config.getNoPermissionMsg());
             return true;
         }
 
+        // Bare /automessages and /automessages help both show the same block.
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
             sendHelp(sender);
             return true;
@@ -42,11 +53,11 @@ public class AutoMessagesCommand implements TabExecutor {
 
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("automessages.reload")) {
-                MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+                messageHelper.sendMessage(sender, config.getNoPermissionMsg());
                 return true;
             }
             plugin.reload();
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getReloadedMsg());
+            messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getReloadedMsg());
             return true;
         }
 
@@ -55,31 +66,39 @@ public class AutoMessagesCommand implements TabExecutor {
             return true;
         }
 
-        MessageHelper.sendMessage(sender, config.getUnknownCommandMsg());
+        messageHelper.sendMessage(sender, config.getUnknownCommandMsg());
         return true;
     }
 
+    /**
+     * Prints the current scheduler state. The "next" index is 1-based for
+     * human reading, which is why there's a modulo + 1 in there.
+     */
     private void showStatus(CommandSender sender) {
         PluginConfig config = plugin.getConfigManager().getConfig();
         int interval = config.getInterval();
         int size = config.getBroadcasts().size();
         int index = plugin.getMessageScheduler().getCurrentIndex();
 
-        MessageHelper.sendMessage(sender, config.getStatusHeaderMsg());
-        MessageHelper.sendMessage(sender, config.getStatusIntervalMsg()
+        messageHelper.sendMessage(sender, config.getStatusHeaderMsg());
+        messageHelper.sendMessage(sender, config.getStatusIntervalMsg()
                 .replace("{interval}", String.valueOf(interval)));
-        MessageHelper.sendMessage(sender, config.getStatusTotalMsg()
+        messageHelper.sendMessage(sender, config.getStatusTotalMsg()
                 .replace("{total}", String.valueOf(size)));
 
         String next = size > 0 ? String.valueOf(index % size + 1) : "0";
-        MessageHelper.sendMessage(sender, config.getStatusNextMsg()
+        messageHelper.sendMessage(sender, config.getStatusNextMsg()
                 .replace("{next}", next)
                 .replace("{total}", String.valueOf(size)));
     }
 
+    /**
+     * Help lines come from config so server owners can reword them without
+     * rebuilding the plugin.
+     */
     private void sendHelp(CommandSender sender) {
         for (String line : plugin.getConfigManager().getConfig().getHelpMsg()) {
-            MessageHelper.sendMessage(sender, line);
+            messageHelper.sendMessage(sender, line);
         }
     }
 
@@ -96,6 +115,7 @@ public class AutoMessagesCommand implements TabExecutor {
             List<String> options = new ArrayList<>();
             options.add("help");
             options.add("status");
+            // Only suggest reload if they can actually use it.
             if (sender.hasPermission("automessages.reload")) {
                 options.add("reload");
             }

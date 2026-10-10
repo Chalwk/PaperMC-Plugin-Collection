@@ -4,7 +4,7 @@ title: AutoMessages
 description: Scheduled broadcasts to all players and console, with legacy colors, JSON click/hover components, and configurable interval.
 category: Administration
 plugin_id: automessages
-latest_version: "1.0.2"
+latest_version: "1.0.3"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -24,6 +24,7 @@ features:
   - "Multi-line broadcasts, cycled in order"
   - "Reload restarts the scheduler and resets the index"
   - "Reload preserves your config comments and formatting"
+  - "Runs on Spigot, Paper, and Purpur"
 commands:
   - name: automessages
     description: Manage AutoMessages plugin
@@ -61,6 +62,7 @@ Also available on SpigotMC: <https://www.spigotmc.org/resources/automessages.139
 - Reload preserves comments and formatting in `config.yml` - the plugin never rewrites your file.
 - Status shows interval, total broadcasts, and next broadcast index.
 - All user-facing strings (help text, status labels, error messages) are defined in `config.yml` under `messages:`, so nothing is hardcoded.
+- Runs on Spigot, Paper, and Purpur.
 
 ## Commands
 
@@ -219,7 +221,27 @@ messages:
 - Broadcasts cycle in order.
 - Reload does **not** rewrite `config.yml`. New keys added in a future plugin release will be applied in memory from the bundled defaults, but will not appear on disk until you add them yourself. This is deliberate: rewriting the file would strip every comment from your config.
 
+## Dependencies
+
+AutoMessages bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies. You do not need to install anything extra.
+
 ## Changelog
+
+### 1.0.3
+
+**Changed**
+
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. AutoMessages runs on Spigot, Paper, and Purpur from a single JAR without relying on a server-provided Adventure library. The interactive click and hover components now work on Spigot as well.
+- Supported server list widened to include Spigot.
+
+**Internal**
+
+- `MessageHelper` is now an instance class wrapping `BukkitAudiences`, created in `onEnable` and closed in `onDisable`. Added a `sendComponent` method for the scheduler to route pre-parsed Components through.
+- `AutoMessagesCommand` and `MessageScheduler` now receive the `MessageHelper` instance via constructor rather than calling static methods.
+
+### 1.0.2
+
+- Documentation and metadata refresh. No user-visible changes.
 
 ### 1.0.1
 
