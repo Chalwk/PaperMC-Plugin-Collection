@@ -41,6 +41,22 @@ public class PluginConfig {
     private String tierSetMsg = "&aSet {player}'s magnet tier to {tier}";
     private String tierChangedMsg = "&aYour magnet tier has been changed to {tier}";
     private String noPermissionMsg = "&cYou don't have permission to use this command!";
+    private String playersOnlyMsg = "&cOnly players can use this command!";
+    private String unknownCommandMsg = "&cUnknown command. Use /magnet help";
+    private String adminNoPermissionMsg = "&cYou don't have permission to use this command!";
+    private String othersNoPermissionMsg = "&cYou don't have permission to toggle magnet for others!";
+    private String specifyPlayerMsg = "&cYou must specify a player!";
+    private String tierUsageMsg = "&cUsage: /magnet tier <player> <tier>";
+    private String costLineMsg = "&7Cost: &e${amount}";
+    private String helpCostMsg = "&7Cost per toggle: &e${amount}";
+    private List<String> helpLines = List.of(
+            "&6&lVacuLoot Help",
+            "&e/magnet &7- Toggle your magnet",
+            "&e/magnet toggle [player] &7- Toggle magnet for yourself or another player",
+            "&e/magnet check [player] &7- Check magnet status",
+            "&e/magnet tier <player> <tier> &7- Set player's magnet tier",
+            "&e/magnet reload &7- Reload configuration",
+            "&e/magnet help &7- Show this help");
 
     public PluginConfig(VacuLoot plugin) {
     }
@@ -73,7 +89,19 @@ public class PluginConfig {
 
         ConfigurationSection messages = config.getConfigurationSection("messages");
         if (messages != null) {
+            List<String> help = messages.getStringList("help");
+            if (!help.isEmpty()) {
+                helpLines = List.copyOf(help);
+            }
             enabledMsg = messages.getString("enabled", enabledMsg);
+            playersOnlyMsg = messages.getString("players_only", playersOnlyMsg);
+            unknownCommandMsg = messages.getString("unknown_command", unknownCommandMsg);
+            adminNoPermissionMsg = messages.getString("admin_no_permission", adminNoPermissionMsg);
+            othersNoPermissionMsg = messages.getString("others_no_permission", othersNoPermissionMsg);
+            specifyPlayerMsg = messages.getString("specify_player", specifyPlayerMsg);
+            tierUsageMsg = messages.getString("tier_usage", tierUsageMsg);
+            costLineMsg = messages.getString("cost_line", costLineMsg);
+            helpCostMsg = messages.getString("help_cost", helpCostMsg);
             disabledMsg = messages.getString("disabled", disabledMsg);
             cooldownMsg = messages.getString("cooldown", cooldownMsg);
             insufficientFundsMsg = messages.getString("insufficient_funds", insufficientFundsMsg);
@@ -87,6 +115,42 @@ public class PluginConfig {
             tierChangedMsg = messages.getString("tier_changed", tierChangedMsg);
             noPermissionMsg = messages.getString("no_permission", noPermissionMsg);
         }
+    }
+
+    public String getPlayersOnlyMsg() {
+        return playersOnlyMsg;
+    }
+
+    public String getUnknownCommandMsg() {
+        return unknownCommandMsg;
+    }
+
+    public String getAdminNoPermissionMsg() {
+        return adminNoPermissionMsg;
+    }
+
+    public String getOthersNoPermissionMsg() {
+        return othersNoPermissionMsg;
+    }
+
+    public String getSpecifyPlayerMsg() {
+        return specifyPlayerMsg;
+    }
+
+    public String getTierUsageMsg() {
+        return tierUsageMsg;
+    }
+
+    public String getCostLineMsg() {
+        return costLineMsg;
+    }
+
+    public String getHelpCostMsg() {
+        return helpCostMsg;
+    }
+
+    public List<String> getHelpLines() {
+        return helpLines;
     }
 
     public String getDefaultTier() {

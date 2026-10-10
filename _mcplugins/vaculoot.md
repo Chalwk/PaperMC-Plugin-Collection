@@ -4,7 +4,7 @@ title: VacuLoot
 description: Toggleable item magnet with tiered ranges, optional Vault economy cost, world restrictions, and item blacklist.
 category: Gameplay
 plugin_id: vaculoot
-latest_version: "1.0.0"
+latest_version: "1.0.1"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -171,3 +171,31 @@ Messages are configurable under `messages`:
 - The magnet task runs every `magnet.interval` ticks and only processes players with an active magnet.
 - Items with metadata `no-magnet` and materials in `blacklist.materials` are ignored.
 - If `worlds.allowed` is empty, all worlds are allowed.
+
+---
+
+## Dependencies
+
+Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies.
+
+---
+
+## Changelog
+
+### 1.0.1
+
+**Changed**
+
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. Runs on Spigot, Paper, and Purpur.
+- All previously hardcoded command messages moved into `config.yml` under `messages:`. Help output is now driven by `messages.help`.
+- Vault remains a `softdepend`. When Vault is absent, economy checks are bypassed as before.
+
+**Fixed**
+
+- Reload no longer rewrites `config.yml`. Comments and formatting are preserved.
+
+**Internal**
+
+- `MessageHelper` is now an instance class wrapping `BukkitAudiences`, created in `onEnable` and closed in `onDisable`.
+- `MagnetCommand` now receives the `MessageHelper` instance via constructor.
+- `getCommand("magnet")` is null-checked in `onEnable`.
