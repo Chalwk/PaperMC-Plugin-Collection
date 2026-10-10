@@ -221,9 +221,13 @@ messages:
 - Broadcasts cycle in order.
 - Reload does **not** rewrite `config.yml`. New keys added in a future plugin release will be applied in memory from the bundled defaults, but will not appear on disk until you add them yourself. This is deliberate: rewriting the file would strip every comment from your config.
 
+---
+
 ## Dependencies
 
-AutoMessages bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies. You do not need to install anything extra.
+Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies.
+
+---
 
 ## Changelog
 
@@ -231,8 +235,7 @@ AutoMessages bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR,
 
 **Changed**
 
-- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. AutoMessages runs on Spigot, Paper, and Purpur from a single JAR without relying on a server-provided Adventure library. The interactive click and hover components now work on Spigot as well.
-- Supported server list widened to include Spigot.
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. Runs on Spigot, Paper, and Purpur.
 
 **Internal**
 

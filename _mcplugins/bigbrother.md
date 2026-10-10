@@ -168,9 +168,13 @@ Per-player spy state is held in memory only and is **not** persisted across serv
 
 Default spy keys: `command`, `sign`, `anvil`, `book`, `portal`.
 
+---
+
 ## Dependencies
 
-BigBrother bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies. You do not need to install anything extra.
+Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies.
+
+---
 
 ## Changelog
 
@@ -182,8 +186,7 @@ BigBrother bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, r
 
 **Changed**
 
-- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. BigBrother runs on Spigot, Paper, and Purpur from a single JAR without relying on a server-provided Adventure library.
-- Supported server list widened to include Spigot.
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. Runs on Spigot, Paper, and Purpur.
 
 **Internal**
 
