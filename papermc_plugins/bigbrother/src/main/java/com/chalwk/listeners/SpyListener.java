@@ -4,9 +4,9 @@ package com.chalwk.listeners;
 
 import com.chalwk.BigBrother;
 import com.chalwk.config.PluginConfig;
+import com.chalwk.util.MessageHelper;
 import com.chalwk.util.SpyType;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,14 +31,31 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * Listens for the events BigBrother spies on and dispatches notifications.
+ *
+ * <p>All handlers use MONITOR priority and read-only access so they never
+ * interfere with other plugins' logic. Anything that modifies the event would
+ * belong at a different priority and would be a bug in a spy plugin.</p>
+ *
+ * <p>Each handler follows the same shape: check whether the spy is active for
+ * the triggering player, check filters, build the notification string from the
+ * config message, hand it to {@link #notifyStaff}.</p>
+ */
 public class SpyListener implements Listener {
 
     private final BigBrother plugin;
+    private final MessageHelper messageHelper;
 
-    public SpyListener(BigBrother plugin) {
+    public SpyListener(BigBrother plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
     }
 
+    /**
+     * Cleans up the player's spy state so the internal maps don't accumulate
+     * entries on a server that runs for weeks at a time.
+     */
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         plugin.getSpyManager().forget(event.getPlayer().getUniqueId());
@@ -58,6 +75,8 @@ public class SpyListener implements Listener {
         if (fullCommand.length() < 2 || fullCommand.charAt(0) != '/')
             return;
 
+        // Only the base command is checked against the filter list. Arguments
+        // are kept in the logged message so staff can see the full line.
         String[] parts = fullCommand.split(" ", 2);
         String baseCommand = parts[0].substring(1);
 
@@ -81,6 +100,8 @@ public class SpyListener implements Listener {
         if (config.isPlayerExcluded(player.getName()) || config.isWorldExcluded(player.getWorld().getName()))
             return;
 
+        // Collect only non-blank lines so the notification isn't padded with
+        // empty rows when someone writes on a 4-line sign but only fills two.
         StringBuilder signContent = new StringBuilder();
         for (Component component : event.lines()) {
             String line = PlainTextComponentSerializer.plainText().serialize(component);
@@ -104,6 +125,8 @@ public class SpyListener implements Listener {
             return;
         if (event.getInventory().getType() != InventoryType.ANVIL)
             return;
+        // Slot 2 is the output slot. Taking the item from there is how we know
+        // the player has actually finished the rename, not just opened the GUI.
         if (event.getRawSlot() != 2)
             return;
 
@@ -118,6 +141,9 @@ public class SpyListener implements Listener {
         if (result == null || !result.hasItemMeta())
             return;
 
+        // The "before" name comes from the input slot (0). If the item didn't
+        // have a custom name, fall back to its material key so the log line
+        // isn't empty.
         String oldName = "Unnamed";
         ItemStack input = event.getInventory().getItem(0);
         if (input != null) {
@@ -155,6 +181,9 @@ public class SpyListener implements Listener {
         BookMeta bookMeta = event.getNewBookMeta();
         String title = bookMeta.hasTitle() ? bookMeta.getTitle() : "Untitled";
 
+        // Only the first page is logged. Full book contents would be noisy and
+        // slow on servers with a lot of staff. Truncation keeps the line to a
+        // reasonable width for chat.
         StringBuilder preview = new StringBuilder();
         if (bookMeta.hasPages()) {
             Component firstPage = bookMeta.page(1);
@@ -202,6 +231,10 @@ public class SpyListener implements Listener {
         notifyStaff(message, SpyType.PORTAL, player);
     }
 
+    /**
+     * Right-clicking a sign to read it. Separate from the edit handler because
+     * it's a different event and staff usually want both logged.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onSignInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
@@ -223,6 +256,8 @@ public class SpyListener implements Listener {
         if (config.isPlayerExcluded(player.getName()) || config.isWorldExcluded(player.getWorld().getName()))
             return;
 
+        // Only the front side. Back-side signs are rare enough that including
+        // them would double the notification volume for little benefit.
         StringBuilder signText = new StringBuilder();
         for (Component component : sign.getSide(Side.FRONT).lines()) {
             String line = PlainTextComponentSerializer.plainText().serialize(component);
@@ -240,22 +275,26 @@ public class SpyListener implements Listener {
         notifyStaff(message, SpyType.SIGN, player);
     }
 
+    /**
+     * Sends the notification to every online staff member who has the matching
+     * spy permission, plus the console. The player who triggered it is skipped
+     * so staff don't see their own actions echoed back.
+     */
     private void notifyStaff(String message, SpyType spyType, Player triggerPlayer) {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
+        // Check the server-wide disable flag on top of the per-player toggles.
         if (!config.isSpyEnabled(spyType))
             return;
-
-        Component formattedMessage = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
 
         for (Player staff : Bukkit.getOnlinePlayers()) {
             if (staff.equals(triggerPlayer))
                 continue;
             if (staff.hasPermission(spyType.getPermission())) {
-                staff.sendMessage(formattedMessage);
+                messageHelper.sendMessage(staff, message);
             }
         }
 
-        Bukkit.getConsoleSender().sendMessage(formattedMessage);
+        messageHelper.sendMessage(Bukkit.getConsoleSender(), message);
     }
 }

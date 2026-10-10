@@ -12,6 +12,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Parsed config values, held as plain fields.
+ *
+ * <p>Populated by {@link #loadFromConfig(ConfigurationSection)} and read via
+ * getters. Spy-related flags and messages are keyed by {@link SpyType} rather
+ * than by string so we don't have to keep a separate map of config-key
+ * lookups scattered around the codebase.</p>
+ */
 public class PluginConfig {
 
     private boolean globalToggle = true;
@@ -46,6 +54,8 @@ public class PluginConfig {
     private String helpHelpMsg = "&e/bigbrother help &7- Show this help";
 
     public PluginConfig(BigBrother plugin) {
+        // Seed the maps so anything that asks for a spy type before load runs
+        // gets a sensible default rather than null.
         for (SpyType type : SpyType.values()) {
             spyEnabled.put(type, true);
             spyMessages.put(type, "&7[&eBigBrother&7] &f{player} &7{action}");
@@ -69,8 +79,11 @@ public class PluginConfig {
 
         ConfigurationSection filters = config.getConfigurationSection("filters");
         if (filters != null) {
+            // Commands and players are matched case-insensitively, so normalize
+            // them once at load time instead of on every comparison.
             excludedCommands = lowercase(filters.getStringList("excluded_commands"));
             excludedPlayers = lowercase(filters.getStringList("excluded_players"));
+            // Worlds are case-sensitive. No lowercasing.
             excludedWorlds = new ArrayList<>(filters.getStringList("excluded_worlds"));
         }
 
@@ -123,6 +136,10 @@ public class PluginConfig {
         return spyMessages.getOrDefault(type, "&7[&eBigBrother&7] &f{player} &7{action}");
     }
 
+    /**
+     * Checks the excluded_commands list. Uses startsWith so an entry like
+     * "msg" also matches "msg John". The command is passed without the slash.
+     */
     public boolean isCommandExcluded(String command) {
         String lowered = command.toLowerCase(Locale.ROOT);
         for (String excluded : excludedCommands) {

@@ -4,7 +4,7 @@ title: BigBrother
 description: Player activity monitoring through command, sign, anvil, book, and portal spies with per-player toggles and filters.
 category: Administration
 plugin_id: bigbrother
-latest_version: "1.0.2"
+latest_version: "1.0.3"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -23,6 +23,7 @@ features:
   - "Excluded commands, players, and worlds (matched case-insensitively for commands and players)"
   - "Configurable per-spy message formats with placeholders"
   - "Console mirroring for every notification"
+  - "Runs on Spigot, Paper, and Purpur"
 commands:
   - name: bigbrother
     description: Manage BigBrother spy features
@@ -121,6 +122,7 @@ BigBrother monitors player activity through configurable spy features.
 - Notifies staff with matching spy permission, excluding the trigger player, and the console.
 - Configurable per-spy messages with placeholders.
 - Status command lists enabled spy features.
+- Runs on Spigot, Paper, and Purpur
 
 ## Commands
 
@@ -164,7 +166,29 @@ Per-player spy state is held in memory only and is **not** persisted across serv
 
 Default spy keys: `command`, `sign`, `anvil`, `book`, `portal`.
 
+## Dependencies
+
+BigBrother bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies. You do not need to install anything extra.
+
 ## Changelog
+
+### 1.0.3
+
+**Fixed**
+
+- Reload no longer rewrites `config.yml`. Previously the plugin called `YamlConfiguration#save` on every reload, which silently stripped every comment and reformatted the file. Comments and formatting are now preserved across reloads.
+
+**Changed**
+
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. BigBrother runs on Spigot, Paper, and Purpur from a single JAR without relying on a server-provided Adventure library.
+- Supported server list widened to include Spigot.
+
+**Internal**
+
+- `MessageHelper` is now an instance class wrapping `BukkitAudiences`, created in `onEnable` and closed in `onDisable`.
+- `BigBrotherCommand` and `SpyListener` now receive the `MessageHelper` instance via constructor rather than calling a static method.
+- Command argument parsing now uses `Locale.ROOT` for case-insensitive comparison, matching the collection convention.
+- `ConfigManager` guards against a missing embedded `config.yml` and no longer assumes `configFile` is set before `reloadConfig` runs.
 
 ### 1.0.2
 

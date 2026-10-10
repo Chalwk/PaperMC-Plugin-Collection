@@ -15,13 +15,23 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * Handles {@code /bigbrother} and its subcommands.
+ *
+ * <p>Subcommand dispatch is a plain switch. Spy subcommands are resolved
+ * through {@link SpyType#fromCommand(String)} so the enum stays the single
+ * source of truth for command names, config keys, and permission nodes.</p>
+ */
 public class BigBrotherCommand implements TabExecutor {
 
     private final BigBrother plugin;
+    private final MessageHelper messageHelper;
 
-    public BigBrotherCommand(BigBrother plugin) {
+    public BigBrotherCommand(BigBrother plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -33,23 +43,25 @@ public class BigBrotherCommand implements TabExecutor {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!sender.hasPermission("bigbrother.use")) {
-            MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+            messageHelper.sendMessage(sender, config.getNoPermissionMsg());
             return true;
         }
 
+        // Bare /bigbrother toggles the global switch. Console has no UUID-based
+        // state to toggle, so it's player-only.
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
-                MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
+                messageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
                 return true;
             }
 
             boolean newState = plugin.getSpyManager().toggleGlobal(player);
             String message = newState ? config.getGlobalEnabledMsg() : config.getGlobalDisabledMsg();
-            MessageHelper.sendMessage(sender, message);
+            messageHelper.sendMessage(sender, message);
             return true;
         }
 
-        String subCommand = args[0].toLowerCase();
+        String subCommand = args[0].toLowerCase(Locale.ROOT);
 
         switch (subCommand) {
             case "help":
@@ -57,20 +69,22 @@ public class BigBrotherCommand implements TabExecutor {
                 return true;
 
             case "reload":
+                // Reload is gated behind a second permission on top of the base
+                // bigbrother.use. Not everyone who can toggle spies can reload.
                 if (!sender.hasPermission("bigbrother.reload")) {
-                    MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+                    messageHelper.sendMessage(sender, config.getNoPermissionMsg());
                     return true;
                 }
                 plugin.reload();
-                MessageHelper.sendMessage(sender, config.getReloadedMsg());
+                messageHelper.sendMessage(sender, config.getReloadedMsg());
                 return true;
 
             case "status":
                 if (!(sender instanceof Player player)) {
-                    MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
+                    messageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
                     return true;
                 }
-                MessageHelper.sendMessage(sender, plugin.getSpyManager().getStatusMessage(player));
+                messageHelper.sendMessage(sender, plugin.getSpyManager().getStatusMessage(player));
                 return true;
 
             default:
@@ -80,39 +94,45 @@ public class BigBrotherCommand implements TabExecutor {
                     return true;
                 }
 
-                MessageHelper.sendMessage(sender, config.getUnknownCommandMsg());
+                messageHelper.sendMessage(sender, config.getUnknownCommandMsg());
                 return true;
         }
     }
 
+    /**
+     * Handles toggling a single spy type, for either the sender or another player.
+     *
+     * <p>Command form is {@code /bigbrother <spy> [player]}. The optional player
+     * argument requires the matching {@code .toggle.others} permission.</p>
+     */
     private void handleSpyToggle(CommandSender sender, String[] args, SpyType spyType) {
         if (!(sender instanceof Player player)) {
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayersOnlyMsg());
+            messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayersOnlyMsg());
             return;
         }
 
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!player.hasPermission(spyType.getPermission())) {
-            MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+            messageHelper.sendMessage(sender, config.getNoPermissionMsg());
             return;
         }
 
         if (args.length > 1) {
             if (!player.hasPermission(spyType.getPermissionOthers())) {
-                MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+                messageHelper.sendMessage(sender, config.getNoPermissionMsg());
                 return;
             }
 
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null) {
-                MessageHelper.sendMessage(sender, config.getPlayerNotFoundMsg());
+                messageHelper.sendMessage(sender, config.getPlayerNotFoundMsg());
                 return;
             }
 
             boolean enabled = plugin.getSpyManager().toggleSpyForPlayer(target, spyType);
             String state = enabled ? config.getStateEnabled() : config.getStateDisabled();
-            MessageHelper.sendMessage(sender,
+            messageHelper.sendMessage(sender,
                     config.getSpyToggledOtherMsg()
                             .replace("{spy}", spyType.getConfigKey())
                             .replace("{state}", state)
@@ -120,28 +140,33 @@ public class BigBrotherCommand implements TabExecutor {
         } else {
             boolean enabled = plugin.getSpyManager().toggleSpy(player, spyType);
             String state = enabled ? config.getStateEnabled() : config.getStateDisabled();
-            MessageHelper.sendMessage(sender,
+            messageHelper.sendMessage(sender,
                     config.getSpyToggledSelfMsg()
                             .replace("{spy}", spyType.getConfigKey())
                             .replace("{state}", state));
         }
     }
 
+    /**
+     * Prints the help block. The spy entries are generated from
+     * {@link SpyType#values()} so adding a new spy type to the enum is enough
+     * to have it show up here.
+     */
     private void sendHelp(CommandSender sender) {
         PluginConfig config = plugin.getConfigManager().getConfig();
-        MessageHelper.sendMessage(sender, config.getHelpHeaderMsg());
-        MessageHelper.sendMessage(sender, config.getHelpToggleAllMsg());
-        MessageHelper.sendMessage(sender, config.getHelpStatusMsg());
+        messageHelper.sendMessage(sender, config.getHelpHeaderMsg());
+        messageHelper.sendMessage(sender, config.getHelpToggleAllMsg());
+        messageHelper.sendMessage(sender, config.getHelpStatusMsg());
 
         for (SpyType type : SpyType.values()) {
-            MessageHelper.sendMessage(sender,
+            messageHelper.sendMessage(sender,
                     config.getHelpSpyEntryMsg()
                             .replace("{command}", type.getCommand())
                             .replace("{spy}", type.getConfigKey()));
         }
 
-        MessageHelper.sendMessage(sender, config.getHelpReloadMsg());
-        MessageHelper.sendMessage(sender, config.getHelpHelpMsg());
+        messageHelper.sendMessage(sender, config.getHelpReloadMsg());
+        messageHelper.sendMessage(sender, config.getHelpHelpMsg());
     }
 
     @Override
@@ -152,7 +177,7 @@ public class BigBrotherCommand implements TabExecutor {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            String partial = args[0].toLowerCase();
+            String partial = args[0].toLowerCase(Locale.ROOT);
 
             List<String> options = new ArrayList<>();
             options.add("help");
@@ -160,6 +185,7 @@ public class BigBrotherCommand implements TabExecutor {
             if (sender.hasPermission("bigbrother.reload")) {
                 options.add("reload");
             }
+            // Only suggest spy subcommands the sender can actually use.
             for (SpyType type : SpyType.values()) {
                 if (sender.hasPermission(type.getPermission())) {
                     options.add(type.getCommand());
@@ -172,11 +198,13 @@ public class BigBrotherCommand implements TabExecutor {
                 }
             }
         } else if (args.length == 2) {
+            // Second argument is a player name, and only for spy subcommands
+            // where the sender has the .toggle.others permission.
             SpyType spyType = SpyType.fromCommand(args[0]);
             if (spyType != null && sender.hasPermission(spyType.getPermissionOthers())) {
-                String partial = args[1].toLowerCase();
+                String partial = args[1].toLowerCase(Locale.ROOT);
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.getName().toLowerCase().startsWith(partial)) {
+                    if (player.getName().toLowerCase(Locale.ROOT).startsWith(partial)) {
                         completions.add(player.getName());
                     }
                 }
