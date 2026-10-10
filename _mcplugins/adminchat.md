@@ -4,7 +4,7 @@ title: AdminChat
 description: Multi-channel staff chat with per-channel permissions, formatting, sounds, cooldowns, and visibility toggles.
 category: Administration
 plugin_id: adminchat
-latest_version: "1.0.0"
+latest_version: "1.0.1"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -135,3 +135,32 @@ Includes: `no_permission`, `no_channel`, `toggled_on`, `toggled_off`, `toggled_f
 - `notifications.join_message`: message with `{player}`.
 - `notifications.quit_notification`: enable/disable quit notification.
 - `notifications.quit_message`: message with `{player}`.
+
+---
+
+## Dependencies
+
+Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies.
+
+---
+
+## Changelog
+
+### 1.0.1
+
+**Changed**
+
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. Runs on Spigot, Paper, and Purpur.
+- Help text moved out of the Java source into `config.yml` under `messages.help`, so it can be customised without rebuilding.
+
+**Internal**
+
+- `MessageHelper` is now an instance class wrapping `BukkitAudiences`, created in `onEnable` and closed in `onDisable`.
+- `AdminChatCommand`, `AdminChatListener`, and `AdminChatManager` now receive the `MessageHelper` instance via constructor.
+- `getCommand("achat")` and `getCommand("adminchat")` are null-checked in `onEnable`.
+- `ConfigManager` no longer rewrites `config.yml` on reload. Comments and formatting are preserved.
+- `plugin.yml` now uses `'${version}'` so the version is set from the build tag.
+
+### 1.0.0
+
+- Initial release.

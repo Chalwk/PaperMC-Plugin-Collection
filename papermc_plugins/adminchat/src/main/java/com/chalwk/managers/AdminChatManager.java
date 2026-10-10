@@ -5,8 +5,6 @@ package com.chalwk.managers;
 import com.chalwk.AdminChat;
 import com.chalwk.config.PluginConfig;
 import com.chalwk.util.MessageHelper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -14,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -21,12 +20,14 @@ import java.util.UUID;
 public class AdminChatManager {
 
     private final AdminChat plugin;
+    private final MessageHelper messageHelper;
     private final Map<UUID, Long> cooldowns = new HashMap<>();
     private final Set<UUID> hiddenPlayers = new HashSet<>();
     private final Map<UUID, String> toggledChannels = new HashMap<>();
 
-    public AdminChatManager(AdminChat plugin) {
+    public AdminChatManager(AdminChat plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
     }
 
     public void toggleChannel(Player player, String channel) {
@@ -34,23 +35,23 @@ public class AdminChatManager {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!config.channelExists(channel)) {
-            MessageHelper.sendMessage(player, config.getNoChannelMsg());
+            messageHelper.sendMessage(player, config.getNoChannelMsg());
             return;
         }
 
         String permission = config.getChannelPermission(channel);
         if (!player.hasPermission(permission)) {
-            MessageHelper.sendMessage(player, config.getNoPermissionMsg());
+            messageHelper.sendMessage(player, config.getNoPermissionMsg());
             return;
         }
 
         if (toggledChannels.containsKey(playerId) && toggledChannels.get(playerId).equals(channel)) {
             toggledChannels.remove(playerId);
-            MessageHelper.sendMessage(player, config.getChannelOffMsg()
+            messageHelper.sendMessage(player, config.getChannelOffMsg()
                     .replace("{channel}", channel));
         } else {
             toggledChannels.put(playerId, channel);
-            MessageHelper.sendMessage(player, config.getChannelOnMsg()
+            messageHelper.sendMessage(player, config.getChannelOnMsg()
                     .replace("{channel}", channel));
         }
     }
@@ -72,19 +73,19 @@ public class AdminChatManager {
 
         if (hasCooldown(sender)) {
             int remaining = getRemainingCooldown(sender);
-            MessageHelper.sendMessage(sender,
+            messageHelper.sendMessage(sender,
                     config.getCooldownMsg().replace("{seconds}", String.valueOf(remaining)));
             return;
         }
 
         if (!config.channelExists(channel)) {
-            MessageHelper.sendMessage(sender, config.getNoChannelMsg());
+            messageHelper.sendMessage(sender, config.getNoChannelMsg());
             return;
         }
 
         String permission = config.getChannelPermission(channel);
         if (!sender.hasPermission(permission)) {
-            MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+            messageHelper.sendMessage(sender, config.getNoPermissionMsg());
             return;
         }
 
@@ -93,11 +94,9 @@ public class AdminChatManager {
                 .replace("{channel}", channel)
                 .replace("{message}", message);
 
-        Component formattedMessage = LegacyComponentSerializer.legacyAmpersand().deserialize(format);
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasPermission("adminchat.use") && !isHidden(player)) {
-                player.sendMessage(formattedMessage);
+                messageHelper.sendMessage(player, format);
 
                 if (config.isSoundEnabled(channel)) {
                     try {
@@ -114,17 +113,9 @@ public class AdminChatManager {
             }
         }
 
-        Bukkit.getConsoleSender().sendMessage(formattedMessage);
+        messageHelper.sendMessage(Bukkit.getConsoleSender(), format);
 
         setCooldown(sender);
-    }
-
-    public void sendToggledMessage(Player sender, String message) {
-        String channel = getToggledChannel(sender);
-        if (channel == null) {
-            channel = plugin.getConfigManager().getConfig().getDefaultChannel();
-        }
-        sendMessage(sender, channel, message);
     }
 
     public void toggleVisibility(Player player) {
@@ -133,10 +124,10 @@ public class AdminChatManager {
 
         if (hiddenPlayers.contains(playerId)) {
             hiddenPlayers.remove(playerId);
-            MessageHelper.sendMessage(player, config.getToggledOnMsg());
+            messageHelper.sendMessage(player, config.getToggledOnMsg());
         } else {
             hiddenPlayers.add(playerId);
-            MessageHelper.sendMessage(player, config.getToggledOffMsg());
+            messageHelper.sendMessage(player, config.getToggledOffMsg());
         }
     }
 
@@ -149,16 +140,16 @@ public class AdminChatManager {
             String message = config.getToggledForMsg()
                     .replace("{state}", "enabled")
                     .replace("{player}", target.getName());
-            MessageHelper.sendMessage(executor, message);
-            MessageHelper.sendMessage(target, config.getVisibilityEnabledByMsg()
+            messageHelper.sendMessage(executor, message);
+            messageHelper.sendMessage(target, config.getVisibilityEnabledByMsg()
                     .replace("{sender}", executor.getName()));
         } else {
             hiddenPlayers.add(targetId);
             String message = config.getToggledForMsg()
                     .replace("{state}", "disabled")
                     .replace("{player}", target.getName());
-            MessageHelper.sendMessage(executor, message);
-            MessageHelper.sendMessage(target, config.getVisibilityDisabledByMsg()
+            messageHelper.sendMessage(executor, message);
+            messageHelper.sendMessage(target, config.getVisibilityDisabledByMsg()
                     .replace("{sender}", executor.getName()));
         }
     }

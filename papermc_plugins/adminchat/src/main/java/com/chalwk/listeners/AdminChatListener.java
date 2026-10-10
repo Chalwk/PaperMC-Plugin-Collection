@@ -4,8 +4,7 @@ package com.chalwk.listeners;
 
 import com.chalwk.AdminChat;
 import com.chalwk.config.PluginConfig;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import com.chalwk.util.MessageHelper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,9 +14,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class AdminChatListener implements Listener {
 
     private final AdminChat plugin;
+    private final MessageHelper messageHelper;
 
-    public AdminChatListener(AdminChat plugin) {
+    public AdminChatListener(AdminChat plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
     }
 
     @EventHandler
@@ -27,11 +28,9 @@ public class AdminChatListener implements Listener {
 
         if (config.isJoinNotificationEnabled() && player.hasPermission("adminchat.use")) {
             String message = config.getJoinMessage().replace("{player}", player.getName());
-            Component formattedMessage = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
-
             for (Player staff : plugin.getServer().getOnlinePlayers()) {
                 if (staff.hasPermission("adminchat.use") && !plugin.getChatManager().isHidden(staff)) {
-                    staff.sendMessage(formattedMessage);
+                    messageHelper.sendMessage(staff, message);
                 }
             }
         }
@@ -44,11 +43,9 @@ public class AdminChatListener implements Listener {
 
         if (config.isQuitNotificationEnabled() && player.hasPermission("adminchat.use")) {
             String message = config.getQuitMessage().replace("{player}", player.getName());
-            Component formattedMessage = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
-
             for (Player staff : plugin.getServer().getOnlinePlayers()) {
                 if (staff.hasPermission("adminchat.use") && !plugin.getChatManager().isHidden(staff)) {
-                    staff.sendMessage(formattedMessage);
+                    messageHelper.sendMessage(staff, message);
                 }
             }
         }

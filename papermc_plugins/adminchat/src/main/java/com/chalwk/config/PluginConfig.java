@@ -6,6 +6,7 @@ import com.chalwk.AdminChat;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PluginConfig {
@@ -37,6 +38,16 @@ public class PluginConfig {
     private String unknownCommandMsg = "&cUnknown command. Use /achat help.";
     private String visibilityEnabledByMsg = "&eYour admin chat visibility was enabled by {sender}";
     private String visibilityDisabledByMsg = "&eYour admin chat visibility was disabled by {sender}";
+
+    private List<String> helpLines = List.of(
+            "&6&lAdminChat Help",
+            "&e/achat <message> &7- Send to your default/toggled channel",
+            "&e/achat <channel> <message> &7- Send to a specific channel",
+            "&e/achat <channel> &7- Toggle a channel on",
+            "&e/achat off &7- Exit your toggled channel",
+            "&e/achat toggle [player] &7- Toggle visibility",
+            "&e/achat reload &7- Reload the configuration",
+            "&e/achat help &7- Show this help");
 
     public PluginConfig(AdminChat plugin) {
     }
@@ -77,6 +88,12 @@ public class PluginConfig {
 
         ConfigurationSection messages = config.getConfigurationSection("messages");
         if (messages != null) {
+
+            List<String> help = messages.getStringList("help");
+            if (!help.isEmpty()) {
+                helpLines = List.copyOf(help);
+            }
+
             noPermissionMsg = messages.getString("no_permission", noPermissionMsg);
             noChannelMsg = messages.getString("no_channel", noChannelMsg);
             toggledOnMsg = messages.getString("toggled_on", toggledOnMsg);
@@ -95,6 +112,10 @@ public class PluginConfig {
             visibilityEnabledByMsg = messages.getString("visibility_enabled_by", visibilityEnabledByMsg);
             visibilityDisabledByMsg = messages.getString("visibility_disabled_by", visibilityDisabledByMsg);
         }
+    }
+
+    public List<String> getHelpLines() {
+        return helpLines;
     }
 
     public String getDefaultChannel() {

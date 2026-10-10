@@ -31,13 +31,21 @@ public class ConfigManager {
 
         configFile = new File(dataFolder, "config.yml");
         if (!configFile.exists()) {
-            plugin.saveResource("config.yml", false);
+            if (plugin.getResource("config.yml") != null) {
+                plugin.saveResource("config.yml", false);
+            } else {
+                plugin.getLogger().severe("Embedded config.yml is missing from the plugin JAR!");
+            }
         }
 
         reloadConfig();
     }
 
     public void reloadConfig() {
+        if (configFile == null) {
+            configFile = new File(plugin.getDataFolder(), "config.yml");
+        }
+
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         InputStream resourceStream = plugin.getResource("config.yml");
@@ -54,12 +62,7 @@ public class ConfigManager {
             plugin.getLogger().warning("Default config.yml not found inside plugin jar!");
         }
 
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Could not save config: " + e.getMessage());
-        }
-
+        // Intentionally not saving. YamlConfiguration#save strips comments.
         pluginConfig.loadFromConfig(config);
     }
 

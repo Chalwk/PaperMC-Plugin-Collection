@@ -15,13 +15,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class AdminChatCommand implements TabExecutor {
 
     private final AdminChat plugin;
+    private final MessageHelper messageHelper;
 
-    public AdminChatCommand(AdminChat plugin) {
+    public AdminChatCommand(AdminChat plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -33,27 +36,27 @@ public class AdminChatCommand implements TabExecutor {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!sender.hasPermission("adminchat.use")) {
-            MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+            messageHelper.sendMessage(sender, config.getNoPermissionMsg());
             return true;
         }
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
-                MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
+                messageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
                 return true;
             }
 
             if (plugin.getChatManager().hasToggledChannel(player)) {
                 String channel = plugin.getChatManager().getToggledChannel(player);
-                MessageHelper.sendMessage(sender, config.getUsageToggledMsg()
+                messageHelper.sendMessage(sender, config.getUsageToggledMsg()
                         .replace("{channel}", channel));
             } else {
-                MessageHelper.sendMessage(sender, config.getUsageMsg());
+                messageHelper.sendMessage(sender, config.getUsageMsg());
             }
             return true;
         }
 
-        String subCommand = args[0].toLowerCase();
+        String subCommand = args[0].toLowerCase(Locale.ROOT);
 
         switch (subCommand) {
             case "help":
@@ -62,11 +65,11 @@ public class AdminChatCommand implements TabExecutor {
 
             case "reload":
                 if (!sender.hasPermission("adminchat.admin")) {
-                    MessageHelper.sendMessage(sender, config.getNoPermissionMsg());
+                    messageHelper.sendMessage(sender, config.getNoPermissionMsg());
                     return true;
                 }
                 plugin.reload();
-                MessageHelper.sendMessage(sender, config.getReloadedMsg());
+                messageHelper.sendMessage(sender, config.getReloadedMsg());
                 return true;
 
             case "toggle":
@@ -78,7 +81,6 @@ public class AdminChatCommand implements TabExecutor {
                 return true;
         }
 
-        // Fall-through: treat args as a channel or message
         handleMessage(sender, args);
         return true;
     }
@@ -87,14 +89,14 @@ public class AdminChatCommand implements TabExecutor {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!(sender instanceof Player player)) {
-            MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
+            messageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
             return;
         }
 
         if (args.length > 1 && sender.hasPermission("adminchat.admin")) {
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null) {
-                MessageHelper.sendMessage(sender, config.getPlayerNotFoundMsg());
+                messageHelper.sendMessage(sender, config.getPlayerNotFoundMsg());
                 return;
             }
             plugin.getChatManager().toggleVisibilityForPlayer(target, player);
@@ -107,17 +109,17 @@ public class AdminChatCommand implements TabExecutor {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!(sender instanceof Player player)) {
-            MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
+            messageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
             return;
         }
 
         if (plugin.getChatManager().hasToggledChannel(player)) {
             String channel = plugin.getChatManager().getToggledChannel(player);
             plugin.getChatManager().clearToggledChannel(player);
-            MessageHelper.sendMessage(sender, config.getChannelOffMsg()
+            messageHelper.sendMessage(sender, config.getChannelOffMsg()
                     .replace("{channel}", channel));
         } else {
-            MessageHelper.sendMessage(sender, config.getNoToggledChannelMsg());
+            messageHelper.sendMessage(sender, config.getNoToggledChannelMsg());
         }
     }
 
@@ -125,15 +127,15 @@ public class AdminChatCommand implements TabExecutor {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!(sender instanceof Player player)) {
-            MessageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
+            messageHelper.sendMessage(sender, config.getPlayersOnlyMsg());
             return;
         }
 
         String channel;
         String message;
 
-        if (config.channelExists(args[0].toLowerCase())) {
-            channel = args[0].toLowerCase();
+        if (config.channelExists(args[0].toLowerCase(Locale.ROOT))) {
+            channel = args[0].toLowerCase(Locale.ROOT);
 
             if (args.length == 1) {
                 plugin.getChatManager().toggleChannel(player, channel);
@@ -154,17 +156,9 @@ public class AdminChatCommand implements TabExecutor {
     }
 
     private void sendHelp(CommandSender sender) {
-        MessageHelper.sendMessage(sender, "&6&lAdminChat Help");
-        MessageHelper.sendMessage(sender, "&e/achat <message> &7- Send to your default/toggled channel");
-        MessageHelper.sendMessage(sender, "&e/achat <channel> <message> &7- Send to a specific channel");
-        MessageHelper.sendMessage(sender, "&e/achat <channel> &7- Toggle a channel on");
-        MessageHelper.sendMessage(sender, "&e/achat off &7- Exit your toggled channel");
-        MessageHelper.sendMessage(sender, "&e/achat toggle [player] &7- Toggle visibility");
-
-        if (sender.hasPermission("adminchat.admin")) {
-            MessageHelper.sendMessage(sender, "&e/achat reload &7- Reload the configuration");
+        for (String line : plugin.getConfigManager().getConfig().getHelpLines()) {
+            messageHelper.sendMessage(sender, line);
         }
-        MessageHelper.sendMessage(sender, "&e/achat help &7- Show this help");
     }
 
     @Override
@@ -176,7 +170,7 @@ public class AdminChatCommand implements TabExecutor {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (args.length == 1) {
-            String partial = args[0].toLowerCase();
+            String partial = args[0].toLowerCase(Locale.ROOT);
 
             for (String channel : config.getChannels().keySet()) {
                 if (channel.startsWith(partial) && sender.hasPermission(config.getChannelPermission(channel))) {
@@ -199,15 +193,15 @@ public class AdminChatCommand implements TabExecutor {
 
             if (sender.hasPermission("adminchat.admin")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.getName().toLowerCase().startsWith(partial)) {
+                    if (player.getName().toLowerCase(Locale.ROOT).startsWith(partial)) {
                         completions.add(player.getName());
                     }
                 }
             }
         } else if (args.length == 2 && args[0].equalsIgnoreCase("toggle")) {
-            String partial = args[1].toLowerCase();
+            String partial = args[1].toLowerCase(Locale.ROOT);
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().toLowerCase().startsWith(partial)) {
+                if (player.getName().toLowerCase(Locale.ROOT).startsWith(partial)) {
                     completions.add(player.getName());
                 }
             }

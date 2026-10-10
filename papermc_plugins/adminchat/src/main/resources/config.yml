@@ -58,6 +58,15 @@ messages:
   unknown_command: "&cUnknown command. Use /achat help."
   visibility_enabled_by: "&eYour admin chat visibility was enabled by {sender}"
   visibility_disabled_by: "&eYour admin chat visibility was disabled by {sender}"
+  help:
+    - "&6&lAdminChat Help"
+    - "&e/achat <message> &7- Send to your default/toggled channel"
+    - "&e/achat <channel> <message> &7- Send to a specific channel"
+    - "&e/achat <channel> &7- Toggle a channel on"
+    - "&e/achat off &7- Exit your toggled channel"
+    - "&e/achat toggle [player] &7- Toggle visibility"
+    - "&e/achat reload &7- Reload the configuration"
+    - "&e/achat help &7- Show this help"
 
 # Notification settings
 notifications:

@@ -1,3 +1,22 @@
-jar {
+plugins {
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
+dependencies {
+    implementation 'net.kyori:adventure-platform-bukkit:4.4.1'
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.named('shadowJar') {
     archiveBaseName.set('AdminChat')
+    archiveClassifier.set('')
+    relocate 'net.kyori', 'com.chalwk.libs.adventure'
+    mergeServiceFiles()
+}
+
+tasks.named('build') {
+    dependsOn tasks.named('shadowJar')
 }

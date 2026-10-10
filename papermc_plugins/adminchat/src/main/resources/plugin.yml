@@ -1,5 +1,5 @@
 name: AdminChat
-version: 1.0.0
+version: '${version}'
 main: com.chalwk.AdminChat
 api-version: 1.21
 description: Secure admin-only chat system with multiple channels
