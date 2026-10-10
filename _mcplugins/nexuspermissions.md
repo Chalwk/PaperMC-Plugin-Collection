@@ -4,7 +4,7 @@ title: NexusPermissions
 description: "Permissions plugin with groups, inheritance, per-world contexts, and promote/demote ladders."
 category: Administration
 plugin_id: nexuspermissions
-latest_version: "1.0.0"
+latest_version: "1.0.1"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -23,6 +23,7 @@ features:
   - "Prefix, suffix, and weight options"
   - "Ladders for promote and demote"
   - "YAML storage that survives reloads"
+  - "Registers as a Vault permission and chat provider when Vault is present"
   - "Runs on Spigot, Paper, and Purpur"
 commands:
   - name: nexus
@@ -116,6 +117,9 @@ lowest-weight to highest-weight, then applying their own entries on top.
 - Options for prefix, suffix, weight, and any custom key you want.
 - Wildcards like `essentials.*` and `*` are supported through Bukkit's
   native permission lookup.
+- Vault integration: when Vault is installed, Nexus registers itself as
+  the server's permission and chat provider. Prefixes, suffixes, groups,
+  and permission checks all flow through Vault without extra configuration.
 - YAML storage that you can read and hand-edit.
 - Neither file is rewritten on reload until you make a change.
 
@@ -309,17 +313,42 @@ permission on top of group membership.
 - If `groups.yml` or `users.yml` fails to parse on startup, the plugin
   logs the error and enters a locked state where saving is refused. Fix
   the YAML and run `/nexus reload` to unlock.
+- Vault integration is strictly read-only. Any plugin that tries to add
+  or remove permissions, groups, prefixes, or suffixes through Vault will
+  get an `UnsupportedOperationException`. All edits must go through the
+  `/nexus` commands.
+- When Vault is present, check the console on startup for
+  `Registered with Vault as permission and chat provider`. If that line is
+  missing, Vault did not pick up the registration. The most common causes
+  are an older Vault JAR or another plugin at a higher service priority.
 
 ---
 
 ## Dependencies
 
 Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR,
-relocated to `com.chalwk.libs.adventure`. No external dependencies.
+relocated to `com.chalwk.libs.adventure`.
+
+Optionally integrates with **Vault**. When Vault is installed, Nexus
+registers itself as both a permission provider and a chat provider. That
+is what makes prefixes, suffixes, and group lookups visible to chat
+plugins, tab list plugins, and anything else that reads through Vault.
+
+Vault is a `softdepend`. The plugin loads and works without it. If Vault
+is absent, the hooks are simply not registered.
 
 ---
 
 ## Changelog
+
+### 1.0.1
+
+- Added Vault integration. Nexus now registers itself as a permission and
+  chat provider when Vault is installed, so prefixes and group lookups are
+  visible to chat plugins, tab list plugins, and anything else that reads
+  through Vault.
+- Vault integration is read-only. Every mutating method in the Vault API
+  throws, so no external plugin can quietly edit Nexus data.
 
 ### 1.0.0
 

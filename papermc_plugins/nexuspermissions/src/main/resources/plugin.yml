@@ -2,6 +2,7 @@ name: NexusPermissions
 version: '${version}'
 main: com.chalwk.nexus.NexusPermissions
 api-version: '1.21'
+softdepend: [Vault]
 authors: [Chalwk]
 description: A permissions plugin with subjects, inheritance and contexts.
 

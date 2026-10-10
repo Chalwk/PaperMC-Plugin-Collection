@@ -5,11 +5,14 @@ package com.chalwk.nexus;
 import com.chalwk.nexus.commands.NexusCommand;
 import com.chalwk.nexus.config.ConfigManager;
 import com.chalwk.nexus.config.PluginConfig;
+import com.chalwk.nexus.hook.VaultChatHook;
+import com.chalwk.nexus.hook.VaultHook;
 import com.chalwk.nexus.listener.PlayerListener;
 import com.chalwk.nexus.manager.PermissionManager;
 import com.chalwk.nexus.util.MessageHelper;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -63,11 +66,38 @@ public final class NexusPermissions extends JavaPlugin {
             return;
         }
 
+        // Vault is a soft dependency: only touch its classes if it's there.
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
+            hookVault();
+        }
+
         // Covers /reload confirm, where players stay connected across a
         // disable/enable cycle and would otherwise be left unattached.
         permissionManager.refreshAll();
 
         getLogger().info("NexusPermissions enabled.");
+    }
+
+    /**
+     * Registers Nexus as Vault's permission and chat provider.
+     *
+     * <p>Kept in its own method so Vault classes are only resolved when this
+     * actually runs. Highest priority makes Nexus win over any other
+     * provider. Bukkit drops the registrations on its own when the plugin
+     * disables, so there's nothing to undo in onDisable.</p>
+     */
+    private void hookVault() {
+        try {
+            VaultHook perms = new VaultHook(permissionManager);
+            getServer().getServicesManager().register(
+                    net.milkbowl.vault.permission.Permission.class, perms, this, ServicePriority.Highest);
+            getServer().getServicesManager().register(
+                    net.milkbowl.vault.chat.Chat.class, new VaultChatHook(permissionManager, perms), this, ServicePriority.Highest);
+            getLogger().info("Vault found, registered as permission and chat provider.");
+        } catch (LinkageError e) {
+            // Vault is present but too old or broken to link against.
+            getLogger().warning("Vault is installed but could not be hooked: " + e);
+        }
     }
 
     @Override
