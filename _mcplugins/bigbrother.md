@@ -112,6 +112,8 @@ permissions:
 
 BigBrother monitors player activity through configurable spy features.
 
+Also available on SpigotMC: <https://www.spigotmc.org/resources/bigbrother.139509/>
+
 ## Features
 
 - Spy types: Command, Sign, Anvil, Book, Portal.
