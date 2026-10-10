@@ -6,6 +6,7 @@ import com.chalwk.NoctiView;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PluginConfig {
@@ -46,6 +47,15 @@ public class PluginConfig {
     private String nightVisionDisabledByMsg = "&eNight vision disabled by {sender}!";
     private String usageEnableWorldMsg = "&cUsage: /nightvision enableworld <world>";
     private String usageDisableWorldMsg = "&cUsage: /nightvision disableworld <world>";
+    private List<String> helpLines = List.of(
+            "&6&lNoctiView Help",
+            "&e/nightvision &7- Toggle your night vision",
+            "&e/nightvision <player> &7- Toggle night vision for another player",
+            "&e/nightvision worlds &7- List per-world settings",
+            "&e/nightvision enableworld <world> &7- Enable night vision in a world",
+            "&e/nightvision disableworld <world> &7- Disable night vision in a world",
+            "&e/nightvision reload &7- Reload the configuration",
+            "&e/nightvision help &7- Show this help");
 
     public PluginConfig(NoctiView plugin) {
     }
@@ -88,6 +98,10 @@ public class PluginConfig {
 
         ConfigurationSection messages = config.getConfigurationSection("messages");
         if (messages != null) {
+            List<String> help = messages.getStringList("help");
+            if (!help.isEmpty()) {
+                helpLines = List.copyOf(help);
+            }
             noPermissionMsg = messages.getString("no_permission", noPermissionMsg);
             playersOnlyMsg = messages.getString("players_only", playersOnlyMsg);
             reloadedMsg = messages.getString("reloaded", reloadedMsg);
@@ -111,6 +125,10 @@ public class PluginConfig {
 
     public boolean isParticleEnabled() {
         return particleEnabled;
+    }
+
+    public List<String> getHelpLines() {
+        return helpLines;
     }
 
     public String getParticleType() {

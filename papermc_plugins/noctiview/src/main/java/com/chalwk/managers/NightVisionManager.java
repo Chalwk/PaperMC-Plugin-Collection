@@ -20,10 +20,12 @@ import java.util.UUID;
 public class NightVisionManager {
 
     private final NoctiView plugin;
+    private final MessageHelper messageHelper;
     private final Set<UUID> activeNightVision;
 
-    public NightVisionManager(NoctiView plugin) {
+    public NightVisionManager(NoctiView plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
         this.activeNightVision = new HashSet<>();
     }
 
@@ -32,16 +34,16 @@ public class NightVisionManager {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!config.isWorldEnabled(player.getWorld().getName())) {
-            MessageHelper.sendMessage(player, config.getWorldNotEnabledSelfMsg());
+            messageHelper.sendMessage(player, config.getWorldNotEnabledSelfMsg());
             return;
         }
 
         if (activeNightVision.contains(playerId)) {
             removeNightVision(player);
-            MessageHelper.sendMessage(player, config.getNightVisionDisabledMsg());
+            messageHelper.sendMessage(player, config.getNightVisionDisabledMsg());
         } else {
             addNightVision(player);
-            MessageHelper.sendMessage(player, config.getNightVisionEnabledMsg());
+            messageHelper.sendMessage(player, config.getNightVisionEnabledMsg());
         }
     }
 
@@ -50,7 +52,7 @@ public class NightVisionManager {
         PluginConfig config = plugin.getConfigManager().getConfig();
 
         if (!config.isWorldEnabled(target.getWorld().getName())) {
-            MessageHelper.sendMessage(executor,
+            messageHelper.sendMessage(executor,
                     config.getWorldNotEnabledOtherMsg()
                             .replace("{world}", target.getWorld().getName()));
             return;
@@ -58,18 +60,18 @@ public class NightVisionManager {
 
         if (activeNightVision.contains(targetId)) {
             removeNightVision(target);
-            MessageHelper.sendMessage(executor,
+            messageHelper.sendMessage(executor,
                     config.getNightVisionDisabledForMsg()
                             .replace("{player}", target.getName()));
-            MessageHelper.sendMessage(target,
+            messageHelper.sendMessage(target,
                     config.getNightVisionDisabledByMsg()
                             .replace("{sender}", executor.getName()));
         } else {
             addNightVision(target);
-            MessageHelper.sendMessage(executor,
+            messageHelper.sendMessage(executor,
                     config.getNightVisionEnabledForMsg()
                             .replace("{player}", target.getName()));
-            MessageHelper.sendMessage(target,
+            messageHelper.sendMessage(target,
                     config.getNightVisionEnabledByMsg()
                             .replace("{sender}", executor.getName()));
         }

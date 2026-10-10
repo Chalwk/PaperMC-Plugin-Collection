@@ -15,13 +15,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class NightVisionCommand implements TabExecutor {
 
     private final NoctiView plugin;
+    private final MessageHelper messageHelper;
 
-    public NightVisionCommand(NoctiView plugin) {
+    public NightVisionCommand(NoctiView plugin, MessageHelper messageHelper) {
         this.plugin = plugin;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -31,20 +34,20 @@ public class NightVisionCommand implements TabExecutor {
             @NotNull String[] args) {
 
         if (!sender.hasPermission("nightvision.use")) {
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+            messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
             return true;
         }
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayersOnlyMsg());
+                messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayersOnlyMsg());
                 return true;
             }
             plugin.getNightVisionManager().toggleNightVision(player);
             return true;
         }
 
-        String subCommand = args[0].toLowerCase();
+        String subCommand = args[0].toLowerCase(Locale.ROOT);
 
         if (subCommand.equals("help")) {
             sendHelp(sender);
@@ -53,17 +56,17 @@ public class NightVisionCommand implements TabExecutor {
 
         if (subCommand.equals("reload")) {
             if (!sender.hasPermission("noctiview.admin")) {
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+                messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
                 return true;
             }
             plugin.reload();
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getReloadedMsg());
+            messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getReloadedMsg());
             return true;
         }
 
         if (subCommand.equals("worlds")) {
             if (!sender.hasPermission("noctiview.admin")) {
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+                messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
                 return true;
             }
             listWorlds(sender);
@@ -72,29 +75,28 @@ public class NightVisionCommand implements TabExecutor {
 
         if (subCommand.equals("enableworld") || subCommand.equals("disableworld")) {
             if (!sender.hasPermission("noctiview.admin")) {
-                MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+                messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
                 return true;
             }
             if (args.length < 2) {
                 String usage = subCommand.equals("enableworld")
                         ? plugin.getConfigManager().getConfig().getUsageEnableWorldMsg()
                         : plugin.getConfigManager().getConfig().getUsageDisableWorldMsg();
-                MessageHelper.sendMessage(sender, usage);
+                messageHelper.sendMessage(sender, usage);
                 return true;
             }
             updateWorld(sender, args[1], subCommand.equals("enableworld"));
             return true;
         }
 
-        // Default: treat the first argument as a player name (toggle for others)
         if (!sender.hasPermission("noctiview.admin")) {
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
+            messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getNoPermissionMsg());
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            MessageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayerNotFoundMsg());
+            messageHelper.sendMessage(sender, plugin.getConfigManager().getConfig().getPlayerNotFoundMsg());
             return true;
         }
 
@@ -104,13 +106,13 @@ public class NightVisionCommand implements TabExecutor {
 
     private void listWorlds(CommandSender sender) {
         PluginConfig config = plugin.getConfigManager().getConfig();
-        MessageHelper.sendMessage(sender, config.getWorldHeaderMsg());
+        messageHelper.sendMessage(sender, config.getWorldHeaderMsg());
 
         for (World world : Bukkit.getWorlds()) {
             boolean enabled = config.isWorldEnabled(world.getName());
             String color = enabled ? "&a" : "&c";
             String status = enabled ? "ENABLED" : "DISABLED";
-            MessageHelper.sendMessage(sender, color + "- " + world.getName() + ": " + status);
+            messageHelper.sendMessage(sender, color + "- " + world.getName() + ": " + status);
         }
     }
 
@@ -119,7 +121,7 @@ public class NightVisionCommand implements TabExecutor {
 
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
-            MessageHelper.sendMessage(sender, config.getWorldNotFoundMsg());
+            messageHelper.sendMessage(sender, config.getWorldNotFoundMsg());
             return;
         }
 
@@ -127,18 +129,13 @@ public class NightVisionCommand implements TabExecutor {
 
         String message = (enabled ? config.getWorldEnabledMsg() : config.getWorldDisabledMsg())
                 .replace("{world}", worldName);
-        MessageHelper.sendMessage(sender, message);
+        messageHelper.sendMessage(sender, message);
     }
 
     private void sendHelp(CommandSender sender) {
-        MessageHelper.sendMessage(sender, "&6&lNoctiView Help");
-        MessageHelper.sendMessage(sender, "&e/nightvision &7- Toggle your night vision");
-        MessageHelper.sendMessage(sender, "&e/nightvision <player> &7- Toggle night vision for another player");
-        MessageHelper.sendMessage(sender, "&e/nightvision worlds &7- List per-world settings");
-        MessageHelper.sendMessage(sender, "&e/nightvision enableworld <world> &7- Enable night vision in a world");
-        MessageHelper.sendMessage(sender, "&e/nightvision disableworld <world> &7- Disable night vision in a world");
-        MessageHelper.sendMessage(sender, "&e/nightvision reload &7- Reload the configuration");
-        MessageHelper.sendMessage(sender, "&e/nightvision help &7- Show this help");
+        for (String line : plugin.getConfigManager().getConfig().getHelpLines()) {
+            messageHelper.sendMessage(sender, line);
+        }
     }
 
     @Override
@@ -149,7 +146,7 @@ public class NightVisionCommand implements TabExecutor {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            String partial = args[0].toLowerCase();
+            String partial = args[0].toLowerCase(Locale.ROOT);
 
             List<String> options = new ArrayList<>();
             options.add("help");
@@ -168,16 +165,16 @@ public class NightVisionCommand implements TabExecutor {
 
             if (sender.hasPermission("noctiview.admin")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.getName().toLowerCase().startsWith(partial)) {
+                    if (player.getName().toLowerCase(Locale.ROOT).startsWith(partial)) {
                         completions.add(player.getName());
                     }
                 }
             }
         } else if (args.length == 2
                 && (args[0].equalsIgnoreCase("enableworld") || args[0].equalsIgnoreCase("disableworld"))) {
-            String partial = args[1].toLowerCase();
+            String partial = args[1].toLowerCase(Locale.ROOT);
             for (World world : Bukkit.getWorlds()) {
-                if (world.getName().toLowerCase().startsWith(partial)) {
+                if (world.getName().toLowerCase(Locale.ROOT).startsWith(partial)) {
                     completions.add(world.getName());
                 }
             }

@@ -50,3 +50,12 @@ messages:
   night_vision_disabled_by: "&eNight vision disabled by {sender}!"
   usage_enableworld: "&cUsage: /nightvision enableworld <world>"
   usage_disableworld: "&cUsage: /nightvision disableworld <world>"
+  help:
+    - "&6&lNoctiView Help"
+    - "&e/nightvision &7- Toggle your night vision"
+    - "&e/nightvision <player> &7- Toggle night vision for another player"
+    - "&e/nightvision worlds &7- List per-world settings"
+    - "&e/nightvision enableworld <world> &7- Enable night vision in a world"
+    - "&e/nightvision disableworld <world> &7- Disable night vision in a world"
+    - "&e/nightvision reload &7- Reload the configuration"
+    - "&e/nightvision help &7- Show this help"

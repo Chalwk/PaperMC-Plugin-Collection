@@ -4,7 +4,7 @@ title: NoctiView
 description: Per-world night vision toggle with configurable particles, sound feedback, and admin world controls.
 category: Gameplay
 plugin_id: noctiview
-latest_version: "1.0.0"
+latest_version: "1.0.1"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -118,3 +118,34 @@ Messages are configurable under `messages`:
 - Active toggles are tracked in memory and are not persisted across server restarts or player reconnects.
 - Admin world changes are saved back to `config.yml` via `setWorldEnabled`.
 - The night vision effect is applied with ambient `true` and particles `false`.
+
+---
+
+## Dependencies
+
+Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies.
+
+---
+
+## Changelog
+
+### 1.0.1
+
+**Changed**
+
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. Runs on Spigot, Paper, and Purpur.
+- Help text moved out of the Java source into `config.yml` under `messages.help`.
+
+**Fixed**
+
+- Reload no longer rewrites `config.yml`. Comments and formatting are preserved across reloads. The `enableworld` / `disableworld` commands still save as before, since that's an explicit admin action.
+
+**Internal**
+
+- `MessageHelper` is now an instance class wrapping `BukkitAudiences`, created in `onEnable` and closed in `onDisable`.
+- `NightVisionCommand` and `NightVisionManager` now receive the `MessageHelper` instance via constructor.
+- `getCommand("nightvision")` is null-checked in `onEnable`.
+
+### 1.0.0
+
+- Initial release.
