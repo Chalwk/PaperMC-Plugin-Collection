@@ -4,7 +4,7 @@ title: NexusPermissions
 description: "Permissions plugin with groups, inheritance, per-world contexts, and promote/demote ladders."
 category: Administration
 plugin_id: nexuspermissions
-latest_version: "1.0.1"
+latest_version: "1.0.2"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -295,6 +295,34 @@ permission on top of group membership.
 
 ---
 
+## Vault and prefix display
+
+When Vault is present, Nexus registers as both a permission provider and
+a chat provider. Plugins that read through Vault will see the correct
+permissions and prefixes automatically.
+
+Two things to be aware of when wiring this up to a chat or tab list
+plugin:
+
+- **Swap your plugin's own prefix token for the Vault one.** Some chat
+  plugins have a built-in prefix token (CMI's `[prefix]`, for example)
+  that reads from the plugin's own rank system, not from Vault. Replace
+  it with `%vault_prefix%` via PlaceholderAPI. Otherwise the plugin will
+  keep showing blank or stale prefixes even though Nexus is returning the
+  correct value.
+- **Nexus returns prefixes with section-sign codes, not ampersands.**
+  This is what makes the output render correctly in every consumer.
+  Plugins that translate `&` codes themselves will leave section signs
+  alone. Plugins that don't translate at all will still render the
+  colours.
+
+If the prefix looks right in `/papi parse me %vault_prefix%` but not
+in the chat or tab list, the problem is on the consuming plugin's side.
+Check its config for the prefix token and swap it for the Vault
+placeholder.
+
+---
+
 ## Notes
 
 - Users are stored by name, not by UUID. This is simple and works well on
@@ -318,9 +346,10 @@ permission on top of group membership.
   get an `UnsupportedOperationException`. All edits must go through the
   `/nexus` commands.
 - When Vault is present, check the console on startup for
-  `Registered with Vault as permission and chat provider`. If that line is
-  missing, Vault did not pick up the registration. The most common causes
-  are an older Vault JAR or another plugin at a higher service priority.
+  `Vault found, registered as permission and chat provider`. If that line
+  is missing, Vault did not pick up the registration. The most common
+  causes are an older Vault JAR or another plugin at a higher service
+  priority.
 
 ---
 
@@ -340,6 +369,16 @@ is absent, the hooks are simply not registered.
 ---
 
 ## Changelog
+
+### 1.0.2
+
+- Prefixes and suffixes returned through Vault now come back with section
+  sign codes rather than ampersands. Consumers that translate `&` codes
+  themselves are unaffected, but consumers that don't (some versions of
+  CMI and other chat plugins) now render the colour correctly instead of
+  printing the raw codes.
+- Added a "Vault and prefix display" section to the docs explaining the
+  `%vault_prefix%` swap and the section-sign change.
 
 ### 1.0.1
 

@@ -26,6 +26,8 @@ import java.util.Locale;
  */
 public class VaultChatHook extends Chat {
 
+    private static final char SECTION = '\u00A7';
+
     private final PermissionManager pm;
 
     /** @param perms the permission provider Vault's group helpers on {@link Chat} delegate to. */
@@ -75,28 +77,47 @@ public class VaultChatHook extends Chat {
         return s == null ? "" : s;
     }
 
+    /**
+     * Translates legacy '&' colour codes to section signs, which every
+     * consumer renders natively. Some chat plugins call their own
+     * translator on top of what Vault returns; those will see section
+     * signs and leave them alone. Callers that don't translate at all
+     * (CMI on some versions) still get a properly coloured result.
+     */
+    private static String translate(String s) {
+        if (s == null || s.isEmpty()) return s;
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length - 1; i++) {
+            if (chars[i] == '&' && "0123456789AaBbCcDdEeFfKkLlMmNnOoRrXx".indexOf(chars[i + 1]) >= 0) {
+                chars[i] = SECTION;
+                chars[i + 1] = Character.toLowerCase(chars[i + 1]);
+            }
+        }
+        return new String(chars);
+    }
+
     // ------------------------------------------------------------------
     // Prefix and suffix
     // ------------------------------------------------------------------
 
     @Override
     public String getPlayerPrefix(String world, String name) {
-        return orEmpty(optionOf(user(name), "prefix"));
+        return translate(orEmpty(optionOf(user(name), "prefix")));
     }
 
     @Override
     public String getPlayerSuffix(String world, String name) {
-        return orEmpty(optionOf(user(name), "suffix"));
+        return translate(orEmpty(optionOf(user(name), "suffix")));
     }
 
     @Override
     public String getGroupPrefix(String world, String name) {
-        return orEmpty(optionOf(pm.getGroup(name), "prefix"));
+        return translate(orEmpty(optionOf(pm.getGroup(name), "prefix")));
     }
 
     @Override
     public String getGroupSuffix(String world, String name) {
-        return orEmpty(optionOf(pm.getGroup(name), "suffix"));
+        return translate(orEmpty(optionOf(pm.getGroup(name), "suffix")));
     }
 
     // ------------------------------------------------------------------
