@@ -1,0 +1,31 @@
+name: PerkMenu
+version: '${version}'
+main: com.chalwk.PerkMenu
+api-version: '1.21'
+description: Paginated chat-based perk browser driven by permissions
+author: Chalwk
+website: https://github.com/Chalwk/PaperMC-Plugin-Collection
+
+commands:
+  perks:
+    description: Browse and inspect server perks
+    usage: /<command> [page|owned|available|info|check|reload|help]
+    permission: perkmenu.use
+    aliases: [ perk ]
+
+permissions:
+  perkmenu.*:
+    description: All PerkMenu permissions
+    children:
+      perkmenu.use: true
+      perkmenu.check: true
+      perkmenu.reload: true
+  perkmenu.use:
+    description: Allows using /perks
+    default: true
+  perkmenu.check:
+    description: Allows checking another player's perks
+    default: op
+  perkmenu.reload:
+    description: Allows reloading the configuration
+    default: op

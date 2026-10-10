@@ -27,12 +27,13 @@ body:
       label: Which plugin?
       description: Select the plugin that is misbehaving.
       options:
-        - VacuLoot
-        - GameModeManager
-        - BigBrother
-        - AutoMessages
         - AdminChat
+        - AutoMessages
+        - BigBrother
+        - GameModeManager
         - NoctiView
+        - PerkMenu
+        - VacuLoot
         - Other (specify below)
     validations:
       required: true

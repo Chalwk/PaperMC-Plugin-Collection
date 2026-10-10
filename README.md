@@ -21,6 +21,7 @@ the [website](https://chalwk.github.io/PaperMC-Plugin-Collection/).
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | [`VacuLoot`](papermc_plugins/vaculoot/)               | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/vaculoot/)        | Toggleable item and XP magnet with tiered ranges, optional Vault economy cost, world allow-list, and item blacklist |
 | [`GameModeManager`](papermc_plugins/gamemodemanager/) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/gamemodemanager/) | Separate inventories and player state per gamemode, with world-change preservation                                  |
+| [`PerkMenu`](papermc_plugins/perkmenu/)               | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/perkmenu/)        | Paginated chat-based perk browser that reads ownership from permissions, with prices, descriptions, and buy links.  |
 | [`NoctiView`](papermc_plugins/noctiview/)             | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/noctiview/)       | Per-world night vision toggle with configurable particles, sound feedback, and admin world controls                 |
 
 ### Administration

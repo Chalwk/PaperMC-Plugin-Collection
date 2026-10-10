@@ -8,6 +8,7 @@ def pluginsRoot = 'papermc_plugins'
     'bigbrother',
     'gamemodemanager',
     'noctiview',
+    'perkmenu',
     'vaculoot'
 ].each { name ->
     include(":${name}")

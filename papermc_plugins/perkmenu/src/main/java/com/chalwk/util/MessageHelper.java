@@ -1,0 +1,30 @@
+// Copyright (c) 2026. Jericho Crosby (Chalwk)
+
+package com.chalwk.util;
+
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.command.CommandSender;
+
+/**
+ * Sends messages through Adventure. Works on Spigot, Paper, and Purpur
+ * because Adventure is bundled and relocated.
+ */
+public final class MessageHelper {
+
+    private final BukkitAudiences audiences;
+
+    public MessageHelper(BukkitAudiences audiences) {
+        this.audiences = audiences;
+    }
+
+    public void sendMessage(CommandSender sender, String message) {
+        Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        audiences.sender(sender).sendMessage(component);
+    }
+
+    public void sendComponent(CommandSender sender, Component component) {
+        audiences.sender(sender).sendMessage(component);
+    }
+}

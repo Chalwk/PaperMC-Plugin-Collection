@@ -1,0 +1,121 @@
+# PerkMenu Configuration
+config-version: 1
+
+# How many perks to show per page in the chat list
+perks_per_page: 6
+
+# URL template used when a player clicks an unowned perk.
+# {package_id} is replaced with the perk's own package_id field.
+buy_url_template: "https://example.com/store/package/{package_id}"
+
+# Whether to show perks the player already owns in the default /perks listing.
+# When false, /perks only shows perks the player doesn't have (like /perks available).
+show_owned_in_list: true
+
+# Messages
+messages:
+  no_permission: "&cYou don't have permission to use this command!"
+  players_only: "&cOnly players can use this command!"
+  unknown_command: "&cUnknown command. Use /perks help"
+  reloaded: "&aConfiguration reloaded!"
+  no_perks: "&7No perks to display."
+  unknown_perk: "&cUnknown perk: &f{perk}"
+  invalid_page: "&cInvalid page number."
+  list_header: "&6&lPerks &7- &f{filter} &7(Page &e{page}&7/&e{total_pages}&7)"
+  summary: "&7You own &a{owned}&7 of &e{total} &7perks. Total listed value: &e{spent}"
+  perk_owned_line: "&a✔ &f{name} &7- &e{price}"
+  perk_unowned_line: "&c✖ &f{name} &7- &e{price}"
+  footer_prev_button: "&e[<< Prev]"
+  footer_next_button: "&e[Next >>]"
+  footer_page_info: "&7Page &f{page}&7/&f{total_pages}"
+  footer_hint: "&8| &7Info: &e/perks info <perk>"
+  filter_all: "All perks"
+  filter_owned: "Owned"
+  filter_available: "Available"
+  info_header: "&6&l{name}"
+  info_category: "&7Category: &f{category}"
+  info_price: "&7Price: &e{price}"
+  info_status_owned: "&7Status: &aOwned"
+  info_status_unowned: "&7Status: &cNot owned"
+  info_description_header: "&7Description:"
+  info_description_line: "&f  {line}"
+  info_buy_hint: "&7Use &e/perks &7and click the perk to buy."
+  info_owned_hint: "&7You already own this perk."
+  check_header: "&6&l{player}&7's perks"
+  check_summary: "&7Owns &a{owned}&7 of &e{total} &7perks. Total listed value: &e{spent}"
+  help:
+    - "&6&lPerkMenu Help"
+    - "&e/perks &7- Browse all perks"
+    - "&e/perks <page> &7- Jump to a specific page"
+    - "&e/perks owned &7- Perks you own"
+    - "&e/perks available &7- Perks you don't own yet"
+    - "&e/perks info <perk> &7- Detailed info about a perk"
+    - "&e/perks check <player> &7- Check another player's perks"
+    - "&e/perks reload &7- Reload the configuration"
+    - "&e/perks help &7- Show this help"
+
+# Perks
+#
+# Each entry under `perks:` is one perk. The key is the perk's ID, used by
+# /perks info <id> and in tab completion.
+#
+# Required fields per perk:
+#   name         Display name shown in the menu.
+#   category     Free-form grouping shown in /perks info.
+#   price        Listed price. Displayed next to the perk and summed for the
+#                "total listed value" shown in the summary line.
+#   package_id   Used to build the buy URL from buy_url_template above.
+#   description  List of lines shown on hover and in /perks info.
+#   permissions  List of permission nodes. A player owns this perk when they
+#                hold EVERY node listed here. Wildcards like "example.group.*"
+#                are resolved by your permissions plugin.
+#
+# The entries below are examples. Replace them with your own.
+perks:
+
+  example_perk_one:
+    name: "Example Perk"
+    category: "Category A"
+    price: 10.00
+    package_id: "1000001"
+    description:
+      - "This is an example perk with a single permission node."
+      - "Replace these lines with your own description."
+    permissions:
+      - "example.perk.one"
+
+  example_perk_two:
+    name: "Another Example"
+    category: "Category A"
+    price: 15.00
+    package_id: "1000002"
+    description:
+      - "A perk that requires several permission nodes."
+      - "The player must hold all of them to be marked as owning it."
+    permissions:
+      - "example.perk.two.base"
+      - "example.perk.two.extra"
+      - "example.perk.two.wildcard.*"
+
+  example_perk_three:
+    name: "Example Kit"
+    category: "Kits"
+    price: 8.00
+    package_id: "1000003"
+    description:
+      - "Example of a perk with a cooldown and usage hint."
+      - "Cooldown: 4 hours."
+      - "Usage: /kit example"
+    permissions:
+      - "example.kit.standard"
+
+  example_perk_four:
+    name: "Example Cosmetic"
+    category: "Cosmetics"
+    price: 25.00
+    package_id: "1000004"
+    description:
+      - "A higher-priced example that demonstrates"
+      - "a perk with multiple lines of description."
+    permissions:
+      - "example.cosmetic.*"

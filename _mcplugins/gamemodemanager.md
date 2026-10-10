@@ -96,7 +96,8 @@ messages:
 
 ## Dependencies
 
-Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies.
+Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR,
+relocated to `com.chalwk.libs.adventure`. No external dependencies.
 
 ---
 
