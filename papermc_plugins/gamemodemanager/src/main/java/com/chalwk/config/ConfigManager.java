@@ -34,17 +34,23 @@ public class ConfigManager {
 
         configFile = new File(dataFolder, "config.yml");
         if (!configFile.exists()) {
-            plugin.saveResource("config.yml", false);
+            if (plugin.getResource("config.yml") != null) {
+                plugin.saveResource("config.yml", false);
+            } else {
+                plugin.getLogger().severe("Embedded config.yml is missing from the plugin JAR!");
+            }
         }
 
         reloadConfig();
     }
 
     public void reloadConfig() {
+        if (configFile == null) {
+            configFile = new File(plugin.getDataFolder(), "config.yml");
+        }
+
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        // Merge in any new keys from the bundled config so users don't have to
-        // delete their file after an update.
         InputStream resourceStream = plugin.getResource("config.yml");
         if (resourceStream != null) {
             try (InputStreamReader defaultConfigStream = new InputStreamReader(resourceStream, StandardCharsets.UTF_8)) {
@@ -58,13 +64,7 @@ public class ConfigManager {
             plugin.getLogger().warning("Default config.yml not found inside plugin jar!");
         }
 
-        // Write back so any newly-defaulted keys show up in the user's file.
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Could not save config: " + e.getMessage());
-        }
-
+        // Intentionally not saving. YamlConfiguration#save strips comments.
         pluginConfig.loadFromConfig(config);
     }
 

@@ -4,7 +4,7 @@ title: GameModeManager
 description: Separate inventories and player state per gamemode, with world-change handling to preserve gamemode.
 category: Gameplay
 plugin_id: gamemodemanager
-latest_version: "1.0.1"
+latest_version: "1.0.2"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21
@@ -92,7 +92,30 @@ messages:
 - Pending world-switch gamemodes are stored in memory and cleared on quit.
 - Player data is stored per UUID under `playerdata/`.
 
+---
+
+## Dependencies
+
+Bundles **Adventure** (`adventure-platform-bukkit`) inside its JAR, relocated to `com.chalwk.libs.adventure` to avoid conflicts with server-provided or other-plugin copies.
+
+---
+
 ## Changelog
+
+### 1.0.2
+
+**Changed**
+
+- Adventure (`adventure-platform-bukkit`) is now shaded into the plugin JAR and relocated to `com.chalwk.libs.adventure`. Runs on Spigot, Paper, and Purpur.
+
+**Fixed**
+
+- Reload no longer rewrites `config.yml`. Comments and formatting are preserved across reloads.
+
+**Internal**
+
+- `MessageHelper` is now an instance class wrapping `BukkitAudiences`, created in `onEnable` and closed in `onDisable`.
+- `GameModeCommand` now receives the `MessageHelper` instance via constructor.
 
 ### 1.0.1
 
