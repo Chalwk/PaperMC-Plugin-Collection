@@ -277,29 +277,29 @@ Copyright (c) 2026 Jericho Crosby (Chalwk)
 [license]: LICENSE
 
 <!-- Plugin documentation and source links -->
-[adminchat-docs]: _mcplugins/adminchat.md
-[adminchat-source]: papermc_plugins/adminchat/
+[adminchat-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/adminchat/
+[adminchat-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/adminchat
 
-[automessages-docs]: _mcplugins/automessages.md
-[automessages-source]: papermc_plugins/automessages/
+[automessages-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/automessages/
+[automessages-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/automessages
 
-[bigbrother-docs]: _mcplugins/bigbrother.md
-[bigbrother-source]: papermc_plugins/bigbrother/
+[bigbrother-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/
+[bigbrother-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/bigbrother
 
-[gamemodemanager-docs]: _mcplugins/gamemodemanager.md
-[gamemodemanager-source]: papermc_plugins/gamemodemanager/
+[gamemodemanager-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/gamemodemanager/
+[gamemodemanager-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/gamemodemanager
 
-[handbook-docs]: _mcplugins/handbook.md
-[handbook-source]: papermc_plugins/handbook/
+[handbook-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/handbook/
+[handbook-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/handbook
 
-[nexuspermissions-docs]: _mcplugins/nexuspermissions.md
-[nexuspermissions-source]: papermc_plugins/nexuspermissions/
+[nexuspermissions-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/nexuspermissions/
+[nexuspermissions-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/nexuspermissions
 
-[noctiview-docs]: _mcplugins/noctiview.md
-[noctiview-source]: papermc_plugins/noctiview/
+[noctiview-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/noctiview/
+[noctiview-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/noctiview
 
-[perkmenu-docs]: _mcplugins/perkmenu.md
-[perkmenu-source]: papermc_plugins/perkmenu/
+[perkmenu-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/perkmenu/
+[perkmenu-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/perkmenu
 
-[vaculoot-docs]: _mcplugins/vaculoot.md
-[vaculoot-source]: papermc_plugins/vaculoot/
+[vaculoot-docs]: https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/vaculoot/
+[vaculoot-source]: https://github.com/Chalwk/PaperMC-Plugin-Collection/tree/main/papermc_plugins/vaculoot
