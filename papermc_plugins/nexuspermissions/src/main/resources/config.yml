@@ -1,0 +1,34 @@
+# NexusPermissions Configuration
+config-version: 1
+
+# Set to true to enable debug logging. Useful when troubleshooting permission
+# resolution or inheritance.
+debug: false
+
+# The default group applied to all new players.
+# Users with no explicit parents are treated as members of this group.
+default-group: "default"
+
+# Name used for the "server" context. Permissions stored under
+# "server:<name>" apply only when this value matches. Useful on proxy
+# networks where each backend server should have its own scoped permissions.
+server-name: "default"
+
+# Ladders for promotion and demotion.
+#
+# Each ladder is a list of group names, ordered from lowest rank to highest.
+# /nexus promote moves a user one step up. /nexus demote moves one step down.
+# A user can only occupy one rung of a given ladder at a time.
+#
+# The ladders below are examples. Replace them with your own hierarchy.
+ladders:
+  staff:
+    - "helper"
+    - "moderator"
+    - "admin"
+    - "owner"
+
+  donor:
+    - "supporter"
+    - "patron"
+    - "benefactor"

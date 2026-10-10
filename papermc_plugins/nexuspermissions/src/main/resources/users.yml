@@ -1,0 +1,67 @@
+# NexusPermissions Users
+#
+# Users are keyed by name. Only users with specific modifications are saved
+# here; players who have never been edited live implicitly in the default
+# group and need no entry.
+#
+# Each user supports:
+#   options      - arbitrary key-value pairs. Shown in /nexus user info.
+#   permissions  - a list of nodes. A leading "-" negates.
+#   contexts     - a map of context name to permission list.
+#   parents      - a list of parent group names.
+#
+# On an online-mode server, names are safe as identifiers. On offline-mode
+# or proxy-in-offline-mode setups, names can be claimed by different players
+# over time, so review this file carefully before using it in that
+# environment. A UUID-based storage mode is a possible future improvement.
+#
+# The entries below are examples showing off each feature. Replace them with
+# your own users.
+
+users:
+
+  # Simple example: this user belongs to two groups and inherits from both.
+  # They get the union of both groups' permissions, with weight deciding
+  # which parent's entries win on conflict.
+  ExamplePlayer:
+    parents:
+      - "default"
+      - "moderator"
+
+  # Per-user option override. The user's own prefix replaces whatever the
+  # groups would have supplied.
+  ExampleDonor:
+    options:
+      prefix: "&6&l[VIP] &6"
+    parents:
+      - "default"
+      - "patron"
+
+  # Per-user permission, granted on top of whatever the parent groups
+  # provide. Useful for one-off exceptions.
+  ExampleBuilder:
+    permissions:
+      - "worldedit.navigation.thru"
+      - "worldedit.navigation.jumpto"
+    parents:
+      - "default"
+      - "builder"
+
+  # Per-user negation. Denies a specific permission that would otherwise be
+  # granted by one of the user's groups.
+  ExampleRestricted:
+    permissions:
+      - "-essentials.fly"
+    parents:
+      - "default"
+      - "patron"
+
+  # Context-scoped entry. Grants this user permission to build in the
+  # creative world only, regardless of which groups they belong to.
+  ExampleScoped:
+    contexts:
+      "world:creative":
+        - "worldedit.region.set"
+        - "worldedit.selection.pos"
+    parents:
+      - "default"

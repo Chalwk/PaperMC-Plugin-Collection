@@ -67,6 +67,8 @@ permissions:
 
 Toggleable item magnet with tiered ranges, optional Vault economy cost, world restrictions, and item blacklist.
 
+---
+
 ## Features
 
 - Toggle a personal item magnet with `/magnet`.
@@ -77,6 +79,8 @@ Toggleable item magnet with tiered ranges, optional Vault economy cost, world re
 - World allow-list and item material blacklist.
 - Admin commands to check status, set tiers, reload config, and toggle for others.
 - In-memory magnet states, tiers, and cooldowns.
+
+---
 
 ## Commands
 
@@ -93,6 +97,8 @@ All `/magnet` commands require `magnet.use` because the Bukkit command permissio
 | `/magnet tier <player> <tier>` | Set a player's magnet tier       | `magnet.use` + `magnet.admin`                           |
 | `/magnet reload`               | Reload configuration             | `magnet.use` + `magnet.admin`                           |
 
+---
+
 ## Permissions
 
 | Permission             | Description                              | Default |
@@ -105,6 +111,8 @@ All `/magnet` commands require `magnet.use` because the Bukkit command permissio
 | `magnet.tier.advanced` | Access to advanced magnet tier           | op      |
 | `magnet.tier.ultimate` | Access to ultimate magnet tier           | op      |
 | `magnet.tier.god`      | Access to god magnet tier                | op      |
+
+---
 
 ## Configuration
 

@@ -1,0 +1,80 @@
+name: NexusPermissions
+version: '${version}'
+main: com.chalwk.nexus.NexusPermissions
+api-version: '1.21'
+authors: [Chalwk]
+description: A permissions plugin with subjects, inheritance and contexts.
+
+commands:
+  nexus:
+    description: NexusPermissions main command
+    usage: /<command> [help]
+    aliases: [nex, nexusperms, nperms]
+
+permissions:
+  nexus.*:
+    description: All NexusPermissions permissions
+    default: op
+    children:
+      nexus.command: true
+      nexus.reload: true
+      nexus.debug: true
+      nexus.promote: true
+      nexus.demote: true
+      nexus.rank.manage: true
+      nexus.user.*: true
+      nexus.group.*: true
+  nexus.user.*:
+    default: op
+    children:
+      nexus.user.info: true
+      nexus.user.perm.set: true
+      nexus.user.parent.add: true
+      nexus.user.parent.remove: true
+      nexus.user.option.set: true
+  nexus.group.*:
+    default: op
+    children:
+      nexus.group.info: true
+      nexus.group.create: true
+      nexus.group.perm.set: true
+      nexus.group.parent.add: true
+      nexus.group.parent.remove: true
+      nexus.group.option.set: true
+      nexus.group.weight.set: true
+  nexus.command:
+    default: op
+  nexus.reload:
+    default: op
+  nexus.debug:
+    default: op
+  nexus.promote:
+    default: op
+  nexus.demote:
+    default: op
+  nexus.rank.manage:
+    default: op
+  nexus.user.info:
+    default: op
+  nexus.user.perm.set:
+    default: op
+  nexus.user.parent.add:
+    default: op
+  nexus.user.parent.remove:
+    default: op
+  nexus.user.option.set:
+    default: op
+  nexus.group.info:
+    default: op
+  nexus.group.create:
+    default: op
+  nexus.group.perm.set:
+    default: op
+  nexus.group.parent.add:
+    default: op
+  nexus.group.parent.remove:
+    default: op
+  nexus.group.option.set:
+    default: op
+  nexus.group.weight.set:
+    default: op

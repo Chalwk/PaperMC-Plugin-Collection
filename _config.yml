@@ -37,6 +37,8 @@ collections:
 exclude:
   - .github
   - .gitignore
+  - .gitattributes
+  - .gradle
   - Gemfile
   - Gemfile.lock
   - LICENSE

@@ -1,0 +1,142 @@
+# Handbook Content
+#
+# The book given to new players, and via /handbook. Edit freely.
+#
+# Book appearance:
+#   title  - shown on the book and in the player's inventory
+#   author - shown as the author of the book
+#
+# Chapters:
+#   Each chapter is one entry under `chapters:`. The chapter title is
+#   rendered at the top of its first page automatically; you don't need
+#   to include it in the content.
+#
+# Content lines:
+#   - Colour codes use '&' (e.g. "&0Black", "&6Gold", "&lBold").
+#   - An empty string "" renders a blank line.
+#   - A line consisting of exactly "---" forces a new page.
+#   - Pages hold up to `lines_per_page` content lines (default 9).
+#     Content wraps automatically when the page is full.
+#   - Force a page break with "---" if a chapter feels too long.
+#
+# Colour codes and the book page:
+#   Book pages have a pale cream background, so only dark colours are
+#   readable. Use &0, &1, &2, &4, &5, &6, &8, &9. Avoid &f, &7, &a,
+#   &b, &c, &d, &e entirely.
+#
+# Line length:
+#   Keep lines under ~22 characters so they don't wrap. Wrapped lines
+#   count as two against the page limit and cause content to spill.
+#
+# Colour codes count toward this: "&0Hello!" is not 6 characters long,
+# it is 8. Budget for them.
+
+book:
+  title: "Server Handbook"
+  author: "Your Server Name"
+
+chapters:
+
+  # --------------------------------------------------------------------
+  # Welcome chapter. Demonstrates basic body text, a blank line, and a
+  # heading-styled line.
+  # --------------------------------------------------------------------
+  - id: welcome
+    title: "Welcome"
+    content:
+      - "&0Welcome to &6&lYour Server&0,"
+      - "&0a short description of"
+      - "&0what kind of server this"
+      - "&0is and who it is for."
+      - ""
+      - "&0Replace this text with"
+      - "&0your own introduction."
+      - ""
+      - "&0Website: &1example.com"
+
+  # --------------------------------------------------------------------
+  # Getting Started. Demonstrates a numbered list with indented
+  # commands and an explicit page break via "---".
+  # --------------------------------------------------------------------
+  - id: getting-started
+    title: "Getting Started"
+    content:
+      - "&01. Read the rules"
+      - "&8   /rules"
+      - ""
+      - "&02. Join the community"
+      - "&8   /discord"
+      - ""
+      - "&03. Claim a starter kit"
+      - "&8   /kit"
+      - ""
+      - "---"
+      - "&04. Explore the world"
+      - "&8   /rt"
+      - ""
+      - "&0Need help? Ask in chat"
+      - "&0or on our Discord."
+
+  # --------------------------------------------------------------------
+  # Commands.
+  # --------------------------------------------------------------------
+  - id: commands
+    title: "Commands"
+    content:
+      - "&8/spawn  &0- to spawn"
+      - "&8/rt  &0- random teleport"
+      - "&8/home  &0- your home"
+      - "&8/kit  &0- claim a kit"
+      - "&8/warp  &0- list warps"
+      - "&8/tpa  &0- teleport ask"
+      - "&8/balance  &0- your money"
+      - ""
+      - "&0Full list: &8/help"
+
+  # --------------------------------------------------------------------
+  # Ranks.
+  # --------------------------------------------------------------------
+  - id: ranks
+    title: "Ranks"
+    content:
+      - "&0Link your account to"
+      - "&0unlock the &6Member"
+      - "&0rank."
+      - ""
+      - "&8/link"
+      - ""
+      - "&0Perks:"
+      - "&8- /kit member"
+      - "&8- extra homes"
+      - "&8- cosmetic access"
+
+  # --------------------------------------------------------------------
+  # Rules.
+  # --------------------------------------------------------------------
+  - id: rules
+    title: "Rules"
+    content:
+      - "&0By playing here you"
+      - "&0agree to the rules."
+      - ""
+      - "&8- no cheating"
+      - "&8- no harassment"
+      - "&8- no scams"
+      - "&8- no griefing claims"
+      - ""
+      - "&0Full rules: &1example.com/rules"
+
+  # --------------------------------------------------------------------
+  # Community.
+  # --------------------------------------------------------------------
+  - id: community
+    title: "Community"
+    content:
+      - "&0Join us outside the game:"
+      - ""
+      - "&8- Discord: &1example.com/discord"
+      - "&8- Website: &1example.com"
+      - "&8- Store: &1example.com/store"
+      - ""
+      - "&0Announcements and events"
+      - "&0are posted on Discord."

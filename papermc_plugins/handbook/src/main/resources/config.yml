@@ -1,0 +1,48 @@
+# Handbook Configuration
+config-version: 1
+
+# Give the handbook automatically on first join.
+give_on_first_join: true
+
+# When true, only players who've never joined before receive the handbook
+# automatically. Existing players can still get one with /handbook.
+# When false, anyone who hasn't received a handbook yet will get one on
+# their next join. Useful after adding or heavily editing the handbook.
+only_first_join: true
+
+# When true, drop the handbook at the player's feet if their inventory is
+# full. When false, silently skip the give.
+drop_when_inventory_full: true
+
+# How many raw content lines to pack into each book page before starting a
+# new one.
+#
+# Minecraft's rendered page holds 14 lines total. Our chapter header takes
+# 4 of those, and any content line that wraps to two rendered lines steals
+# another. 9 is a safe default that leaves headroom for a few wrapped
+# lines per page.
+#
+# Valid range: 1 to 14. Anything above 14 will overflow and spam warnings
+# to console on startup. Increase with caution and always test in-game.
+lines_per_page: 9
+
+# Hard cap on total pages in the book. Minecraft's own limit for written
+# books is 100. Content beyond this is silently dropped from the end.
+max_pages: 100
+
+# Messages
+messages:
+  no_permission: "&cYou don't have permission to use this command!"
+  players_only: "&cOnly players can use this command!"
+  unknown_command: "&cUnknown command. Use /handbook help"
+  reloaded: "&aHandbook configuration reloaded!"
+  received: "&aYou have received the Compendium of the Realm."
+  given: "&aGave the handbook to &f{player}&a."
+  player_not_found: "&cPlayer not found."
+  inventory_full: "&eYour inventory is full. The handbook has been dropped at your feet."
+  help:
+    - "&6&lHandbook Help"
+    - "&e/handbook &7- Get a copy of the server handbook"
+    - "&e/handbook give <player> &7- Give the handbook to another player"
+    - "&e/handbook reload &7- Reload the configuration"
+    - "&e/handbook help &7- Show this help"

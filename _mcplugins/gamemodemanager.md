@@ -47,6 +47,8 @@ permissions:
 
 Manages separate inventories and player states per gamemode, with world-change handling to preserve gamemode.
 
+---
+
 ## Features
 
 - Tracks separate inventories for `CREATIVE` and `SURVIVAL` only.
@@ -56,6 +58,8 @@ Manages separate inventories and player states per gamemode, with world-change h
 - Saves player data to `playerdata/<uuid>.yml`.
 - Loads data on join, saves on quit, and saves all online players on plugin disable.
 - Reload command for `config.yml`.
+
+---
 
 ## Commands
 
@@ -73,6 +77,8 @@ Manages separate inventories and player states per gamemode, with world-change h
 | `gmmanage.use`    | Allows using the /gmmanage command | op      |
 | `gmmanage.reload` | Allows reloading the configuration | op      |
 
+---
+
 ## Configuration
 
 ```yaml
@@ -85,6 +91,8 @@ messages:
     - "&6/gmmanage reload &7- Reload the configuration"
     - "&6/gmmanage help &7- Show this help"
 ```
+
+---
 
 ## Notes
 

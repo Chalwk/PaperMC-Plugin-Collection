@@ -60,6 +60,8 @@ player holds every permission node the perk declares. There is no store API,
 no economy plugin, no database. If the permissions are there, the perk is
 there.
 
+---
+
 ## Features
 
 - Paginated chat menu. No inventory GUI, no chest, no resource pack.
@@ -70,6 +72,8 @@ there.
 - Summary line shows owned count, total count, and total listed value.
 - Admin command to inspect another player's perks.
 - Everything configurable in `config.yml`.
+
+---
 
 ## Commands
 
@@ -84,6 +88,8 @@ there.
 | `/perks reload`           | Reload configuration                | `perkmenu.use` + `perkmenu.reload` |
 | `/perks help`             | Show help                           | `perkmenu.use`                     |
 
+---
+
 ## Permissions
 
 | Permission        | Description                            | Default |
@@ -92,6 +98,8 @@ there.
 | `perkmenu.use`    | Allows using `/perks`                  | true    |
 | `perkmenu.check`  | Allows checking another player's perks | op      |
 | `perkmenu.reload` | Allows reloading the configuration     | op      |
+
+---
 
 ## Configuration
 
@@ -116,6 +124,8 @@ Each entry under `perks:` is one perk. The key is the perk's ID (used by
 - `description`: list of lines shown on hover and in `/perks info`.
 - `permissions`: list of permission nodes. A player owns this perk when
   they hold **every** node in this list.
+
+---
 
 ## Notes
 

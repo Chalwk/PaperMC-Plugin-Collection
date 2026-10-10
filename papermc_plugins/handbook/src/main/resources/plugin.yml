@@ -1,0 +1,31 @@
+name: Handbook
+version: '${version}'
+main: com.chalwk.Handbook
+api-version: '1.21'
+description: Gives new players a written book guide to the server
+author: Chalwk
+website: https://github.com/Chalwk/PaperMC-Plugin-Collection
+
+commands:
+  handbook:
+    description: Get a copy of the server handbook
+    usage: /<command> [give|reload|help] [player]
+    permission: handbook.use
+    aliases: [ book ]
+
+permissions:
+  handbook.*:
+    description: All Handbook permissions
+    children:
+      handbook.use: true
+      handbook.give: true
+      handbook.reload: true
+  handbook.use:
+    description: Allows using /handbook
+    default: true
+  handbook.give:
+    description: Allows giving the handbook to other players
+    default: op
+  handbook.reload:
+    description: Allows reloading the handbook configuration
+    default: op

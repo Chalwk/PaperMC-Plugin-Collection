@@ -31,6 +31,8 @@ body:
         - AutoMessages
         - BigBrother
         - GameModeManager
+        - Handbook
+        - NexusPermissions
         - NoctiView
         - PerkMenu
         - VacuLoot

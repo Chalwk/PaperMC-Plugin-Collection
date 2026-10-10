@@ -114,6 +114,8 @@ BigBrother monitors player activity through configurable spy features.
 
 Also available on SpigotMC: <https://www.spigotmc.org/resources/bigbrother.139509/>
 
+---
+
 ## Features
 
 - Spy types: Command, Sign, Anvil, Book, Portal.
@@ -125,6 +127,8 @@ Also available on SpigotMC: <https://www.spigotmc.org/resources/bigbrother.13950
 - Configurable per-spy messages with placeholders.
 - Status command lists enabled spy features.
 - Runs on Spigot, Paper, and Purpur
+
+---
 
 ## Commands
 
@@ -142,6 +146,8 @@ All `/bigbrother` subcommands also require `bigbrother.use` because the command'
 | `/bigbrother books [player]`    | Toggle book spy                      | `bigbrother.use` + `bigbrother.bookspy.toggle`; other player requires `bigbrother.bookspy.toggle.others`       |
 | `/bigbrother portals [player]`  | Toggle portal spy                    | `bigbrother.use` + `bigbrother.portalspy.toggle`; other player requires `bigbrother.portalspy.toggle.others`   |
 
+---
+
 ## Spy Details
 
 - **Command**: logs commands before execution. Respects `filters.excluded_commands` (matched case-insensitively against the command name, without the leading `/`). Placeholders: `{player}`, `{command}`.
@@ -153,6 +159,8 @@ All `/bigbrother` subcommands also require `bigbrother.use` because the command'
 ## Persistence
 
 Per-player spy state is held in memory only and is **not** persisted across server restarts. State is also dropped when a player quits, so reconnecting players start from `enabled_by_default`.
+
+---
 
 ## Configuration
 

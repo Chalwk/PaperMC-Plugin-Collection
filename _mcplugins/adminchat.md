@@ -63,6 +63,8 @@ permissions:
 
 AdminChat provides a secure, permission-based chat system for staff with multiple channels, per-channel formatting, sounds, cooldowns, and visibility toggles.
 
+---
+
 ## Features
 
 - Multiple configurable channels: `mod`, `admin`, `trial` by default.
@@ -73,6 +75,8 @@ AdminChat provides a secure, permission-based chat system for staff with multipl
 - `/achat toggle [player]` toggles admin-chat visibility.
 - Join/quit notifications for staff with `adminchat.use`.
 - Reload command for configuration.
+
+---
 
 ## Commands
 
@@ -88,6 +92,8 @@ AdminChat provides a secure, permission-based chat system for staff with multipl
 | `/achat reload`              | Reload configuration                         | `adminchat.use` + `adminchat.admin`                             |
 | `/adminchat ...`             | Same executor as `/achat`                    | `adminchat.admin` at Bukkit level, plus `adminchat.use` in code |
 
+---
+
 ## Permissions
 
 | Permission                | Description                         | Default |
@@ -98,6 +104,8 @@ AdminChat provides a secure, permission-based chat system for staff with multipl
 | `adminchat.channel.mod`   | Access to mod channel               | op      |
 | `adminchat.channel.admin` | Access to admin channel             | op      |
 | `adminchat.channel.trial` | Access to trial channel             | op      |
+
+---
 
 ## Configuration
 

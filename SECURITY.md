@@ -20,8 +20,7 @@ practical, backported to the most recent release tag.
 | Older releases   | :x:                |
 | Forks            | :x:                |
 
-If you have an older copy of a plugin, re-download from the
-[Releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases) page
+If you have an older copy of a plugin, re-download from the [Releases][releases] page
 or from `main` before reporting anything. It may already be fixed.
 
 ---
@@ -33,12 +32,11 @@ or from `main` before reporting anything. It may already be fixed.
 Two private channels are available:
 
 1. **GitHub Private Vulnerability Reporting** (preferred). Use the
-   [Report a vulnerability](https://github.com/Chalwk/PaperMC-Plugin-Collection/security/advisories/new)
-   button on the repository's Security tab. This keeps the discussion private,
-   tracks the fix, and lets us coordinate disclosure.
-2. **Email**. If you'd rather not use GitHub, email
-   [chalwk.dev@gmail.com](mailto:chalwk.dev@gmail.com) with "SECURITY" in the
-   subject line.
+   [Report a vulnerability][report-vulnerability] button on the repository's
+   Security tab. This keeps the discussion private, tracks the fix, and lets
+   us coordinate disclosure.
+2. **Email**. If you'd rather not use GitHub, email [chalwk.dev@gmail.com][chalwk_email]
+   with "SECURITY" in the subject line.
 
 ### What to include
 
@@ -140,3 +138,7 @@ This repository runs the following GitHub security features on every push:
 Findings from these tools are triaged by the maintainer. If you've spotted
 something the automated tools missed, that's exactly what the private
 reporting channels above are for.
+
+[releases]: https://github.com/Chalwk/PaperMC-Plugin-Collection/releases
+[report-vulnerability]: https://github.com/Chalwk/PaperMC-Plugin-Collection/security/advisories/new
+[chalwk_email]: mailto:chalwk.dev@gmail.com

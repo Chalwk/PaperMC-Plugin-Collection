@@ -1,15 +1,15 @@
 # PaperMC-Plugin-Collection
 
-[![Website](https://img.shields.io/badge/website-chalwk.github.io%2FPaperMC--Plugin--Collection-blue)](https://chalwk.github.io/PaperMC-Plugin-Collection/)
-[![Build](https://github.com/Chalwk/PaperMC-Plugin-Collection/actions/workflows/build.yml/badge.svg)](https://github.com/Chalwk/PaperMC-Plugin-Collection/actions/workflows/build.yml)
-[![Security Policy](https://img.shields.io/badge/security-policy-blue)](SECURITY.md)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Website][website-badge]][repo_url]
+[![Build][build-badge]][build-workflow]
+[![Security Policy][security-badge]][security-policy]
+[![License: MIT][license-badge]][license]
 
 A collection of plugins for **PaperMC** (and compatible forks). Every plugin is a complete, standalone JAR - no shared library,
 no dependency chain between plugins.
 
 Full documentation, downloads, and release notes for each plugin live on
-the [website](https://chalwk.github.io/PaperMC-Plugin-Collection/).
+the [website][repo_url].
 
 ---
 
@@ -17,29 +17,33 @@ the [website](https://chalwk.github.io/PaperMC-Plugin-Collection/).
 
 ### Gameplay
 
-| Plugin                                                | Docs                                                                                         | What it does                                                                                                        |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [`VacuLoot`](papermc_plugins/vaculoot/)               | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/vaculoot/)        | Toggleable item and XP magnet with tiered ranges, optional Vault economy cost, world allow-list, and item blacklist |
-| [`GameModeManager`](papermc_plugins/gamemodemanager/) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/gamemodemanager/) | Separate inventories and player state per gamemode, with world-change preservation                                  |
-| [`PerkMenu`](papermc_plugins/perkmenu/)               | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/perkmenu/)        | Paginated chat-based perk browser that reads ownership from permissions, with prices, descriptions, and buy links.  |
-| [`NoctiView`](papermc_plugins/noctiview/)             | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/noctiview/)       | Per-world night vision toggle with configurable particles, sound feedback, and admin world controls                 |
+| Plugin                                      | Docs                                  | What it does                                                                                                         |
+| ------------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [`GameModeManager`][gamemodemanager-source] | [Read the docs][gamemodemanager-docs] | Separate inventories and player state per game mode, with world-change preservation.                                 |
+| [`Handbook`][handbook-source]               | [Read the docs][handbook-docs]        | Gives every player a written book guide to the server, with chapters configurable in a separate `handbook.yml`.      |
+| [`NoctiView`][noctiview-source]             | [Read the docs][noctiview-docs]       | Per-world night vision toggle with configurable particles, sound feedback, and admin world controls.                 |
+| [`PerkMenu`][perkmenu-source]               | [Read the docs][perkmenu-docs]        | Paginated chat-based perk browser that reads ownership from permissions, with prices, descriptions, and buy links.   |
+| [`VacuLoot`][vaculoot-source]               | [Read the docs][vaculoot-docs]        | Toggleable item and XP magnet with tiered ranges, optional Vault economy cost, world allow-list, and item blacklist. |
 
 ### Administration
 
-| Plugin                                          | Docs                                                                                      | What it does                                                                                      |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| [`BigBrother`](papermc_plugins/bigbrother/)     | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/bigbrother/)   | Command, sign, anvil, book, and portal spies with per-player toggles and filters                  |
-| [`AdminChat`](papermc_plugins/adminchat/)       | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/adminchat/)    | Multi-channel staff chat with per-channel permissions, formatting, sounds, and visibility toggles |
-| [`AutoMessages`](papermc_plugins/automessages/) | [Read the docs](https://chalwk.github.io/PaperMC-Plugin-Collection/plugins/automessages/) | Scheduled broadcasts with legacy colors and JSON click/hover components                           |
+| Plugin                                        | Docs                                   | What it does                                                                                       |
+| --------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| [`AdminChat`][adminchat-source]               | [Read the docs][adminchat-docs]        | Multi-channel staff chat with per-channel permissions, formatting, sounds, and visibility toggles. |
+| [`AutoMessages`][automessages-source]         | [Read the docs][automessages-docs]     | Scheduled broadcasts with legacy colors and JSON click/hover components.                           |
+| [`BigBrother`][bigbrother-source]             | [Read the docs][bigbrother-docs]       | Command, sign, anvil, book, and portal spies with per-player toggles and filters.                  |
+| [`NexusPermissions`][nexuspermissions-source] | [Read the docs][nexuspermissions-docs] | Permissions plugin with groups, inheritance, per-world contexts, and promote/demote ladders.       |
+
+> **Note:** NexusPermissions is still under active development. The core
+> feature set works, but the command surface and config schema may change
+> between releases. See its docs page for details.
 
 ---
 
 ## Downloads
 
-Each plugin is released independently. The [website](https://chalwk.github.io/PaperMC-Plugin-Collection/)
-links to the latest JAR for every plugin, or you can browse
-[all releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases)
-on GitHub.
+Each plugin is released independently. The [website][repo_url] links to the latest
+JAR for every plugin, or you can browse [all releases][releases] on GitHub.
 
 ---
 
@@ -230,12 +234,11 @@ Each plugin is tagged and pushed independently, and each tag fires its own
 
 ## Installing
 
-1. Build from source (above), or download a release JAR from the
-   [Releases](https://github.com/Chalwk/PaperMC-Plugin-Collection/releases) page.
-2. Drop the JAR into your server's `plugins/` directory.
-3. Restart the server (or use a plugin manager that supports hot-loading).
-4. Edit the generated config in `plugins/<PluginName>/config.yml` as needed.
-5. Run `/reload confirm` or restart to apply config changes.
+1. Build from source (above), or download a release JAR from the [Releases][releases] page.
+1. Drop the JAR into your server's `plugins/` directory.
+2. Restart the server (or use a plugin manager that supports hot-loading).
+3. Edit the generated config in `plugins/<PluginName>/config.yml` as needed.
+4. Run `/reload confirm` or restart to apply config changes.
 
 Every plugin generates its own config on first run with sensible defaults.
 
@@ -243,20 +246,60 @@ Every plugin generates its own config on first run with sensible defaults.
 
 ## Contributing
 
-Bugs, ideas, and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md)
+Bugs, ideas, and pull requests are welcome. See [CONTRIBUTING.md][contributing]
 for how to report a bug, suggest a plugin, or open a PR.
 
 ---
 
 ## Security
 
-**Do not open a public issue for security problems.** See [SECURITY.md](SECURITY.md)
+**Do not open a public issue for security problems.** See [SECURITY.md][security-policy]
 for the private reporting channels, scope, and expected timelines.
 
 ---
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MIT - see [LICENSE][license].
 
 Copyright (c) 2026 Jericho Crosby (Chalwk)
+
+<!-- Repository status, contribution, and project links -->
+[repo_url]: https://chalwk.github.io/PaperMC-Plugin-Collection/
+[build-badge]: https://github.com/Chalwk/PaperMC-Plugin-Collection/actions/workflows/build.yml/badge.svg
+[license-badge]: https://img.shields.io/badge/license-MIT-green
+[security-badge]: https://img.shields.io/badge/security-policy-blue
+[website-badge]: https://img.shields.io/badge/website-chalwk.github.io%2FPaperMC--Plugin--Collection-blue
+[build-workflow]: https://github.com/Chalwk/PaperMC-Plugin-Collection/actions/workflows/build.yml
+[releases]: https://github.com/Chalwk/PaperMC-Plugin-Collection/releases
+[contributing]: CONTRIBUTING.md
+[security-policy]: SECURITY.md
+[license]: LICENSE
+
+<!-- Plugin documentation and source links -->
+[adminchat-docs]: _mcplugins/adminchat.md
+[adminchat-source]: papermc_plugins/adminchat/
+
+[automessages-docs]: _mcplugins/automessages.md
+[automessages-source]: papermc_plugins/automessages/
+
+[bigbrother-docs]: _mcplugins/bigbrother.md
+[bigbrother-source]: papermc_plugins/bigbrother/
+
+[gamemodemanager-docs]: _mcplugins/gamemodemanager.md
+[gamemodemanager-source]: papermc_plugins/gamemodemanager/
+
+[handbook-docs]: _mcplugins/handbook.md
+[handbook-source]: papermc_plugins/handbook/
+
+[nexuspermissions-docs]: _mcplugins/nexuspermissions.md
+[nexuspermissions-source]: papermc_plugins/nexuspermissions/
+
+[noctiview-docs]: _mcplugins/noctiview.md
+[noctiview-source]: papermc_plugins/noctiview/
+
+[perkmenu-docs]: _mcplugins/perkmenu.md
+[perkmenu-source]: papermc_plugins/perkmenu/
+
+[vaculoot-docs]: _mcplugins/vaculoot.md
+[vaculoot-source]: papermc_plugins/vaculoot/

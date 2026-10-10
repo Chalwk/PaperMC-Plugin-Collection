@@ -47,6 +47,8 @@ permissions:
 
 Simple night vision toggle with per-world enable/disable and optional particle/sound feedback.
 
+---
+
 ## Features
 
 - Toggle night vision for yourself with `/nightvision` or `/nv`.
@@ -55,6 +57,8 @@ Simple night vision toggle with per-world enable/disable and optional particle/s
 - Admin command to toggle night vision for another player.
 - Configurable potion duration/amplifier, particles, and sound.
 - Removes night vision from all online players when the plugin disables.
+
+---
 
 ## Commands
 
@@ -70,6 +74,8 @@ All commands require `nightvision.use` at the Bukkit command level. Admin subcom
 | `/nightvision disableworld <world>` | Disable night vision in a world        | `nightvision.use` + `noctiview.admin` |
 | `/nightvision reload`               | Reload configuration                   | `nightvision.use` + `noctiview.admin` |
 
+---
+
 ## Permissions
 
 | Permission        | Description                                      | Default |
@@ -77,6 +83,8 @@ All commands require `nightvision.use` at the Bukkit command level. Admin subcom
 | `noctiview.*`     | All NoctiView permissions                        | op      |
 | `nightvision.use` | Allows toggling your own night vision            | true    |
 | `noctiview.admin` | Access to admin commands and toggling for others | op      |
+
+---
 
 ## Configuration
 
@@ -111,6 +119,8 @@ worlds:
 Messages are configurable under `messages`:
 
 `no_permission`, `players_only`, `reloaded`, `player_not_found`, `world_not_found`, `world_enabled`, `world_disabled`, `world_header`, `world_not_enabled_self`, `world_not_enabled_other`, `night_vision_enabled`, `night_vision_disabled`, `night_vision_enabled_for`, `night_vision_disabled_for`, `night_vision_enabled_by`, `night_vision_disabled_by`, `usage_enableworld`, `usage_disableworld`.
+
+---
 
 ## Notes
 

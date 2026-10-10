@@ -28,14 +28,16 @@ body:
       label: Existing Plugin (if applicable)
       description: If this is a feature request, select the plugin. Otherwise, pick "N/A".
       options:
-        - N/A (new plugin)
-        - VacuLoot
-        - GameModeManager
-        - PerkMenu
-        - BigBrother
-        - AutoMessages
         - AdminChat
+        - AutoMessages
+        - BigBrother
+        - GameModeManager
+        - Handbook
+        - NexusPermissions
         - NoctiView
+        - PerkMenu
+        - VacuLoot
+        - N/A (new plugin)
         - Other (specify below)
     validations:
       required: true

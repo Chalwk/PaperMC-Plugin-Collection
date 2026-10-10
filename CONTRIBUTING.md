@@ -7,7 +7,7 @@ permalink: /contributing/
 
 ## Reporting a bug
 
-Use the [bug report template](https://github.com/{{ site.repository }}/issues/new?template=bug-report.yaml)
+Use the [bug report template][bug-report]
 and include:
 
 - Which plugin is misbehaving (and its version)
@@ -23,13 +23,13 @@ and include:
 
 **Do not open a public issue for security problems.**
 
-Use the private [Report a vulnerability](https://github.com/{{ site.repository }}/security/advisories/new)
-flow on the Security tab, or see [SECURITY.md](https://github.com/{{ site.repository }}/blob/main/SECURITY.md)
+Use the private [Report a vulnerability][report-vulnerability]
+flow on the Security tab, or see [SECURITY.md][security-policy]
 for the full policy, scope, and expected timelines.
 
 ## Suggesting a plugin or feature
 
-Use the [plugin request template](https://github.com/{{ site.repository }}/issues/new?template=plugin-request.yaml).
+Use the [plugin request template][plugin-request].
 Describe the problem you're trying to solve, not the solution you have in
 mind - that gives me more room to suggest something simpler than what you'd
 expect.
@@ -53,7 +53,7 @@ Before opening a PR, make sure:
 - No hardcoded secrets, API keys, or database credentials
 - You've tested the cases described in the related issue
 
-See [`.github/pull_request_template.md`](https://github.com/{{ site.repository }}/blob/main/.github/pull_request_template.md)
+See [`.github/pull_request_template.md`][pr-template]
 for the full checklist.
 
 ## Code style
@@ -69,5 +69,15 @@ There's no enforced linter, but the house style is:
 
 ## Questions
 
-Open a [GitHub Discussion](https://github.com/{{ site.repository }}/discussions)
-or find me on [Discord]({{ site.discord_invite }}).
+Open a [GitHub Discussion][discussions]
+or find me on [Discord][discord].
+
+<!-- links -->
+
+[security-policy]: SECURITY.md
+[discord]: https://discord.gg/g6ENWebHsE
+[discussions]: https://github.com/Chalwk/PaperMC-Plugin-Collection/discussions
+[bug-report]: https://github.com/Chalwk/PaperMC-Plugin-Collection/issues/new?template=bug-report.yaml
+[plugin-request]: https://github.com/Chalwk/PaperMC-Plugin-Collection/issues/new?template=plugin-request.yaml
+[pr-template]: https://github.com/Chalwk/PaperMC-Plugin-Collection/blob/main/.github/pull_request_template.md
+[report-vulnerability]: https://github.com/Chalwk/PaperMC-Plugin-Collection/security/advisories/new

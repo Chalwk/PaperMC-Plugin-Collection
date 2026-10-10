@@ -1,0 +1,134 @@
+# NexusPermissions Groups
+#
+# Permissions prefixed with "-" are negated. Lower weight = higher priority.
+# Context-specific permissions go under "contexts", e.g.
+#   contexts:
+#     "world:world_nether":
+#       - "essentials.fly"
+#
+# Each group supports:
+#   options      - arbitrary key-value pairs. "weight" and "prefix" are the
+#                  two the plugin reads natively. Other keys are shown in
+#                  /nexus group info but have no effect on permissions.
+#   permissions  - a list of nodes. A leading "-" negates.
+#   contexts     - a map of context name to permission list.
+#   parents      - a list of parent group names, applied in weight order.
+#
+# The groups below are examples showing off each feature. Replace them with
+# your own hierarchy.
+
+groups:
+
+  # The default group. Applied to players with no explicit parents.
+  # Weight is deliberately high so it loses to everything else during
+  # inheritance resolution.
+  default:
+    options:
+      prefix: "&7"
+      weight: 1000
+    parents: []
+    permissions:
+      - "essentials.spawn"
+      - "essentials.help"
+      - "essentials.warp"
+      - "essentials.tpa"
+      - "essentials.balance"
+      - "essentials.pay"
+      - "essentials.msg"
+      - "essentials.reply"
+      # Negations. Explicit denials override grants inherited from other
+      # parents, which is useful for locking down features on the baseline
+      # group so only promoted players get them.
+      - "-essentials.fly"
+      - "-essentials.gamemode"
+      - "-essentials.god"
+
+  # Example of a group with a scoped permission. Players in this group can
+  # fly in the creative world but not anywhere else.
+  builder:
+    options:
+      prefix: "&a[Builder] &a"
+      weight: 500
+    parents:
+      - "default"
+    permissions:
+      - "essentials.gamemode.creative"
+      - "worldedit.wand"
+      - "worldedit.selection.pos"
+      - "worldedit.region.set"
+    contexts:
+      "world:creative":
+        - "essentials.fly"
+        - "essentials.gamemode"
+
+  # Example of a staff rank. Inherits from default so it gets the baseline
+  # commands automatically, and adds moderation permissions on top.
+  moderator:
+    options:
+      prefix: "&8[&bMod&8] &b"
+      weight: 100
+      rank-ladder: "staff"
+    parents:
+      - "default"
+    permissions:
+      - "essentials.fly"
+      - "essentials.kick"
+      - "essentials.mute"
+      - "essentials.tempban"
+      - "essentials.vanish"
+      - "essentials.tp"
+      - "essentials.tp.others"
+      - "essentials.invsee"
+      - "essentials.enderchest"
+      - "essentials.enderchest.others"
+      - "coreprotect.inspect"
+      - "coreprotect.lookup"
+      - "coreprotect.rollback"
+      - "worldguard.region.flag.*"
+      - "worldguard.region.bypass.*"
+
+  # Example of a group with a wildcard permission. Wildcards are resolved by
+  # Bukkit at lookup time; Nexus doesn't need to expand them itself.
+  admin:
+    options:
+      prefix: "&8[&cAdmin&8] &c"
+      weight: 50
+      rank-ladder: "staff"
+    parents:
+      - "moderator"
+    permissions:
+      - "essentials.*"
+      - "worldedit.*"
+      - "worldguard.*"
+      - "-essentials.fly.disabled"
+      - "commandblocker.bypass"
+
+  # Example of a single-step donor tier, showing how a group can inherit
+  # from the default group and add a small number of extras.
+  supporter:
+    options:
+      prefix: "&6[Supporter] &6"
+      weight: 400
+      rank-ladder: "donor"
+    parents:
+      - "default"
+    permissions:
+      - "essentials.hat"
+      - "essentials.nick"
+      - "essentials.workbench"
+      - "essentials.enderchest"
+
+  # Example of a top donor tier that inherits from supporter, so it
+  # automatically gets everything the lower tier has plus its own extras.
+  patron:
+    options:
+      prefix: "&6[Patron] &6"
+      weight: 300
+      rank-ladder: "donor"
+    parents:
+      - "supporter"
+    permissions:
+      - "essentials.fly"
+      - "essentials.feed"
+      - "essentials.heal"
+      - "essentials.back.ondeath"

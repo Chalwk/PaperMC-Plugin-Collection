@@ -26,7 +26,7 @@ build/
 Thumbs.db
 desktop.ini
 
-# ---- Local Minecraft server (root-level only) ----
+# ---- Local Minecraft server ----
 /server/
 /run/
 /logs/
@@ -49,6 +49,9 @@ purpur-*.jar
 *.orig
 *.rej
 *.bak
+
+# ---- Personal server configs ----
+jericraft-*.yml
 
 # ---- Jekyll / GitHub Pages ----
 _site/

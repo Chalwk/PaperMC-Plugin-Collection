@@ -51,6 +51,8 @@ AutoMessages periodically broadcasts configured messages to all online players a
 
 Also available on SpigotMC: <https://www.spigotmc.org/resources/automessages.139507/>
 
+---
+
 ## Features
 
 - Broadcasts configured messages at a fixed interval.
@@ -64,6 +66,8 @@ Also available on SpigotMC: <https://www.spigotmc.org/resources/automessages.139
 - All user-facing strings (help text, status labels, error messages) are defined in `config.yml` under `messages:`, so nothing is hardcoded.
 - Runs on Spigot, Paper, and Purpur.
 
+---
+
 ## Commands
 
 | Command                 | Description                         | Permission                                 |
@@ -75,6 +79,8 @@ Also available on SpigotMC: <https://www.spigotmc.org/resources/automessages.139
 
 Tab completion covers `help`, `status`, and (if you have permission) `reload`.
 
+---
+
 ## Permissions
 
 | Permission            | Description                    | Default |
@@ -82,6 +88,8 @@ Tab completion covers `help`, `status`, and (if you have permission) `reload`.
 | `automessages.*`      | All AutoMessages permissions   | op      |
 | `automessages.use`    | Allows using /automessages     | op      |
 | `automessages.reload` | Allows reloading configuration | op      |
+
+---
 
 ## Configuration
 
@@ -213,6 +221,8 @@ messages:
     - "&e/automessages reload &7- Reload configuration and restart scheduler"
     - "&e/automessages help &7- Show this help"
 ```
+
+---
 
 ## Notes
 
