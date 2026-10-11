@@ -14,10 +14,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * Keeps permission attachments in sync with the player's presence and
  * current world.
  *
- * <p>New players need no stored data. A user without explicit parents is
- * implicitly in the default group, so the join handler only has to attach
- * the resolved permissions. Nothing is written to users.yml unless the
- * player is later edited by an admin.</p>
+ * <p>Also records the player's UUID on their stored user the first
+ * time they join.</p>
  */
 public class PlayerListener implements Listener {
 
@@ -30,6 +28,9 @@ public class PlayerListener implements Listener {
     /** LOWEST so our attachment is in place before other plugins query it. */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
+        boolean linked = plugin.getPermissionManager().recordUuid(event.getPlayer());
+        if (linked) plugin.debug("Recorded UUID for " + event.getPlayer().getName());
+
         plugin.getPermissionManager().applyToPlayer(event.getPlayer());
     }
 

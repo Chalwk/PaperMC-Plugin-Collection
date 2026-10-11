@@ -7,6 +7,7 @@ import com.chalwk.nexus.manager.PermissionManager;
 import com.chalwk.nexus.model.Group;
 import com.chalwk.nexus.model.Subject;
 import com.chalwk.nexus.model.User;
+import com.chalwk.nexus.util.AuditLogger;
 import com.chalwk.nexus.util.MessageHelper;
 import org.bukkit.command.CommandSender;
 
@@ -21,22 +22,21 @@ import java.util.Locale;
  * permission node gates the action, given by {@code basePerm}, which is
  * either {@code nexus.user} or {@code nexus.group}.</p>
  *
- * <p>Every mutating method persists and re-applies to online players
- * before returning. There's no undo, so the state on disk always matches
- * what the server is currently enforcing.</p>
+ * <p>Every mutating method persists, re-applies to online players, and
+ * writes an audit line if the audit log is enabled.</p>
  */
 final class SubjectEditor {
 
-    private final NexusPermissions plugin;
     private final PermissionManager pm;
     private final MessageHelper messageHelper;
+    private final AuditLogger audit;
     private final String basePerm;
 
     SubjectEditor(NexusPermissions plugin, String basePerm, MessageHelper messageHelper) {
-        this.plugin = plugin;
         this.pm = plugin.getPermissionManager();
-        this.basePerm = basePerm;
         this.messageHelper = messageHelper;
+        this.audit = plugin.getAuditLogger();
+        this.basePerm = basePerm;
     }
 
     /** Used in usage strings and error messages so they read naturally. */
@@ -50,14 +50,20 @@ final class SubjectEditor {
         pm.refreshAll();
     }
 
-    /** args: <node> <true|false|unset> [context] */
+    /**
+     * args: {@code <node> <true|false|unset> [context] [temp:7d]}
+     *
+     * <p>Context and temp are both optional. The parser accepts them in
+     * either order as long as temp has the {@code temp:} prefix. Duration
+     * suffixes are s, m, h, d, w.</p>
+     */
     void perm(CommandSender sender, Subject subject, String[] args) {
         if (!sender.hasPermission(basePerm + ".perm.set")) {
             messageHelper.noPermission(sender);
             return;
         }
         if (args.length < 2) {
-            messageHelper.error(sender, "Usage: /nexus " + kind(subject) + " <name> perm <node> <true|false|unset> [context]");
+            messageHelper.error(sender, "Usage: /nexus " + kind(subject) + " <name> perm <node> <true|false|unset> [context] [temp:7d]");
             return;
         }
         String node = args[0].toLowerCase(Locale.ROOT);
@@ -67,14 +73,38 @@ final class SubjectEditor {
             messageHelper.error(sender, "Invalid permission node.");
             return;
         }
-        String context = PermissionManager.parseContext(args.length > 2 ? args[2] : null);
-        String where = context.equals(Subject.GLOBAL) ? "globally" : "in " + context;
+
         String value = args[1].toLowerCase(Locale.ROOT);
+        String contextArg = null;
+        String tempArg = null;
+        for (int i = 2; i < args.length; i++) {
+            if (args[i].toLowerCase(Locale.ROOT).startsWith("temp:")) {
+                tempArg = args[i].substring(5);
+            } else if (contextArg == null) {
+                contextArg = args[i];
+            }
+        }
+        String context = PermissionManager.parseContext(contextArg);
+        String where = context.equals(Subject.GLOBAL) ? "globally" : "in " + context;
+
+        long expires = 0L;
+        if (tempArg != null) {
+            Long parsed = parseDuration(tempArg);
+            if (parsed == null) {
+                messageHelper.error(sender, "Invalid duration. Use a number followed by s, m, h, d or w (for example temp:7d).");
+                return;
+            }
+            expires = parsed;
+        }
+
+        String auditSuffix = expires > 0 ? " (until " + expires + ")" : "";
 
         switch (value) {
             case "true", "false" -> {
-                subject.setPermission(context, node, Boolean.parseBoolean(value));
-                messageHelper.success(sender, "Set " + node + " to " + value + " for " + subject.getName() + " " + where + ".");
+                subject.setPermission(context, node, Boolean.parseBoolean(value), expires);
+                String suffix = expires > 0 ? " until " + formatExpiry(expires) : "";
+                messageHelper.success(sender, "Set " + node + " to " + value + " for " + subject.getName() + " " + where + suffix + ".");
+                audit.log(sender, kind(subject) + " " + subject.getName() + " perm " + node + " " + value + " " + context + auditSuffix);
             }
             case "unset", "remove" -> {
                 if (!subject.unsetPermission(context, node)) {
@@ -82,6 +112,7 @@ final class SubjectEditor {
                     return;
                 }
                 messageHelper.success(sender, "Removed " + node + " from " + subject.getName() + " " + where + ".");
+                audit.log(sender, kind(subject) + " " + subject.getName() + " perm " + node + " unset " + context);
             }
             default -> {
                 messageHelper.error(sender, "Value must be true, false or unset.");
@@ -126,6 +157,7 @@ final class SubjectEditor {
                     return;
                 }
                 messageHelper.success(sender, "Added parent " + groupName + " to " + subject.getName() + ".");
+                audit.log(sender, kind(subject) + " " + subject.getName() + " parent add " + groupName);
             }
             case "remove" -> {
                 if (!sender.hasPermission(basePerm + ".parent.remove")) {
@@ -137,6 +169,7 @@ final class SubjectEditor {
                     return;
                 }
                 messageHelper.success(sender, "Removed parent " + groupName + " from " + subject.getName() + ".");
+                audit.log(sender, kind(subject) + " " + subject.getName() + " parent remove " + groupName);
             }
             default -> {
                 messageHelper.error(sender, "Usage: /nexus " + kind(subject) + " <name> parent <add|remove> <group>");
@@ -175,10 +208,40 @@ final class SubjectEditor {
                 return;
             }
             messageHelper.success(sender, "Removed option " + key + " from " + subject.getName() + ".");
+            audit.log(sender, kind(subject) + " " + subject.getName() + " option " + key + " unset");
         } else {
             subject.setOption(key, value);
             messageHelper.success(sender, "Set option " + key + " for " + subject.getName() + ".");
+            audit.log(sender, kind(subject) + " " + subject.getName() + " option " + key + " " + value);
         }
         commit();
+    }
+
+    /**
+     * Parses a duration like {@code 7d} or {@code 30m} and returns the epoch
+     * millis at which it expires. Returns null if the format is bad.
+     */
+    private static Long parseDuration(String s) {
+        if (s == null || s.isEmpty()) return null;
+        char unit = s.charAt(s.length() - 1);
+        long multiplier;
+        switch (Character.toLowerCase(unit)) {
+            case 's' -> multiplier = 1000L;
+            case 'm' -> multiplier = 60_000L;
+            case 'h' -> multiplier = 3_600_000L;
+            case 'd' -> multiplier = 86_400_000L;
+            case 'w' -> multiplier = 604_800_000L;
+            default -> { return null; }
+        }
+        try {
+            long value = Long.parseLong(s.substring(0, s.length() - 1));
+            return System.currentTimeMillis() + (value * multiplier);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static String formatExpiry(long epochMillis) {
+        return java.time.Instant.ofEpochMilli(epochMillis).toString();
     }
 }

@@ -14,13 +14,33 @@ default-group: "default"
 # networks where each backend server should have its own scoped permissions.
 server-name: "default"
 
+# Region context. When WorldGuard is installed and this is enabled, players
+# standing inside a WorldGuard region also resolve the "region:<name>"
+# context. That lets you grant permissions to everyone inside a specific
+# region without touching individual players or groups.
+#
+# Turn off if you have a large number of regions or are seeing performance
+# issues. The lookup runs once per player per world change and refresh.
+region-context:
+  enabled: true
+
+# Audit log. When enabled, every mutation is appended to
+# plugins/NexusPermissions/audit.log. Useful for tracking who changed what
+# and when on servers with more than one admin.
+audit-log:
+  enabled: false
+
+# How often (in seconds) to sweep expired timed permissions. Timed entries
+# are also filtered out at resolution time, so this only affects when the
+# file is written back and online players are refreshed. 60 is a sane
+# default.
+timed-permission-sweep-seconds: 60
+
 # Ladders for promotion and demotion.
 #
 # Each ladder is a list of group names, ordered from lowest rank to highest.
 # /nexus promote moves a user one step up. /nexus demote moves one step down.
 # A user can only occupy one rung of a given ladder at a time.
-#
-# The ladders below are examples. Replace them with your own hierarchy.
 ladders:
   staff:
     - "helper"

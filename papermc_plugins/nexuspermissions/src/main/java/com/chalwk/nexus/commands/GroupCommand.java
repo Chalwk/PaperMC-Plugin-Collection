@@ -5,12 +5,16 @@ package com.chalwk.nexus.commands;
 import com.chalwk.nexus.NexusPermissions;
 import com.chalwk.nexus.manager.PermissionManager;
 import com.chalwk.nexus.model.Group;
+import com.chalwk.nexus.model.User;
+import com.chalwk.nexus.util.AuditLogger;
 import com.chalwk.nexus.util.MessageHelper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,20 +28,24 @@ import java.util.stream.Collectors;
  */
 public class GroupCommand {
 
+    private final NexusPermissions plugin;
     private final PermissionManager pm;
     private final MessageHelper messageHelper;
+    private final AuditLogger audit;
     private final SubjectEditor editor;
 
     public GroupCommand(NexusPermissions plugin, MessageHelper messageHelper) {
+        this.plugin = plugin;
         this.pm = plugin.getPermissionManager();
         this.messageHelper = messageHelper;
+        this.audit = plugin.getAuditLogger();
         this.editor = new SubjectEditor(plugin, "nexus.group", messageHelper);
     }
 
     /** args[0] = group name, args[1] = action, rest = action arguments. */
     public void execute(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            messageHelper.error(sender, "Usage: /nexus group <group> <create|info|perm|parent|option|weight> ...");
+            messageHelper.error(sender, "Usage: /nexus group <group> <create|info|perm|parent|option|weight|members|delete> ...");
             return;
         }
         String name = args[0].toLowerCase(Locale.ROOT);
@@ -62,11 +70,13 @@ public class GroupCommand {
 
         switch (action) {
             case "info" -> info(sender, group);
+            case "members" -> members(sender, group);
             case "perm" -> editor.perm(sender, group, rest);
             case "parent" -> editor.parent(sender, group, rest);
             case "option" -> editor.option(sender, group, rest);
             case "weight" -> weight(sender, group, rest);
-            default -> messageHelper.error(sender, "Unknown action. Use create, info, perm, parent, option or weight.");
+            case "delete" -> delete(sender, group);
+            default -> messageHelper.error(sender, "Unknown action. Use create, info, members, perm, parent, option, weight or delete.");
         }
     }
 
@@ -81,6 +91,52 @@ public class GroupCommand {
         }
         pm.save();
         messageHelper.success(sender, "Created group " + name + ".");
+        audit.log(sender, "group " + name + " create");
+    }
+
+    /**
+     * Deletes a group, first refusing if it's still referenced. Refuses if
+     * it's the default group, if any other group has it as a parent, or if
+     * it's on a ladder. That way a delete never silently breaks a config (hopefully).
+     */
+    private void delete(CommandSender sender, Group group) {
+        if (!sender.hasPermission("nexus.group.delete")) {
+            messageHelper.noPermission(sender);
+            return;
+        }
+        String name = group.getName();
+
+        if (name.equalsIgnoreCase(plugin.getPluginConfig().getDefaultGroup())) {
+            messageHelper.error(sender, "Cannot delete the default group.");
+            return;
+        }
+
+        List<String> referencing = new ArrayList<>();
+        for (Group other : pm.getGroups()) {
+            if (other == group) continue;
+            if (other.hasParent(name)) referencing.add(other.getName());
+        }
+        if (!referencing.isEmpty()) {
+            messageHelper.error(sender, "Group '" + name + "' is a parent of: " + String.join(", ", referencing)
+                    + ". Remove those references first.");
+            return;
+        }
+
+        for (Map.Entry<String, List<String>> e : plugin.getPluginConfig().getLadders().entrySet()) {
+            if (e.getValue().contains(name)) {
+                messageHelper.error(sender, "Group '" + name + "' is on ladder '" + e.getKey() + "'. Remove it first.");
+                return;
+            }
+        }
+
+        if (!pm.deleteGroup(name)) {
+            messageHelper.error(sender, "Could not delete group '" + name + "'.");
+            return;
+        }
+        pm.save();
+        pm.refreshAll();
+        messageHelper.success(sender, "Deleted group '" + name + "'.");
+        audit.log(sender, "group " + name + " delete");
     }
 
     /**
@@ -107,6 +163,7 @@ public class GroupCommand {
         pm.save();
         pm.refreshAll();
         messageHelper.success(sender, "Set weight of " + group.getName() + " to " + group.getWeight() + " (lower = higher priority).");
+        audit.log(sender, "group " + group.getName() + " weight " + group.getWeight());
     }
 
     /**
@@ -126,7 +183,7 @@ public class GroupCommand {
 
         String prefix = pm.getOption(group, "prefix");
         messageHelper.kv(sender, "Prefix", prefix == null ? Component.text("none", NamedTextColor.GRAY)
-                : messageHelper.legacy(prefix + "Preview").append(Component.text("  (" + prefix + ")", NamedTextColor.DARK_GRAY)));
+                : messageHelper.legacy(prefix + "Preview"));
 
         messageHelper.kv(sender, "Own options", group.getOptions().isEmpty() ? "none"
                 : group.getOptions().entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining(", ")));
@@ -141,5 +198,22 @@ public class GroupCommand {
         if (!any) messageHelper.kv(sender, "Own permissions", "none");
         messageHelper.kv(sender, "Effective nodes (global)",
                 String.valueOf(pm.resolvePermissions(group, java.util.List.of()).size()));
+    }
+
+    /** Lists users whose effective group set includes this group. */
+    private void members(CommandSender sender, Group group) {
+        if (!sender.hasPermission("nexus.group.info")) {
+            messageHelper.noPermission(sender);
+            return;
+        }
+        List<String> members = new ArrayList<>();
+        for (User u : pm.getUsers()) {
+            if (pm.getEffectiveParentNames(u).contains(group.getName())) members.add(u.getName());
+        }
+        if (members.isEmpty()) {
+            messageHelper.info(sender, "Group '" + group.getName() + "' has no stored members.");
+            return;
+        }
+        messageHelper.info(sender, "Members of '" + group.getName() + "': " + String.join(", ", members));
     }
 }

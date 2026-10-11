@@ -5,6 +5,7 @@ package com.chalwk.nexus.config;
 import com.chalwk.nexus.NexusPermissions;
 import com.chalwk.nexus.manager.PermissionManager;
 import com.chalwk.nexus.model.Group;
+import com.chalwk.nexus.model.PermissionEntry;
 import com.chalwk.nexus.model.Subject;
 import com.chalwk.nexus.model.User;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -91,8 +93,7 @@ public class ConfigManager {
         if (users != null) {
             for (String key : users.getKeys(false)) {
                 ConfigurationSection sec = users.getConfigurationSection(key);
-                User u = new User(key);
-                if (sec != null) readSubject(u, sec);
+                User u = readUser(key, sec);
                 manager.addUser(u);
             }
         }
@@ -106,6 +107,29 @@ public class ConfigManager {
         }
         plugin.debug("Loaded " + manager.getGroups().size() + " groups and " + manager.getUsers().size() + " users.");
         return true;
+    }
+
+    /**
+     * Reads one user entry. Keys can be UUIDs or legacy names. If it's a
+     * UUID, the name comes from the entry's name field. If it's a name, the
+     * UUID is left null and gets filled in when the player next joins.
+     */
+    private User readUser(String key, ConfigurationSection sec) {
+        UUID uuid = tryParseUuid(key);
+        String name = sec != null ? sec.getString("name", key) : key;
+        User u = new User(name);
+        if (uuid != null) u.setUuid(uuid);
+        if (sec != null) readSubject(u, sec);
+        return u;
+    }
+
+    private static UUID tryParseUuid(String s) {
+        if (s == null || s.length() != 36) return null;
+        try {
+            return UUID.fromString(s);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public void saveAll(PermissionManager manager) {
@@ -129,13 +153,19 @@ public class ConfigManager {
 
     private void saveUsers(PermissionManager manager) {
         YamlConfiguration yml = newYaml();
-        yml.options().setHeader(List.of("NexusPermissions Users", "Only users with specific modifications are saved here."));
+        yml.options().setHeader(List.of(
+                "NexusPermissions Users",
+                "Keyed by UUID. The name field is kept for readability only."));
         ConfigurationSection root = yml.createSection("users");
         for (User u : manager.getUsers()) {
             // Empty users are transient entries created during command
             // handling and shouldn't end up on disk.
             if (u.isEmpty()) continue;
-            writeSubject(root.createSection(u.getName()), u);
+
+            String key = u.getUuid() != null ? u.getUuid().toString() : u.getName();
+            ConfigurationSection sec = root.createSection(key);
+            if (u.getUuid() != null) sec.set("name", u.getName());
+            writeSubject(sec, u);
         }
         write(yml, usersFile);
     }
@@ -170,9 +200,13 @@ public class ConfigManager {
     }
 
     /**
-     * Reads a permission list. A leading '-' on a line means the node is
-     * negated, which is how NexusPermissions stores explicit denials on
-     * disk. Everything else is a grant.
+     * Reads a permission list. Format per entry:
+     * <pre>
+     *   node              grant, permanent
+     *   -node             deny, permanent
+     *   node;1234567890   grant, expires at that epoch millis
+     *   -node;1234567890  deny, expires at that epoch millis
+     * </pre>
      */
     private void readPerms(Subject s, String context, List<String> list) {
         for (String raw : list) {
@@ -183,7 +217,18 @@ public class ConfigManager {
                 value = false;
                 node = node.substring(1);
             }
-            if (!node.isEmpty()) s.setPermission(context, node, value);
+            long expires = 0L;
+            int semi = node.indexOf(';');
+            if (semi > 0) {
+                try {
+                    expires = Long.parseLong(node.substring(semi + 1).trim());
+                    node = node.substring(0, semi);
+                } catch (NumberFormatException ignored) {
+                    // Treat the whole thing as a node name if the suffix
+                    // isn't a number.
+                }
+            }
+            if (!node.isEmpty()) s.setPermission(context, node, value, expires);
         }
     }
 
@@ -196,10 +241,15 @@ public class ConfigManager {
                 opts.set(e.getKey(), asNumberIfPossible(e.getValue()));
             }
         }
-        sec.set("permissions", toList(s.getPermissions(Subject.GLOBAL)));
+
+        // Raw view preserves expiries. Global context goes at the top level,
+        // everything else under contexts.
+        Map<String, Map<String, PermissionEntry>> raw = s.getAllRawPermissions();
+        Map<String, PermissionEntry> global = raw.getOrDefault(Subject.GLOBAL, Map.of());
+        sec.set("permissions", toList(global));
 
         ConfigurationSection ctxs = null;
-        for (Map.Entry<String, Map<String, Boolean>> e : s.getAllPermissions().entrySet()) {
+        for (Map.Entry<String, Map<String, PermissionEntry>> e : raw.entrySet()) {
             if (e.getKey().equals(Subject.GLOBAL)) continue;
             if (ctxs == null) ctxs = sec.createSection("contexts");
             ctxs.set(e.getKey(), toList(e.getValue()));
@@ -207,10 +257,19 @@ public class ConfigManager {
         sec.set("parents", new ArrayList<>(s.getParents()));
     }
 
-    /** Granted nodes go on the list plain, denied ones get a leading '-'. */
-    private List<String> toList(Map<String, Boolean> perms) {
+    /**
+     * Serialises a permission map to YAML lines. Negations get a leading
+     * '-' and timed entries get a ';' separator plus the epoch millis.
+     */
+    private List<String> toList(Map<String, PermissionEntry> perms) {
         List<String> out = new ArrayList<>();
-        perms.forEach((node, value) -> out.add(value ? node : "-" + node));
+        perms.forEach((node, entry) -> {
+            StringBuilder sb = new StringBuilder();
+            if (!entry.value()) sb.append('-');
+            sb.append(node);
+            if (entry.expiresAt() > 0) sb.append(';').append(entry.expiresAt());
+            out.add(sb.toString());
+        });
         return out;
     }
 

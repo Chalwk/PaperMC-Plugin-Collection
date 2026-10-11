@@ -2,7 +2,8 @@ name: NexusPermissions
 version: '${version}'
 main: com.chalwk.nexus.NexusPermissions
 api-version: '1.21'
-softdepend: [Vault]
+softdepend: [Vault, PlaceholderAPI, WorldGuard]
+loadbefore: [CMI]
 authors: [Chalwk]
 description: A permissions plugin with subjects, inheritance and contexts.
 
@@ -33,6 +34,8 @@ permissions:
       nexus.user.parent.add: true
       nexus.user.parent.remove: true
       nexus.user.option.set: true
+      nexus.user.delete: true
+      nexus.user.rename: true
   nexus.group.*:
     default: op
     children:
@@ -43,6 +46,8 @@ permissions:
       nexus.group.parent.remove: true
       nexus.group.option.set: true
       nexus.group.weight.set: true
+      nexus.group.delete: true
+      nexus.group.rename: true
   nexus.command:
     default: op
   nexus.reload:
@@ -65,6 +70,10 @@ permissions:
     default: op
   nexus.user.option.set:
     default: op
+  nexus.user.delete:
+    default: op
+  nexus.user.rename:
+    default: op
   nexus.group.info:
     default: op
   nexus.group.create:
@@ -78,4 +87,8 @@ permissions:
   nexus.group.option.set:
     default: op
   nexus.group.weight.set:
+    default: op
+  nexus.group.delete:
+    default: op
+  nexus.group.rename:
     default: op

@@ -9,6 +9,12 @@ repositories {
             includeGroup 'com.github.MilkBowl'
         }
     }
+    maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    maven {
+        url = 'https://maven.enginehub.org/repo/'
+    }
 }
 
 dependencies {
@@ -16,6 +22,8 @@ dependencies {
     compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
         exclude group: 'org.bukkit'
     }
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.9'
 }
 
 tasks.named('jar') {

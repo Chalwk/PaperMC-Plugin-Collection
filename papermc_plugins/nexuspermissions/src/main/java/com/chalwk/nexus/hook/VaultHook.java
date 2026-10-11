@@ -31,6 +31,7 @@ import java.util.Map;
  * <p>Prefixes and suffixes are not part of Vault's {@code Permission} API.
  * Those live in {@link VaultChatHook}.</p>
  */
+@SuppressWarnings("deprecation")
 public class VaultHook extends Permission {
 
     private final PermissionManager pm;

@@ -10,12 +10,16 @@
 #   options      - arbitrary key-value pairs. "weight" and "prefix" are the
 #                  two the plugin reads natively. Other keys are shown in
 #                  /nexus group info but have no effect on permissions.
-#   permissions  - a list of nodes. A leading "-" negates.
+#   permissions  - a list of nodes. Formats:
+#                    node               grant, permanent
+#                    -node              deny, permanent
+#                    node;1234567890    grant until that epoch time (ms)
+#                    -node;1234567890   deny until that epoch time (ms)
+#                  Timed entries are usually written by the plugin rather
+#                  than by hand. Use /nexus group <g> perm <node> true temp:7d
+#                  and the file picks up the expiry on the next save.
 #   contexts     - a map of context name to permission list.
 #   parents      - a list of parent group names, applied in weight order.
-#
-# The groups below are examples showing off each feature. Replace them with
-# your own hierarchy.
 
 groups:
 

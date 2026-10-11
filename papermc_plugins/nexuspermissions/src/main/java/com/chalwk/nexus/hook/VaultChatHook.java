@@ -24,6 +24,7 @@ import java.util.Locale;
  * of callers concatenate them straight into a string. Read-only, like the
  * permission hook.</p>
  */
+@SuppressWarnings("deprecation")
 public class VaultChatHook extends Chat {
 
     private static final char SECTION = '\u00A7';

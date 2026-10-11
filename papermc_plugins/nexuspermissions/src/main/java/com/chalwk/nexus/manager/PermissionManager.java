@@ -3,6 +3,7 @@
 package com.chalwk.nexus.manager;
 
 import com.chalwk.nexus.NexusPermissions;
+import com.chalwk.nexus.hook.WorldGuardHook;
 import com.chalwk.nexus.model.Group;
 import com.chalwk.nexus.model.Subject;
 import com.chalwk.nexus.model.User;
@@ -16,16 +17,17 @@ import java.util.*;
  * The central brain: stores subjects in memory, resolves inheritance and
  * applies the result to online players.
  *
- * <p>Groups and users are both held in insertion-ordered maps, keyed by
- * lowercase name. Loading and saving happen through
- * {@link com.chalwk.nexus.config.ConfigManager}; this class only holds the
- * live data.</p>
+ * <p>Groups and users are both held in insertion-ordered maps. Users are
+ * keyed by lowercase name for fast command lookups, and additionally
+ * indexed by UUID once one is recorded, so the public API can look them up
+ * either way.</p>
  */
 public class PermissionManager {
 
     private final NexusPermissions plugin;
     private final Map<String, Group> groups = new LinkedHashMap<>();
     private final Map<String, User> users = new LinkedHashMap<>();
+    private final Map<UUID, User> usersByUuid = new HashMap<>();
     private final Map<UUID, PermissionAttachment> attachments = new HashMap<>();
 
     public PermissionManager(NexusPermissions plugin) {
@@ -39,6 +41,7 @@ public class PermissionManager {
     public void clear() {
         groups.clear();
         users.clear();
+        usersByUuid.clear();
     }
 
     public void addGroup(Group g) {
@@ -47,6 +50,16 @@ public class PermissionManager {
 
     public void addUser(User u) {
         users.put(u.getName().toLowerCase(Locale.ROOT), u);
+        if (u.getUuid() != null) usersByUuid.put(u.getUuid(), u);
+    }
+
+    /**
+     * Renames a user in the lookup map. Used by /nexus user rename. The
+     * UUID index is untouched, since the UUID doesn't change.
+     */
+    public void renameUser(String oldName, String newName) {
+        User u = users.remove(oldName.toLowerCase(Locale.ROOT));
+        if (u != null) users.put(newName.toLowerCase(Locale.ROOT), u);
     }
 
     public Group getGroup(String name) {
@@ -66,8 +79,26 @@ public class PermissionManager {
         return g;
     }
 
+    /**
+     * Removes a group and cleans up references to it from other groups'
+     * parents and every user's parents. Returns false if the group didn't
+     * exist. Does not check ladders or default-group; callers do that.
+     */
+    public boolean deleteGroup(String name) {
+        String key = name.toLowerCase(Locale.ROOT);
+        Group g = groups.remove(key);
+        if (g == null) return false;
+        for (Group other : groups.values()) other.removeParent(key);
+        for (User u : users.values()) u.removeParent(key);
+        return true;
+    }
+
     public User getUser(String name) {
         return name == null ? null : users.get(name.toLowerCase(Locale.ROOT));
+    }
+
+    public User getUserByUuid(UUID uuid) {
+        return uuid == null ? null : usersByUuid.get(uuid);
     }
 
     /**
@@ -81,6 +112,32 @@ public class PermissionManager {
 
     public Collection<User> getUsers() {
         return Collections.unmodifiableCollection(users.values());
+    }
+
+    /**
+     * Removes a user from storage. Returns false if they don't exist.
+     * Refuses if the user is currently online, since removing them out from
+     * under a live session would leave stale attachments behind.
+     */
+    public boolean deleteUser(String name) {
+        User u = users.get(name.toLowerCase(Locale.ROOT));
+        if (u == null) return false;
+        if (u.getUuid() != null) usersByUuid.remove(u.getUuid());
+        users.remove(name.toLowerCase(Locale.ROOT));
+        return true;
+    }
+
+    /**
+     * Records a player's UUID on their stored user, creating an entry if
+     * needed. Called on join so that name-keyed legacy entries get linked.
+     */
+    public boolean recordUuid(Player player) {
+        User u = getUser(player.getName());
+        if (u == null) return false;
+        if (u.getUuid() != null) return false;
+        u.setUuid(player.getUniqueId());
+        usersByUuid.put(player.getUniqueId(), u);
+        return true;
     }
 
     public void save() {
@@ -149,11 +206,14 @@ public class PermissionManager {
     /**
      * Walks the inheritance chain and merges permissions into {@code out}.
      *
-     * <p>Later writes overwrite earlier ones, so the order matters. Parents
-     * are visited lowest-weight-first, meaning higher-weight parents (lower
-     * numbers) override them. The subject's own global permissions come
-     * next, and context-specific ones last. Identity-set guards against
-     * cycles, even though the edit commands refuse to create them.</p>
+     * <p>Later writes overwrite earlier ones, so the order matters. The
+     * parent list is sorted lowest-weight-first, and we iterate it in
+     * reverse: the highest-weight (lowest priority) parent is written
+     * first, and the lowest-weight (highest priority) parent is written
+     * last, so it wins. The subject's own global permissions come next,
+     * and its context-specific ones last of all. Identity-set guards
+     * against cycles, even though the edit commands refuse to create
+     * them.</p>
      */
     private void resolveInto(Subject subject, List<String> contexts, Map<String, Boolean> out, Set<Subject> path) {
         if (!path.add(subject)) return;
@@ -219,11 +279,22 @@ public class PermissionManager {
         return List.of("server:" + plugin.getPluginConfig().getServerName());
     }
 
-    /** Server context first, then the player's current world. */
+    /**
+     * Server context, then the player's world, then any WorldGuard regions
+     * they're standing in. Regions are appended last, so their entries
+     * override world-level ones during resolution.
+     *
+     * <p>Region lookups are relatively expensive. They run on join, world
+     * change, and explicit refresh, not on every permission check.</p>
+     */
     public List<String> getContexts(Player player) {
-        return List.of(
-                "server:" + plugin.getPluginConfig().getServerName(),
-                "world:" + player.getWorld().getName().toLowerCase(Locale.ROOT));
+        List<String> out = new ArrayList<>(3);
+        out.add("server:" + plugin.getPluginConfig().getServerName());
+        out.add("world:" + player.getWorld().getName().toLowerCase(Locale.ROOT));
+        if (plugin.getPluginConfig().isRegionContextEnabled()) {
+            out.addAll(WorldGuardHook.regionsAt(player));
+        }
+        return out;
     }
 
     // ------------------------------------------------------------------
@@ -235,9 +306,15 @@ public class PermissionManager {
      *
      * <p>Wildcards like {@code essentials.*} and {@code *} are placed in
      * the attachment as-is. Bukkit's own permission lookup walks the
-     * hierarchy at query time, so there's no need to expand them here.
-     * An earlier version did expand them, which was slower and had no
-     * effect on behaviour.</p>
+     * hierarchy at query time, so there's no need to expand them here.</p>
+     *
+     * <p>Entries are added one at a time via
+     * {@link PermissionAttachment#setPermission(String, boolean)} rather
+     * than by writing to the map returned by {@code getPermissions()}.
+     * On current Paper builds that map is a copy, so writing to it is a
+     * silent no-op: the attachment is created empty, the player resolves
+     * nothing, and every node falls through to the server's default
+     * registry. {@code setPermission} is the supported mutation path.</p>
      */
     public void applyToPlayer(Player player) {
         removeAttachment(player);
@@ -250,9 +327,31 @@ public class PermissionManager {
         Map<String, Boolean> effective = resolvePermissions(user, getContexts(player));
 
         PermissionAttachment attachment = player.addAttachment(plugin);
-        attachment.getPermissions().putAll(effective);
+        for (Map.Entry<String, Boolean> entry : effective.entrySet()) {
+            attachment.setPermission(entry.getKey(), entry.getValue());
+        }
         attachments.put(player.getUniqueId(), attachment);
         player.recalculatePermissions();
+
+        // Guard against a future Paper change making setPermission a
+        // silent no-op the same way my old putAll was. If the attachment
+        // ends up with fewer entries than we resolved, every permission
+        // check for this player will quietly fall through to the default
+        // registry.
+        if (attachment.getPermissions().size() != effective.size()) {
+            plugin.getLogger().severe("Permission attachment size mismatch for " + player.getName()
+                    + " (expected " + effective.size() + ", got " + attachment.getPermissions().size()
+                    + "). Bukkit's PermissionAttachment API may have changed.");
+        }
+
+        for (Map.Entry<String, Boolean> entry : effective.entrySet()) {
+            if (!entry.getValue()) continue;
+            if (!player.hasPermission(entry.getKey())) {
+                plugin.getLogger().severe("Permission attachment verification failed for " + player.getName()
+                        + ": granted node '" + entry.getKey() + "' resolved false through Bukkit.");
+            }
+            break;
+        }
 
         plugin.debug("Applied " + effective.size() + " permission nodes to " + player.getName()
                 + " (contexts: " + getContexts(player) + ")");
@@ -277,6 +376,22 @@ public class PermissionManager {
     public void shutdown() {
         for (Player p : Bukkit.getOnlinePlayers()) removeAttachment(p);
         attachments.clear();
+    }
+
+    // ------------------------------------------------------------------
+    // Timed permission sweep
+    // ------------------------------------------------------------------
+
+    /**
+     * Removes every expired entry from every subject. Returns true if
+     * anything changed, so the caller can decide whether to save and
+     * refresh.
+     */
+    public boolean purgeExpired() {
+        boolean changed = false;
+        for (Group g : groups.values()) changed |= g.purgeExpired();
+        for (User u : users.values()) changed |= u.purgeExpired();
+        return changed;
     }
 
     // ------------------------------------------------------------------

@@ -2,13 +2,17 @@
 
 package com.chalwk.nexus;
 
+import com.chalwk.nexus.api.NexusAPI;
+import com.chalwk.nexus.api.NexusAPIImpl;
 import com.chalwk.nexus.commands.NexusCommand;
 import com.chalwk.nexus.config.ConfigManager;
 import com.chalwk.nexus.config.PluginConfig;
+import com.chalwk.nexus.hook.NexusPlaceholderExpansion;
 import com.chalwk.nexus.hook.VaultChatHook;
 import com.chalwk.nexus.hook.VaultHook;
 import com.chalwk.nexus.listener.PlayerListener;
 import com.chalwk.nexus.manager.PermissionManager;
+import com.chalwk.nexus.util.AuditLogger;
 import com.chalwk.nexus.util.MessageHelper;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.PluginCommand;
@@ -19,15 +23,16 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Plugin entry point.
  *
  * <p>Wires together the config manager, the permission manager, the
- * command handler and the join/quit listener. The BukkitAudiences instance
- * is created here and passed into the message helper, which is then handed
- * to every command so they all share the same sender bridge.</p>
+ * command handler, the join/quit listener, and the three optional hooks
+ * (Vault, PlaceholderAPI, WorldGuard). All hooks are guarded so the plugin
+ * loads and works with none of them present.</p>
  */
 public final class NexusPermissions extends JavaPlugin {
 
     private PluginConfig pluginConfig;
     private ConfigManager configManager;
     private PermissionManager permissionManager;
+    private AuditLogger auditLogger;
     private BukkitAudiences audiences;
     private MessageHelper messageHelper;
 
@@ -40,6 +45,9 @@ public final class NexusPermissions extends JavaPlugin {
 
         pluginConfig = new PluginConfig(this);
         pluginConfig.load();
+
+        auditLogger = new AuditLogger(this);
+        auditLogger.setEnabled(pluginConfig.isAuditLogEnabled());
 
         permissionManager = new PermissionManager(this);
         configManager = new ConfigManager(this);
@@ -66,16 +74,36 @@ public final class NexusPermissions extends JavaPlugin {
             return;
         }
 
+        registerApi();
+
         // Vault is a soft dependency: only touch its classes if it's there.
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             hookVault();
         }
+
+        // PlaceholderAPI expansion, if PAPI is present.
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            try {
+                new NexusPlaceholderExpansion(this).register();
+                getLogger().info("Registered PlaceholderAPI expansion 'nexus'.");
+            } catch (LinkageError e) {
+                getLogger().warning("PlaceholderAPI is installed but the expansion could not be registered: " + e);
+            }
+        }
+
+        scheduleTimedPermissionSweep();
 
         // Covers /reload confirm, where players stay connected across a
         // disable/enable cycle and would otherwise be left unattached.
         permissionManager.refreshAll();
 
         getLogger().info("NexusPermissions enabled.");
+    }
+
+    /** Publishes the read API so other plugins can query Nexus directly. */
+    private void registerApi() {
+        NexusAPIImpl api = new NexusAPIImpl(permissionManager);
+        getServer().getServicesManager().register(NexusAPI.class, api, this, ServicePriority.Normal);
     }
 
     /**
@@ -100,6 +128,22 @@ public final class NexusPermissions extends JavaPlugin {
         }
     }
 
+    /**
+     * Runs a periodic task that prunes expired timed permissions. When the
+     * sweep removes anything, it saves and refreshes online players so the
+     * change takes effect immediately. Interval comes from config.
+     */
+    private void scheduleTimedPermissionSweep() {
+        long periodTicks = pluginConfig.getTimedPermissionSweepSeconds() * 20L;
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            boolean changed = permissionManager.purgeExpired();
+            if (changed) {
+                configManager.saveAll(permissionManager);
+                permissionManager.refreshAll();
+            }
+        }, periodTicks, periodTicks);
+    }
+
     @Override
     public void onDisable() {
         if (permissionManager != null) permissionManager.shutdown();
@@ -110,6 +154,7 @@ public final class NexusPermissions extends JavaPlugin {
     public void reloadAll() {
         reloadConfig();
         pluginConfig.load();
+        auditLogger.setEnabled(pluginConfig.isAuditLogEnabled());
         configManager.load(permissionManager);
         permissionManager.refreshAll();
     }
@@ -128,6 +173,10 @@ public final class NexusPermissions extends JavaPlugin {
 
     public PermissionManager getPermissionManager() {
         return permissionManager;
+    }
+
+    public AuditLogger getAuditLogger() {
+        return auditLogger;
     }
 
     public MessageHelper getMessageHelper() {

@@ -22,6 +22,9 @@ public class PluginConfig {
     private boolean debug;
     private String defaultGroup = "default";
     private String serverName = "default";
+    private boolean regionContextEnabled = true;
+    private boolean auditLogEnabled = false;
+    private int timedPermissionSweepSeconds = 60;
     private final Map<String, List<String>> ladders = new LinkedHashMap<>();
 
     public PluginConfig(NexusPermissions plugin) {
@@ -33,6 +36,10 @@ public class PluginConfig {
         debug = c.getBoolean("debug", false);
         defaultGroup = c.getString("default-group", "default").toLowerCase(Locale.ROOT);
         serverName = c.getString("server-name", "default").toLowerCase(Locale.ROOT);
+
+        regionContextEnabled = c.getBoolean("region-context.enabled", true);
+        auditLogEnabled = c.getBoolean("audit-log.enabled", false);
+        timedPermissionSweepSeconds = Math.max(5, c.getInt("timed-permission-sweep-seconds", 60));
 
         // Ladders are stored as name -> ordered list of group names. Both
         // the ladder name and the groups inside are normalised to lowercase
@@ -67,6 +74,18 @@ public class PluginConfig {
         return serverName;
     }
 
+    public boolean isRegionContextEnabled() {
+        return regionContextEnabled;
+    }
+
+    public boolean isAuditLogEnabled() {
+        return auditLogEnabled;
+    }
+
+    public int getTimedPermissionSweepSeconds() {
+        return timedPermissionSweepSeconds;
+    }
+
     /** Unmodifiable so callers can't accidentally corrupt the loaded config. */
     public Map<String, List<String>> getLadders() {
         return Collections.unmodifiableMap(ladders);
@@ -93,5 +112,34 @@ public class PluginConfig {
         plugin.getConfig().set("ladders." + key, new ArrayList<>(list));
         plugin.saveConfig();
         return true;
+    }
+
+    /**
+     * Rewrites a ladder, swapping any occurrences of {@code oldName} for
+     * {@code newName}. Used by the group rename command so ladders don't
+     * keep pointing at a stale name.
+     *
+     * @return true if anything was changed.
+     */
+    public boolean renameInLadders(String oldName, String newName) {
+        String oldKey = oldName.toLowerCase(Locale.ROOT);
+        String newKey = newName.toLowerCase(Locale.ROOT);
+        boolean changed = false;
+        for (Map.Entry<String, List<String>> e : ladders.entrySet()) {
+            List<String> list = e.getValue();
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).equals(oldKey)) {
+                    list.set(i, newKey);
+                    changed = true;
+                }
+            }
+        }
+        if (changed) {
+            for (Map.Entry<String, List<String>> e : ladders.entrySet()) {
+                plugin.getConfig().set("ladders." + e.getKey(), new ArrayList<>(e.getValue()));
+            }
+            plugin.saveConfig();
+        }
+        return changed;
     }
 }
