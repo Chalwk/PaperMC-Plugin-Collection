@@ -1,0 +1,174 @@
+/* Comments */
+.highlight .c,
+.highlight .ch,
+.highlight .cm,
+.highlight .c1,
+.highlight .cs,
+.highlight .cp,
+.highlight .cpf {
+    color: var(--text-faint);
+    font-style: italic;
+}
+
+/* Keywords: public, class, return, if, new. Also true/false/null in YAML. */
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt {
+    color: var(--purple);
+    font-weight: 500;
+}
+
+/* Strings and regexes */
+.highlight .s,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s2,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sx,
+.highlight .sr,
+.highlight .s1,
+.highlight .ss {
+    color: var(--accent-hover);
+}
+
+/* Literals: unquoted YAML scalars like GLOW or basic, dates, shell here-docs */
+.highlight .l,
+.highlight .ld {
+    color: var(--accent-hover);
+}
+
+/* Numbers */
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .il,
+.highlight .mo {
+    color: var(--warning);
+}
+
+/* Names: variables, params, fields, plain identifiers */
+.highlight .n,
+.highlight .nb,
+.highlight .no,
+.highlight .nd,
+.highlight .ni,
+.highlight .ne,
+.highlight .py,
+.highlight .nl,
+.highlight .nx,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .vm {
+    color: var(--text);
+}
+
+/* Tags: YAML keys and XML/HTML tag names */
+.highlight .nt {
+    color: var(--text);
+}
+
+/* Types and class names: NexusAPI, String, Map, List */
+.highlight .nc,
+.highlight .nn {
+    color: var(--code-type);
+}
+
+/* Method declarations: public void foo(...) */
+.highlight .nf,
+.highlight .fm {
+    color: var(--code-func);
+}
+
+/* Attribute names: Java method calls, CSS props, HTML attrs.
+   YAML overrides to plain text, in case a future Rouge
+   version starts tagging YAML keys as .na (hope not).*/
+.highlight .na {
+    color: var(--code-attr);
+}
+
+.language-yaml .highlight .na {
+    color: var(--text);
+}
+
+/* Builtin pseudo: this, super, null */
+.highlight .bp {
+    color: var(--purple);
+}
+
+/* Operators and punctuation: (), {}, [], ., :, -, = */
+.highlight .o,
+.highlight .ow,
+.highlight .p {
+    color: var(--text-muted);
+}
+
+/* Diff markers, used on changelog snippets */
+.highlight .gd {
+    color: var(--danger);
+}
+
+.highlight .gi {
+    color: var(--success);
+}
+
+.highlight .ge {
+    font-style: italic;
+}
+
+.highlight .gs {
+    font-weight: 700;
+}
+
+.highlight .gr {
+    color: var(--danger);
+}
+
+.highlight .gt {
+    color: var(--danger);
+}
+
+/* Headings inside code blocks: shell prompts, YAML doc headers */
+.highlight .gh {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.highlight .gu {
+    color: var(--text-faint);
+    font-weight: 600;
+}
+
+/* Other: XML delimiters, shell escapes */
+.highlight .x {
+    color: var(--text-muted);
+}
+
+/* Errors: visible so malformed snippets stand out */
+.highlight .err {
+    color: var(--danger);
+    background: rgba(248, 81, 73, 0.08);
+}
+
+/* Whitespace, never rendered anyway */
+.highlight .w {
+    color: transparent;
+}
+
+/* Highlighted lines from hl_lines or linenos */
+.highlight .hll {
+    display: block;
+    background: var(--accent-soft);
+}

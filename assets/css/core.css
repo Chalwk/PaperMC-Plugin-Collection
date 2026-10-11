@@ -19,6 +19,11 @@
     --danger: #f85149;
     --purple: #bc8cff;
 
+    /* syntax highlighting */
+    --code-type: #f0883e;
+    --code-func: #d2a8ff;
+    --code-attr: #79c0ff;
+
     --container: 1100px;
     --radius: 8px;
     --radius-lg: 12px;
