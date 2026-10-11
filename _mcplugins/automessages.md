@@ -123,7 +123,10 @@ JSON example (interactive click):
 broadcasts:
   2:
     - '&e&lBulletin'
-    - '{"text":"• Click to open the guide","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://example.com/guide/"},"hoverEvent":{"action":"show_text","value":"Opens the guide in your browser"}}'
+- >-
+  {"text":"• Click to open the guide","bold":true,"color":"dark_green",
+  "clickEvent":{"action":"open_url","value":"https://example.com/guide/"},
+  "hoverEvent":{"action":"show_text","value":"Opens the guide in your browser"}}
 ```
 
 ### Interactive Components
@@ -161,19 +164,28 @@ The `hoverEvent.action` field decides what tooltip is shown when a player hovers
 Open a URL on click:
 
 ```yaml
-- '{"text":"• Click to open the store","bold":true,"color":"dark_green","clickEvent":{"action":"open_url","value":"https://example.com/store/"},"hoverEvent":{"action":"show_text","value":"Visit the store"}}'
+- >-
+  {"text":"• Click to open the store","bold":true,"color":"dark_green",
+  "clickEvent":{"action":"open_url","value":"https://example.com/store/"},
+  "hoverEvent":{"action":"show_text","value":"Visit the store"}}
 ```
 
 Run a command on click:
 
 ```yaml
-- '{"text":"• Click to join Discord","bold":true,"color":"dark_green","clickEvent":{"action":"run_command","value":"/discord"},"hoverEvent":{"action":"show_text","value":"Opens the Discord invite"}}'
+- >-
+  {"text":"• Click to join Discord","bold":true,"color":"dark_green",
+  "clickEvent":{"action":"run_command","value":"/discord"},
+  "hoverEvent":{"action":"show_text","value":"Opens the Discord invite"}}
 ```
 
 Suggest a command on click (fills the chat bar without sending):
 
 ```yaml
-- '{"text":"• Click to suggest /help","color":"yellow","clickEvent":{"action":"suggest_command","value":"/help"},"hoverEvent":{"action":"show_text","value":"Fills the chat bar with /help"}}'
+- >-
+  {"text":"• Click to suggest /help","color":"yellow",
+  "clickEvent":{"action":"suggest_command","value":"/help"},
+  "hoverEvent":{"action":"show_text","value":"Fills the chat bar with /help"}}
 ```
 
 #### Mixing legacy formatting and interactive components
@@ -183,7 +195,11 @@ Each list entry is broadcast on its own line, so you cannot have a coloured lega
 To combine them, encode the entire line as a single JSON component with `extra` children:
 
 ```yaml
-- '{"text":"","extra":[{"text":"&e&lNotice: &7","color":"yellow"},{"text":"• Open guide","bold":true,"color":"aqua","clickEvent":{"action":"open_url","value":"https://example.com/guide/"},"hoverEvent":{"action":"show_text","value":"Opens the guide"}}]}'
+- >-
+  {"text":"","extra":[{"text":"&e&lNotice: &7","color":"yellow"},
+  {"text":"• Open guide","bold":true,"color":"aqua",
+  "clickEvent":{"action":"open_url","value":"https://example.com/guide/"},
+  "hoverEvent":{"action":"show_text","value":"Opens the guide"}}]}
 ```
 
 > **Important:** `&` codes inside a JSON string are **not** translated. The legacy serializer only runs on lines that are *not* JSON. Once a line is parsed as JSON, styling must use the JSON fields (`color`, `bold`, `italic`, `underlined`, `strikethrough`, `obfuscated`). The `&e&lNotice:` segment in the example above is a JSON `text` value and will render literally unless you either drop the `&` codes or split the line so the `&`-coded part is a separate, non-JSON entry.

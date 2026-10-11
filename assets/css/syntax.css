@@ -103,6 +103,11 @@
     color: var(--text);
 }
 
+.language-yaml .highlight .err {
+    color: var(--text);
+    background: none;
+}
+
 /* Builtin pseudo: this, super, null */
 .highlight .bp {
     color: var(--purple);
