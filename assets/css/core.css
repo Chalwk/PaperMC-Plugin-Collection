@@ -1,3 +1,6 @@
+/* Copyright (c) 2026. Jericho Crosby (Chalwk) */
+
+/* Core styles for the whole site. Variables below control most of the color/spacing stuff. */
 :root {
     --bg: #0b0e14;
     --bg-elevated: #141922;
@@ -19,7 +22,7 @@
     --danger: #f85149;
     --purple: #bc8cff;
 
-    /* syntax highlighting */
+    /* syntax highlighting (also see `./assets/css/syntax.css`) */
     --code-type: #f0883e;
     --code-func: #d2a8ff;
     --code-attr: #79c0ff;
@@ -39,6 +42,7 @@
     --transition: 150ms ease;
 }
 
+/* Reset/page shell. */
 *,
 *::before,
 *::after {
@@ -70,6 +74,7 @@ svg {
     height: auto;
 }
 
+/* Typography. */
 h1,
 h2,
 h3,
@@ -143,6 +148,7 @@ blockquote p:last-child {
     margin-bottom: 0;
 }
 
+/* Layout helpers. */
 .container {
     width: 100%;
     max-width: var(--container);
@@ -150,11 +156,13 @@ blockquote p:last-child {
     padding: 0 24px;
 }
 
+/* Main content area. */
 .site-main {
     flex: 1 0 auto;
     padding-bottom: 80px;
 }
 
+/* Accessibility skip link. */
 .skip-link {
     position: absolute;
     top: -100px;
@@ -171,6 +179,7 @@ blockquote p:last-child {
     top: 16px;
 }
 
+/* Sticky header. */
 .site-header {
     position: sticky;
     top: 0;
@@ -188,6 +197,7 @@ blockquote p:last-child {
     height: 62px;
 }
 
+/* Brand block in the header. */
 .brand {
     display: inline-flex;
     align-items: center;
@@ -220,6 +230,7 @@ blockquote p:last-child {
     letter-spacing: -0.01em;
 }
 
+/* Primary navigation. */
 .site-nav {
     display: flex;
     gap: 26px;
@@ -241,6 +252,95 @@ blockquote p:last-child {
     color: var(--accent) !important;
 }
 
+/* Tools dropdown. It uses <details> so it works without JavaScript. Woo! */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown>summary.nav-dropdown-toggle {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    font-weight: 500;
+    user-select: none;
+    transition: color var(--transition);
+}
+
+.nav-dropdown>summary.nav-dropdown-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.nav-dropdown>summary.nav-dropdown-toggle::marker {
+    content: "";
+}
+
+.nav-dropdown-caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    opacity: 0.65;
+    transition: transform var(--transition);
+}
+
+.nav-dropdown[open] .nav-dropdown-caret {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown>summary.nav-dropdown-toggle:hover,
+.nav-dropdown[open]>summary.nav-dropdown-toggle {
+    color: var(--text);
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: 0;
+    min-width: 220px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    z-index: 200;
+}
+
+.nav-dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 0;
+    right: 0;
+    height: 14px;
+}
+
+.nav-dropdown-menu a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background var(--transition), color var(--transition);
+}
+
+.nav-dropdown-menu a:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+    text-decoration: none;
+}
+
+/* Home page hero. */
 .hero {
     padding: 88px 0 56px;
     text-align: center;
@@ -288,6 +388,7 @@ blockquote p:last-child {
     flex-wrap: wrap;
 }
 
+/* Buttons. */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -334,6 +435,7 @@ blockquote p:last-child {
     background: var(--accent-soft);
 }
 
+/* Generic section wrapper. */
 .section {
     margin-top: 24px;
 }
@@ -358,12 +460,14 @@ blockquote p:last-child {
     font-family: var(--font-mono);
 }
 
+/* Plugin card grid. */
 .script-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 18px;
 }
 
+/* Plugin card. */
 .script-card {
     display: flex;
     flex-direction: column;
@@ -495,11 +599,13 @@ blockquote p:last-child {
     font-size: 0.72rem;
 }
 
+/* Long form text pages. */
 .prose {
     max-width: 760px;
     margin: 48px auto 0;
 }
 
+/* Page title block. */
 .page-header {
     margin-bottom: 40px;
     padding-bottom: 20px;
@@ -517,6 +623,7 @@ blockquote p:last-child {
     font-size: 1.02rem;
 }
 
+/* Breadcrumb trail on plugin pages. */
 .breadcrumb {
     display: flex;
     align-items: center;
@@ -540,6 +647,7 @@ blockquote p:last-child {
     color: var(--text-faint);
 }
 
+/* Plugin detail page. */
 .script-detail {
     max-width: 1040px;
     margin: 0 auto;
@@ -591,6 +699,7 @@ blockquote p:last-child {
     margin: 0;
 }
 
+/* Metadata list on plugin pages. */
 .plugin-meta {
     display: grid;
     grid-template-columns: max-content 1fr;
@@ -633,6 +742,7 @@ blockquote p:last-child {
     color: var(--accent);
 }
 
+/* Code blocks. */
 code {
     font-family: var(--font-mono);
     font-size: 0.88em;
@@ -695,6 +805,7 @@ pre code {
     border-radius: 0;
 }
 
+/* Tables. */
 table {
     width: 100%;
     margin: 1.4em 0;
@@ -722,6 +833,7 @@ tr:hover td {
     background: var(--bg-elevated);
 }
 
+/* Footer. */
 .site-footer {
     flex-shrink: 0;
     padding: 28px 0;
@@ -760,6 +872,7 @@ tr:hover td {
     text-decoration: none;
 }
 
+/* Utility class stuff. */
 .text-muted {
     color: var(--text-muted);
 }
@@ -772,6 +885,7 @@ tr:hover td {
     font-family: var(--font-mono);
 }
 
+/* Responsive stuff. */
 @media (max-width: 720px) {
     .container {
         padding: 0 18px;

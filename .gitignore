@@ -1,17 +1,17 @@
-# ---- Java ----
+# Java build output
 *.class
 bin/
 
-# ---- Gradle ----
+# Gradle caches and build folders
 .gradle/
 build/
 .gradletasknamecache
 
-# Gradle wrapper
+# Keep the Gradle wrapper jar, ignore other jars
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
 
-# ---- IDE / editor ----
+# Editors and IDEs
 .vscode/
 .idea/
 *.iml
@@ -22,12 +22,12 @@ build/
 *~
 *.code-workspace
 
-# ---- OS ----
+# OS junk
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# ---- Local Minecraft server ----
+# Local Minecraft server folders
 /server/
 /run/
 /logs/
@@ -36,25 +36,25 @@ desktop.ini
 /world_nether/
 /world_the_end/
 
-# ---- Server JARs ----
+# Server jars people might drop in while testing
 craftbukkit-*.jar
 spigot-*.jar
 paper-*.jar
 purpur-*.jar
 
-# ---- Logs ----
+# Log files
 *.log
 *.log.gz
 
-# ---- Patch / merge leftovers ----
+# Patch and merge leftovers
 *.orig
 *.rej
 *.bak
 
-# ---- Personal server configs ----
+# Personal server configs
 jericraft-*.yml
 
-# ---- Jekyll / GitHub Pages ----
+# Jekyll and GitHub Pages build output
 _site/
 .jekyll-cache/
 .jekyll-metadata

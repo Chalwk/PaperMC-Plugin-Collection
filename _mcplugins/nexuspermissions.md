@@ -5,6 +5,8 @@ description: "Permissions plugin with groups, inheritance, per-world and per-reg
 category: Administration
 plugin_id: nexuspermissions
 latest_version: "1.1.0"
+tool_name: "Open in Nexus Editor"
+tool_url: "/tools/nexus-editor/"
 author: Chalwk
 website: https://github.com/Chalwk/PaperMC-Plugin-Collection
 api-version: 1.21

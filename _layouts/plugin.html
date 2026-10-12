@@ -33,6 +33,12 @@ layout: default
           Download v{{ page.latest_version }}
         </a>
         {% endif %}
+        {% if page.tool_url and page.tool_name %}
+        <a class="btn btn-sm btn-secondary"
+          href="{{ page.tool_url | relative_url }}">
+          {{ page.tool_name }}
+        </a>
+        {% endif %}
         {% if page.plugin_id %}
         <a class="btn btn-sm btn-secondary"
           href="https://github.com/{{ site.repository }}/releases?q=tag:{{ page.plugin_id }}-v" target="_blank"

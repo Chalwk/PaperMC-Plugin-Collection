@@ -1,19 +1,24 @@
+# Site identity. If you fork this, the first few values are the ones you care about.
 title: PaperMC-Plugin-Collection
 tagline: "Collection of Minecraft plugins for PaperMC"
 description: "A collection of Minecraft plugins for PaperMC and compatible servers."
 
+# GitHub Pages URL setup.
 url: "https://chalwk.github.io"
 baseurl: "/PaperMC-Plugin-Collection"
 
+# Used in the footer and SEO tags.
 author:
   name: Jericho Crosby
   handle: Chalwk
   email: chalwk.dev@gmail.com
 
+# Handy links reused in templates.
 repository: "Chalwk/PaperMC-Plugin-Collection"
 github_username: Chalwk
 discord_invite: "https://discord.gg/g6ENWebHsE"
 
+# Markdown and syntax highlighting.
 markdown: kramdown
 highlighter: rouge
 permalink: pretty
@@ -23,15 +28,18 @@ kramdown:
   hard_wrap: false
   syntax_highlighter: rouge
 
+# Jekyll plugins. seo-tag feeds the head include, sitemap writes sitemap.xml.
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
+# Plugin pages live in `_mcplugins` and get /plugins/<name>/ URLs.
 collections:
   mcplugins:
     output: true
     permalink: /plugins/:name/
 
+# Keep build tooling and local server files out of the generated site.
 exclude:
   - .github
   - .gitignore
@@ -57,6 +65,8 @@ exclude:
   - gradle
   - run.bat
 
+# Defaults for front matter.
+# The social image is a fallback for pages that do not set one.
 defaults:
   - scope:
       path: ""
@@ -74,3 +84,7 @@ defaults:
       type: "mcplugins"
     values:
       layout: "plugin"
+  - scope:
+      path: "tools"
+    values:
+      layout: "page"

@@ -1,0 +1,36 @@
+---
+layout: default
+title: Nexus YAML Editor
+description: "Edit NexusPermissions groups.yml and users.yml in the browser."
+permalink: /tools/nexus-editor/
+extra_css:
+  - /tools/nexus-editor/nexus-editor.css
+---
+
+<div class="container editor-page">
+  <header class="editor-header">
+    <h1 class="editor-title">NexusPermissions YAML Editor</h1>
+    <p class="editor-lede">
+      Load <code>groups.yml</code> and <code>users.yml</code> from your NexusPermissions
+      data folder, edit them here, then download the updated files.
+    </p>
+  </header>
+
+  <!-- Rendered by nexus-editor.js. -->
+  <section class="editor-files" id="editor-files"></section>
+
+  <!-- Empty state until at least one file is loaded. -->
+  <div class="editor-empty" id="editor-empty">
+    <p class="text-muted">Load at least one file to begin editing.</p>
+  </div>
+
+  <!-- Tabs and editor panes get built here. -->
+  <section class="editor-workspace" id="editor-workspace" hidden>
+    <nav class="editor-tabs" id="editor-tabs"></nav>
+    <div class="editor-split" id="editor-split"></div>
+  </section>
+</div>
+
+<!-- js-yaml does the parsing. The editor script checks for window.jsyaml before it starts. -->
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script src="{{ '/tools/nexus-editor/nexus-editor.js' | relative_url }}"></script>

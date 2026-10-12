@@ -1,0 +1,580 @@
+/* Copyright (c) 2026. Jericho Crosby (Chalwk) */
+
+/* Page shell. */
+.editor-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+}
+
+/* Header block. */
+.editor-header {
+    margin-bottom: 32px;
+}
+
+.editor-title {
+    font-family: var(--font-mono);
+    font-size: 1.85rem;
+    margin: 10px 0 12px;
+    letter-spacing: -0.02em;
+}
+
+.editor-lede {
+    color: var(--text-muted);
+    max-width: 720px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.editor-lede code {
+    font-size: 0.85em;
+}
+
+/* File cards. These double as drop zones for groups.yml and users.yml. */
+.editor-files {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+/* Loaded and dragover states are toggled by nexus-editor.js. */
+.file-card {
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--transition), background var(--transition);
+}
+
+.file-card.is-loaded {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.file-card.is-dragover {
+    border-color: var(--accent-hover);
+    background: var(--accent-soft);
+    transform: translateY(-2px);
+}
+
+.file-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.file-card-name {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+}
+
+.file-card-status {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+}
+
+.file-card.is-loaded .file-card-status {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.file-card-desc {
+    margin: 0 0 14px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.file-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.file-input {
+    display: none;
+}
+
+/* Tabs for switching between groups and users. */
+.editor-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.editor-tab {
+    padding: 10px 18px;
+    margin-bottom: -1px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    transition: all var(--transition);
+}
+
+.editor-tab:hover {
+    color: var(--text);
+    background: var(--surface);
+}
+
+.editor-tab.is-active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+    background: var(--surface);
+}
+
+.editor-tab-count {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    margin-left: 6px;
+}
+
+/* Sidebar plus editor pane. Collapses to one column on small screens. */
+.editor-split {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 880px) {
+    .editor-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Shown before any file is loaded. */
+.editor-empty {
+    padding: 60px 20px;
+    text-align: center;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+}
+
+/* Sticky list of groups or users. */
+.editor-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+    position: sticky;
+    top: 80px;
+}
+
+.editor-list-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+}
+
+.editor-list-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    margin: 0;
+    font-family: var(--font-mono);
+}
+
+.editor-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 10px;
+    margin-bottom: 2px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.editor-list-item:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.editor-list-item.is-active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-hover);
+}
+
+.editor-list-item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.editor-list-item-badge {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    color: var(--text-faint);
+}
+
+.editor-list-item.is-active .editor-list-item-badge {
+    color: var(--accent);
+}
+
+/* Right side editor. */
+.editor-pane {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    min-height: 400px;
+}
+
+.editor-pane-empty {
+    display: grid;
+    place-items: center;
+    min-height: 400px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    text-align: center;
+    padding: 20px;
+}
+
+.editor-pane-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.editor-pane-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text);
+}
+
+/* Label and input row used in several places. */
+.form-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 6px 0;
+}
+
+.form-row>label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+}
+
+.form-row input,
+.form-row select {
+    width: 100%;
+    padding: 7px 11px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    transition: border-color var(--transition);
+}
+
+.form-row input:focus,
+.form-row select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Boxed section for options, parents, permissions, and contexts. */
+.editor-section {
+    margin: 20px 0;
+    padding: 16px 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.editor-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.editor-section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin: 0;
+}
+
+/* Permission rows. The grid changes shape on narrow screens. */
+.perm-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 150px 32px;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+@media (max-width: 640px) {
+    .perm-row {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "node value"
+            "expires remove";
+    }
+
+    .perm-row>[data-field="perm-node"] {
+        grid-area: node;
+    }
+
+    .perm-row>[data-field="perm-value"] {
+        grid-area: value;
+    }
+
+    .perm-row>[data-field="perm-expires"] {
+        grid-area: expires;
+    }
+
+    .perm-row>.icon-btn {
+        grid-area: remove;
+    }
+}
+
+.perm-row input,
+.perm-row select {
+    padding: 6px 9px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.perm-row input:focus,
+.perm-row select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.perm-row.is-deny input[data-field="perm-node"] {
+    color: var(--danger);
+}
+
+/* Square buttons for add/remove actions. */
+.icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.icon-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.icon-btn.is-danger:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(248, 81, 73, 0.08);
+}
+
+.context-item {
+    margin-bottom: 10px;
+    padding: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.context-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.context-name {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--code-attr);
+    padding: 5px 9px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+}
+
+.context-name:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--bg-elevated);
+}
+
+/* Parent group checkboxes. */
+.parents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 6px;
+}
+
+.parent-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.parent-chip:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+}
+
+.parent-chip.is-checked {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-hover);
+}
+
+.parent-chip input[type="checkbox"] {
+    margin: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+/* Option key/value pair. */
+.option-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 32px;
+    gap: 6px;
+    margin-bottom: 5px;
+}
+
+.option-row input {
+    padding: 6px 9px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.option-row input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Buttons that should not compete with the primary actions. */
+.btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px dashed var(--border-strong);
+}
+
+.btn-ghost:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    border-style: solid;
+    background: var(--accent-soft);
+}
+
+/* Destructive actions! */
+.btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--border-strong);
+}
+
+.btn-danger:hover {
+    border-color: var(--danger);
+    background: rgba(248, 81, 73, 0.08);
+}
+
+/* Toast is fixed to the bottom right and fades out. */
+.editor-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 12px 18px;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 0.88rem;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--transition), transform var(--transition);
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.editor-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.editor-toast.is-error {
+    border-color: var(--danger);
+}
